@@ -16,7 +16,55 @@ file.warn<-function(gg){
 ## calls dnapars from PHYLIP 3.695 (Felsenstein 2013)
 ## written by Liam J. Revell 2013
 
-Rdnapars<-function(X,path="."
+Rdnapars<-function(X,path=".",...){
+	if(hasArg(quiet)) quiet<-list(...)$quiet
+	else quiet<-FALSE
+	if(!quiet) if(file.warn(c("infile","outfile","outtree","weights"))==0) return(NULL)
+	oo<-c("r")
+	if(hasArg(tree)){
+		oo<-c(oo,"u")
+		tree<-list(...)$tree
+		tree$tip.label<-sapply(tree$tip.label,function(x,y) which(x==y),y=rownames(X))
+		write.tree(tree,"intree")
+		intree<-TRUE
+	} else intree<-FALSE
+	if(hasArg(thorough)) thorough<-list(...)$thorough
+	else thorough<-TRUE
+	if(!thorough) oo<-c(oo,"s","n")
+	if(hasArg(nsave)) nsave<-list(...)$nsave
+	else nsave<-10000
+	if(nsave!=10000) oo<-c(oo,"v",nsave)
+	if(hasArg(random.order)) random.order<-list(...)$random.order
+	else random.order<-TRUE
+	if(random.order){
+		if(hasArg(random.addition)) random.addition<-list(...)$random.addition
+		else random.addition<-10
+		oo<-c(oo,"j",sample(seq(1,99999,by=2),1),random.addition)
+	}
+	if(hasArg(threshold)) threshold<-list(...)$threshold
+	else threshold<-0
+	if(threshold!=0) oo<-c(oo,"t",threshold)
+	if(hasArg(transversion)) transversion<-list(...)$transversion
+	else transversion<-FALSE
+	if(transversion) oo<-c(oo,"n")
+	if(hasArg(weights)){
+		oo<-c(oo,"w")
+		write(paste(weights,collapse=""),file="weights")
+	} else weights<-NULL
+
+
+
+	if(hasArg(outgroup)){ 
+		outgroup<-list(...)$outgroup
+		tree<-root(tree,outgroup)
+		if(!quiet){
+			cat("Rooted with the outgroup\n")
+			cat("------------------------\n")
+			cat(paste(paste(outgroup,collapse=", "),"\n\n"))
+		}
+	}
+	return(tree)
+}
 
 ## calls contml from PHYLIP 3.695 (Felsenstein 2013)
 ## written by Liam J. Revell 2013
