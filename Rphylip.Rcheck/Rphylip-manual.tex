@@ -1,0 +1,208 @@
+\nonstopmode{}
+\documentclass[a4paper]{book}
+\usepackage[times,inconsolata,hyper]{Rd}
+\usepackage{makeidx}
+\usepackage[utf8,latin1]{inputenc}
+% \usepackage{graphicx} % @USE GRAPHICX@
+\makeindex{}
+\begin{document}
+\chapter*{}
+\begin{center}
+{\textbf{\huge Package `Rphylip'}}
+\par\bigskip{\large \today}
+\end{center}
+\begin{description}
+\raggedright{}
+\item[Version]\AsIs{0.1-0}
+\item[Date]\AsIs{2013-11-30}
+\item[Title]\AsIs{Rphylip: An R interface for PHYLIP}
+\item[Author]\AsIs{Liam J. Revell}
+\item[Maintainer]\AsIs{Liam J. Revell }\email{liam.revell@umb.edu}\AsIs{}
+\item[Depends]\AsIs{R (>= 2.10), ape (>= 3.0-10)}
+\item[ZipData]\AsIs{no}
+\item[Description]\AsIs{Rphylip provides an R interface for the PHYLIP package}
+\item[License]\AsIs{GPL (>= 2)}
+\item[URL]\AsIs{}\url{http://www.phytools.org/Rphylip}\AsIs{}
+\item[Repository]\AsIs{}
+\item[Date/Publication]\AsIs{2013-11-30 12:00:00 EDT}
+\end{description}
+\Rdcontents{\R{} topics documented:}
+\inputencoding{utf8}
+\HeaderA{opt.Rdnaml}{Parameter optimizer for Rdnaml}{opt.Rdnaml}
+\keyword{phylogenetics}{opt.Rdnaml}
+\keyword{inference}{opt.Rdnaml}
+\keyword{maximum likelihood}{opt.Rdnaml}
+%
+\begin{Description}\relax
+This function is an wrapper for \code{\LinkA{Rdnaml}{Rdnaml}} that attempts to optimize \code{gamma} (the alpha shape parameter of the gamma model of rate heterogeneity among sites), \code{kappa} (the transition:transversion ratio), and \code{bf} (the base frequencies).
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+opt.Rdnaml(X, path="." , ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{X}] an object of class \code{"DNAbin"}.
+\item[\code{path}] path to the executable containing dnaml.
+\item[\code{...}] optional arguments. See details for more information.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+Optional arguments include the following: \code{tree} fixed tree to use in optimization - if not provided, it will be estimated using \code{\LinkA{Rdnaml}{Rdnaml}} under the default conditions.
+\end{Details}
+%
+\begin{Value}
+This function returns a list with the following components: \code{kappa}, \code{gamma}, \code{bf} (see Details), and \code{logLik} (the log-likelihood of the fitted model).
+\end{Value}
+%
+\begin{Author}\relax
+Liam Revell \email{liam.revell@umb.edu}
+\end{Author}
+%
+\begin{References}\relax
+Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
+\end{References}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{opt.Rdnaml}{opt.Rdnaml}}
+\end{SeeAlso}
+\inputencoding{utf8}
+\HeaderA{Rcontml}{R interface for contml}{Rcontml}
+\keyword{phylogenetics}{Rcontml}
+\keyword{inference}{Rcontml}
+\keyword{maximum likelihood}{Rcontml}
+%
+\begin{Description}\relax
+This function is an R interface for contml in the PHYLIP package (Felsenstein 2013). contml can be used for ML phylogeny estimation from gene frequency data or continuous characters. The continuous characters should be rotated so as to be uncorrelated before analysis.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+Rcontml(X, path="." , ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{X}] either (a) a \emph{matrix} of continuous valued traits (in columns) with rownames containing species names; or (b) a list of matrices in which each row contains the relative frequency of alleles at a locus for a species. In the latter case the rownames of each matrix in the list should contain the species names.
+\item[\code{path}] path to the executable containing contml.
+\item[\code{...}] optional arguments to be passed to contml. See details for more information.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+Optional arguments include the following: \code{quiet} suppress some output to R console (defaults to \code{quiet = FALSE}); \code{tree} object of class \code{"phylo"} - if supplied, then the model will be optimized on a fixed input topology; \code{global} perform global search (defaults to \code{global = TRUE}); \code{random.order} add taxa to tree in random order (defaults to \code{random.order = TRUE}); \code{random.addition} number of random addition replicates for \code{random.order = TRUE} (defaults to \code{random.addition = 10}); \code{root} outgroup if outgroup rooting of the estimated tree is desired; and \code{cleanup} remove PHYLIP input/output files after the analysis is completed (defaults to \code{cleanup = TRUE}).
+\end{Details}
+%
+\begin{Value}
+This function returns an object of class \code{"phylo"} that is the optimized tree.
+\end{Value}
+%
+\begin{Author}\relax
+Liam Revell \email{liam.revell@umb.edu}
+\end{Author}
+%
+\begin{References}\relax
+Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
+\end{References}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{Rdnaml}{Rdnaml}}
+\end{SeeAlso}
+\inputencoding{utf8}
+\HeaderA{Rcontrast}{R interface for contrast}{Rcontrast}
+\keyword{phylogenetics}{Rcontrast}
+\keyword{inference}{Rcontrast}
+\keyword{maximum likelihood}{Rcontrast}
+%
+\begin{Description}\relax
+This function is an R interface for contrast in the PHYLIP package (Felsenstein 2013). contrast can be used to perform the among species phylogenetically independent contrasts method of Felsenstein (1985) and the within \& among species method of Felsenstein (2008).
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+Rcontrast(tree, X, path="." , ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{tree}] object of class \code{"phylo"}.
+\item[\code{X}] a \emph{matrix} of continuous valued traits (in columns) with rownames containing species names. For within-species contrasts analysis, the matrix should contain repeating (identical) row names for conspecifics.
+\item[\code{path}] path to the executable containing contrast.
+\item[\code{...}] optional arguments to be passed to contrast. See details for more information.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+Optional arguments include the following: \code{quiet} suppress some output to R console (defaults to \code{quiet = FALSE}); and \code{cleanup} remove PHYLIP input/output files after the analysis is completed (defaults to \code{cleanup = TRUE}).
+\end{Details}
+%
+\begin{Value}
+This function returns an object of class \code{"phylo"} that is the optimized tree.
+\end{Value}
+%
+\begin{Author}\relax
+Liam Revell \email{liam.revell@umb.edu}
+\end{Author}
+%
+\begin{References}\relax
+Felsenstein, J. (1985) Phylogenies and the comparative method. American Naturalist, 125, 1-15.
+
+Felsenstein, J. (2008) Comparative methods with sampling error and within-species variation: Contrasts revisited and revised. American Naturalist, 171, 713-725.
+
+Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
+\end{References}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{pic}{pic}}
+\end{SeeAlso}
+\inputencoding{utf8}
+\HeaderA{Rdnaml}{R interface for dnaml}{Rdnaml}
+\keyword{phylogenetics}{Rdnaml}
+\keyword{inference}{Rdnaml}
+\keyword{maximum likelihood}{Rdnaml}
+%
+\begin{Description}\relax
+This function is an R interface for dnaml in the PHYLIP package (Felsenstein 2013). dnaml can be used for ML phylogeny estimation from DNA sequences.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+Rdnaml(X, path="." , ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{X}] an object of class \code{"DNAbin"}.
+\item[\code{path}] path to the executable containing dnaml.
+\item[\code{...}] optional arguments to be passed to dnaml. See details for more information.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+Optional arguments include the following: \code{quiet} suppress some output to R console (defaults to \code{quiet = FALSE}); \code{tree} object of class \code{"phylo"} - if supplied, then the model will be optimized on a fixed input topology; \code{kappa} transition:transversion ratio (defaults to \code{kappa = 2.0}); \code{bf} vector of base frequencies in alphabetical order (i.e., A, C, G, \& T) - if not provided, then defaults to empirical frequencies; \code{rates} vector of rates (defaults to single rate); \code{rate.categories} vector of rate categories corresponding to the order of \code{rates}; \code{gamma} alpha shape parameter of a gamma model of rate heterogeneity among sites (defaults to no gamma rate heterogeneity); \code{ncat} number of rate categories for the gamma model; \code{inv} proportion of invariant sites for the invariant sites model (defaults to \code{inv = 0}); \code{weights} vector of weights of length equal to the number of columns in \code{X} (defaults to unweighted); \code{speedier} speedier but rougher analysis (defaults to \code{speedier = FALSE}); \code{global} perform global search (defaults to \code{global = TRUE}); \code{random.order} add taxa to tree in random order (defaults to \code{random.order = TRUE}); \code{random.addition} number of random addition replicates for \code{random.order = TRUE} (defaults to \code{random.addition = 10}); \code{root} outgroup if outgroup rooting of the estimated tree is desired; and \code{cleanup} remove PHYLIP input \& output files after the analysis is completed (defaults to \code{cleanup = TRUE}).
+\end{Details}
+%
+\begin{Value}
+This function returns an object of class \code{"phylo"} that is the optimized tree.
+\end{Value}
+%
+\begin{Author}\relax
+Liam Revell \email{liam.revell@umb.edu}
+\end{Author}
+%
+\begin{References}\relax
+Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
+\end{References}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{opt.Rdnaml}{opt.Rdnaml}}, \code{\LinkA{Rcontml}{Rcontml}}
+\end{SeeAlso}
+\printindex{}
+\end{document}

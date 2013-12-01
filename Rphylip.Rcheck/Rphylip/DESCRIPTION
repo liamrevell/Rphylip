@@ -1,0 +1,15 @@
+Package: Rphylip
+Version: 0.1-0
+Date: 2013-11-30
+Title: Rphylip: An R interface for PHYLIP
+Author: Liam J. Revell
+Maintainer: Liam J. Revell <liam.revell@umb.edu>
+Depends: R (>= 2.10), ape (>= 3.0-10)
+ZipData: no
+Description: Rphylip provides an R interface for the PHYLIP package
+License: GPL (>= 2)
+URL: http://www.phytools.org/Rphylip
+Packaged: 2013-11-30 12:00:00 EDT
+Repository:
+Date/Publication: 2013-11-30 12:00:00 EDT
+Built: R 3.0.2; ; 2013-12-01 01:22:23 UTC; windows
