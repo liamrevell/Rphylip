@@ -233,12 +233,7 @@ Rcontml<-function(X,path=".",...){
 	} else stop("X should be a matrix (for continuous characters) or a list (for gene frequencies)")
 	if(hasArg(outgroup)){ 
 		outgroup<-list(...)$outgroup
-		tree<-root(tree,outgroup)
-		if(!quiet){
-			cat("Rooted with the outgroup\n")
-			cat("------------------------\n")
-			cat(paste(paste(outgroup,collapse=", "),"\n\n"))
-		}
+		tree<-outgroup.root(tree,outgroup,quiet)
 	}
 	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
 	else cleanup<-TRUE
@@ -323,13 +318,7 @@ Rdnaml<-function(X,path=".",...){
 	}
 	if(quiet) oo<-c(oo,2)
 	oo<-c(oo,"y",ee,"r")
-	write(paste("    ",nrow(X),"   ",ncol(X),sep=""),file="infile")
-	for(i in 1:nrow(X)){
-		sp<-as.character(i)
-		sp<-paste(sp,paste(rep(" ",11-nchar(sp)),collapse=""),collapse="")
-		tt<-paste(sp,paste(X[i,],collapse=""),collapse=" ")
-		write(tt,append=TRUE,file="infile")
-	}
+	write.dna(X)
 	system("touch outtree")
 	system("touch outfile")
 	temp<-system(paste(path,"/dnaml",sep=""),input=oo,show.output.on.console=(!quiet))
@@ -346,12 +335,7 @@ Rdnaml<-function(X,path=".",...){
 	tree$tip.label<-rownames(X)[as.numeric(tree$tip.label)]
 	if(hasArg(outgroup)){ 
 		outgroup<-list(...)$outgroup
-		tree<-root(tree,outgroup)
-		if(!quiet){
-			cat("Rooted with the outgroup\n")
-			cat("------------------------\n")
-			cat(paste(paste(outgroup,collapse=", "),"\n\n"))
-		}
+		tree<-outgroup.root(tree,outgroup,quiet)
 	}
 	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
 	else cleanup<-TRUE

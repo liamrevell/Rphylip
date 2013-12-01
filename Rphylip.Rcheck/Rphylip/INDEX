@@ -1,4 +1,5 @@
 Rcontml                 R interface for contml
 Rcontrast               R interface for contrast
 Rdnaml                  R interface for dnaml
+Rdnapars                R interface for dnapars
 opt.Rdnaml              Parameter optimizer for Rdnaml

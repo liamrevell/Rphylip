@@ -9,5 +9,5 @@ citEntry(
 	textVersion=paste("Revell, L. J.","Rphylip: An R interface for PHYLIP","R package.")	   
 )
 
-citFooter("As Rphylip is an R interface for PHYLIP, all Rphylip users should cite PHYLIP in published work: ")
-citFooter("Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.")
+citFooter("As Rphylip is an R interface for PHYLIP, all Rphylip users should cite PHYLIP in published work:\n\n")
+citFooter("   Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.")
