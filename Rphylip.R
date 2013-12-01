@@ -51,17 +51,62 @@ Rdnapars<-function(X,path=".",...){
 		oo<-c(oo,"w")
 		write(paste(weights,collapse=""),file="weights")
 	} else weights<-NULL
-
-
-
+	if(quiet) oo<-c(oo,2)
+	oo<-c(oo,"y","r")
+	write(paste("    ",nrow(X),"   ",ncol(X),sep=""),file="infile")
+	for(i in 1:nrow(X)){
+		sp<-as.character(i)
+		sp<-paste(sp,paste(rep(" ",11-nchar(sp)),collapse=""),collapse="")
+		tt<-paste(sp,paste(X[i,],collapse=""),collapse=" ")
+		write(tt,append=TRUE,file="infile")
+	}
+	system("touch outtree")
+	system("touch outfile")
+	system(paste(path,"/dnapars",sep=""),input=oo)
+	tree<-read.tree("outtree")
+	temp<-readLines("outfile")
+	ii<-grep("requires a total of",temp)
+	for(i in 1:length(ii)){
+		xx<-strsplit(temp[ii[i]],"  ")[[1]]
+		tree[[i]]$pscore<-as.numeric(xx[length(xx)])
+	}
+	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet){
+		cat("Translation table\n")
+		cat("-----------------\n")
+		temp<-lapply(1:nrow(X),function(x,y) cat(paste("\t",paste(x,y[x],sep="\t"),"\n",sep="")),y=rownames(X))
+		cat("\n")
+	}
+	if(class(tree)=="phylo") tree$tip.label<-rownames(X)[as.numeric(tree$tip.label)]
+	else if(class(tree)=="multiPhylo"){
+		foo<-function(x,y){
+			x$tip.label<-y[as.numeric(x$tip.label)]
+			x
+		}
+		tree<-lapply(tree,foo,y=rownames(X))
+		class(tree)<-"multiPhylo"
+	}	
 	if(hasArg(outgroup)){ 
 		outgroup<-list(...)$outgroup
-		tree<-root(tree,outgroup)
+		if(class(tree)=="phylo") tree<-root(tree,outgroup)
+		else if(class(tree)=="multiPhylo"){
+			tree<-lapply(tree,root,outgroup=outgroup)
+			class(tree)<-"multiPhylo"
+		}
 		if(!quiet){
 			cat("Rooted with the outgroup\n")
 			cat("------------------------\n")
 			cat(paste(paste(outgroup,collapse=", "),"\n\n"))
 		}
+	}
+	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
+	else cleanup<-TRUE
+	if(cleanup){
+		system("rm infile",show.output.on.console=FALSE)
+		system("rm outtree",show.output.on.console=FALSE)
+		system("rm outfile",show.output.on.console=FALSE)
+		if(!is.null(weights)) system("rm weights",show.output.on.console=FALSE)
+		if(intree) system("rm intree",show.output.on.console=FALSE)	
 	}
 	return(tree)
 }
