@@ -1,3 +1,33 @@
+## function writes DNAbin to file in PHYLIP format with numbers as labels
+## written by Liam J. Revell 2013
+
+write.dna<-function(X){
+	write(paste("    ",nrow(X),"   ",ncol(X),sep=""),file="infile")
+	for(i in 1:nrow(X)){
+		sp<-as.character(i)
+		sp<-paste(sp,paste(rep(" ",11-nchar(sp)),collapse=""),collapse="")
+		tt<-paste(sp,paste(X[i,],collapse=""),collapse=" ")
+		write(tt,append=TRUE,file="infile")
+	}
+}
+
+## function to outgroup root
+## written by Liam J. Revell 2013
+
+outgroup.root<-function(tree,outgroup,quiet){
+	if(class(tree)=="phylo") tree<-root(tree,outgroup)
+	else if(class(tree)=="multiPhylo"){
+		tree<-lapply(tree,root,outgroup=outgroup)
+		class(tree)<-"multiPhylo"
+	}
+	if(!quiet){
+		cat("Rooted tree(s) with the outgroup\n")
+		cat("------------------------\n")
+		cat(paste(paste(outgroup,collapse=", "),"\n\n"))
+	}
+	return(tree)
+}
+
 ## function check before overwriting files
 ## written by Liam J. Revell 2013
 
@@ -53,13 +83,7 @@ Rdnapars<-function(X,path=".",...){
 	} else weights<-NULL
 	if(quiet) oo<-c(oo,2)
 	oo<-c(oo,"y","r")
-	write(paste("    ",nrow(X),"   ",ncol(X),sep=""),file="infile")
-	for(i in 1:nrow(X)){
-		sp<-as.character(i)
-		sp<-paste(sp,paste(rep(" ",11-nchar(sp)),collapse=""),collapse="")
-		tt<-paste(sp,paste(X[i,],collapse=""),collapse=" ")
-		write(tt,append=TRUE,file="infile")
-	}
+	write.dna(X)
 	system("touch outtree")
 	system("touch outfile")
 	system(paste(path,"/dnapars",sep=""),input=oo)
@@ -68,7 +92,8 @@ Rdnapars<-function(X,path=".",...){
 	ii<-grep("requires a total of",temp)
 	for(i in 1:length(ii)){
 		xx<-strsplit(temp[ii[i]],"  ")[[1]]
-		tree[[i]]$pscore<-as.numeric(xx[length(xx)])
+		if(length(ii)>1) tree[[i]]$pscore<-as.numeric(xx[length(xx)])
+		else tree$pscore<-as.numeric(xx[length(xx)])
 	}
 	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
 	if(!quiet){
@@ -88,16 +113,7 @@ Rdnapars<-function(X,path=".",...){
 	}	
 	if(hasArg(outgroup)){ 
 		outgroup<-list(...)$outgroup
-		if(class(tree)=="phylo") tree<-root(tree,outgroup)
-		else if(class(tree)=="multiPhylo"){
-			tree<-lapply(tree,root,outgroup=outgroup)
-			class(tree)<-"multiPhylo"
-		}
-		if(!quiet){
-			cat("Rooted with the outgroup\n")
-			cat("------------------------\n")
-			cat(paste(paste(outgroup,collapse=", "),"\n\n"))
-		}
+		tree<-outgroup.root(tree,outgroup,quiet)
 	}
 	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
 	else cleanup<-TRUE
