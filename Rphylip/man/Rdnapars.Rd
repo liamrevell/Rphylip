@@ -10,7 +10,9 @@ Rdnapars(X, path=NULL, ...)
 	\item{...}{optional arguments to be passed to dnapars. See details for more information.}
 }
 \details{
-	Optional arguments include the following: \code{quiet} suppress some output to R console (defaults to \code{quiet = FALSE}); \code{tree} object of class \code{"phylo"} - if supplied, then the parsimony score will be computed on a fixed input topology; \code{thorough} logical value indicating whether to conduct a more thorough search (defaults to \code{thorough=TRUE}); \code{nsave} number of trees to save if multiple equally parsimonious trees are found (defaults to \code{nsave=10000}); \code{random.order} add taxa to tree in random order (defaults to \code{random.order = TRUE}); \code{random.addition} number of random addition replicates for \code{random.order = TRUE} (defaults to \code{random.addition = 10}); \code{threshold} threshold value for threshold parsimony (defaults to ordinary parsimony); \code{transversion} logical value indicating whether to use transversion parsimony (defaults to \code{transversion=FALSE}); \code{weights} vector of weights of length equal to the number of columns in \code{X} (defaults to unweighted); \code{outgroup} outgroup if outgroup rooting of the estimated tree is desired; and \code{cleanup} remove PHYLIP input & output files after the analysis is completed (defaults to \code{cleanup = TRUE}).   
+	Optional arguments include the following: \code{quiet} suppress some output to R console (defaults to \code{quiet = FALSE}); \code{tree} object of class \code{"phylo"} - if supplied, then the parsimony score will be computed on a fixed input topology; \code{thorough} logical value indicating whether to conduct a more thorough search (defaults to \code{thorough=TRUE}); \code{nsave} number of trees to save if multiple equally parsimonious trees are found (defaults to \code{nsave=10000}); \code{random.order} add taxa to tree in random order (defaults to \code{random.order = TRUE}); \code{random.addition} number of random addition replicates for \code{random.order = TRUE} (defaults to \code{random.addition = 10}); \code{threshold} threshold value for threshold parsimony (defaults to ordinary parsimony); \code{transversion} logical value indicating whether to use transversion parsimony (defaults to \code{transversion=FALSE}); \code{weights} vector of weights of length equal to the number of columns in \code{X} (defaults to unweighted); \code{outgroup} outgroup if outgroup rooting of the estimated tree is desired; and \code{cleanup} remove PHYLIP input & output files after the analysis is completed (defaults to \code{cleanup = TRUE}).
+
+	Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
 }
 \description{
 	This function is an R interface for dnapars in the PHYLIP package (Felsenstein 2013). dnapars can be used for ML phylogeny estimation from DNA sequences.
@@ -26,6 +28,10 @@ Rdnapars(X, path=NULL, ...)
 	\code{\link{Rdnaml}}
 }
 \examples{
+\dontrun{
+data(primates)
+tree<-Rdnapars(primates)
+}
 }
 \keyword{phylogenetics}
 \keyword{inference}

@@ -15,6 +15,8 @@ Rcontrast(tree, X, path=NULL, ...)
 }
 \description{
 	This function is an R interface for contrast in the PHYLIP package (Felsenstein 2013). contrast can be used to perform the among species phylogenetically independent contrasts method of Felsenstein (1985) and the within & among species method of Felsenstein (2008).
+
+	Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
 }
 \value{
 	This function returns an object of class \code{"phylo"} that is the optimized tree.

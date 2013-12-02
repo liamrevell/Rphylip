@@ -1,3 +1,76 @@
+## calls neighbor from PHYLIP 3.695 (Felsenstein 2013)
+## written by Liam J. Revell 2013
+
+Rneighbor<-function(D,path=NULL,...){
+	if(class(D)=="dist"||class(D)=="data.frame") D<-as.matrix(D)
+	D<-D[rownames(D),rownames(D)]
+	if(is.null(path)) path<-findPath("neighbor")
+	if(is.null(path)) stop("No path provided and was not able to find path to neighbor")
+	if(hasArg(quiet)) quiet<-list(...)$quiet
+	else quiet<-FALSE
+	if(!quiet) if(file.warn(c("infile","outfile","outtree"))==0) return(NULL)
+	oo<-c("r")
+	if(hasArg(method)) method<-list(...)$method
+	else method<-"nj"
+	if(method=="NJ"||method=="nj") method<-"nj"
+	else if(method=="UPGMA"||method=="upgma"){
+		method<-"upgma"
+		oo<-c(oo,"n")
+	} else {
+		cat("\nWarning:\n  method not recognized - using method=\"NJ\"\n")
+		method="nj"
+	}
+	if(hasArg(random.order)) random.order<-list(...)$random.order
+	else random.order<-TRUE
+	if(random.order) oo<-c(oo,"j",sample(seq(1,99999,by=2),1))
+	if(quiet) oo<-c(oo,2)
+	oo<-c(oo,"y","r")
+	write.distances(D)
+	system("touch outtree")
+	system("touch outfile")
+	system(paste(path,"/neighbor",sep=""),input=oo)
+	tree<-read.tree("outtree")
+	temp<-readLines("outfile")
+	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet){
+		cat("Translation table\n")
+		cat("-----------------\n")
+		temp<-lapply(1:nrow(D),function(x,y) cat(paste("\t",paste(x,y[x],sep="\t"),"\n",sep="")),y=rownames(D))
+		cat("\n")
+	}
+	tree$tip.label<-rownames(D)[as.numeric(tree$tip.label)]	
+	if(hasArg(outgroup)){
+		if(method=="nj"){
+			outgroup<-list(...)$outgroup
+			tree<-outgroup.root(tree,outgroup,quiet)
+		} else { 
+			cat("\nWarning:\n  outgroup rooting not permitted for method = \"upgma\"\n")
+			cat("  tree already rooted\n\n")
+		}
+	}
+	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
+	else cleanup<-TRUE
+	if(cleanup){
+		system("rm infile",show.output.on.console=FALSE)
+		system("rm outtree",show.output.on.console=FALSE)
+		system("rm outfile",show.output.on.console=FALSE)
+	}
+	return(tree)
+}
+
+## write distance matrix to file in PHYLIP format
+## written by Liam J. Revell 2013
+
+write.distances<-function(D){
+	write(paste("    ",nrow(D),sep=""),file="infile")
+	for(i in 1:nrow(D)){
+		sp<-as.character(i)
+		sp<-paste(sp,paste(rep(" ",11-nchar(sp)),collapse=""),collapse="")
+		tt<-paste(sp,paste(D[i,],collapse=" "),collapse=" ")
+		write(tt,append=TRUE,file="infile")
+	}
+}
+
 ## attempt to find path to PHYLIP executable
 ## written by Liam J. Revell 2013
 
@@ -44,6 +117,7 @@ findPath<-function(string){
 			if(length(ii)>0) 
 				if(any(ll[ii]==string)||any(ll[ii]==paste(string,".exe",sep=""))) 
 					return(shortPathName(dd))
+		}
 		## check C:/Users/Username/Documents
 		ll<-list.files(paste("C:/Users/",uu,"/Documents",sep=""))
 		ii<-grep("phylip",ll)

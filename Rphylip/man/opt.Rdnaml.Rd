@@ -11,6 +11,8 @@ opt.Rdnaml(X, path=NULL, ...)
 }
 \details{
 	Optional arguments include the following: \code{tree} fixed tree to use in optimization - if not provided, it will be estimated using \code{\link{Rdnaml}} under the default conditions; \code{bounds} a list with bounds for optimization - for \code{kappa} and \code{gamma} this should be a two-element vector, whereas for \code{bf} this should be a 4 x 2 matrix with lower bounds in column 1 and upper bounds in column 2.
+
+	Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
 }
 \description{
 	This function is an wrapper for \code{\link{Rdnaml}} that attempts to optimize \code{gamma} (the alpha shape parameter of the gamma model of rate heterogeneity among sites), \code{kappa} (the transition:transversion ratio), and \code{bf} (the base frequencies).
@@ -26,6 +28,11 @@ opt.Rdnaml(X, path=NULL, ...)
 	\code{\link{opt.Rdnaml}}
 }
 \examples{
+\dontrun{
+data(primates)
+fit<-opt.Rdnaml(primates,bounds=list(kappa=c(0.1,40))
+tree<-Rdnaml(primates,kappa=fit$kappa,gamma=fit$gamma,bf=fit$bf)
+}
 }
 \keyword{phylogenetics}
 \keyword{inference}

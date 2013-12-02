@@ -1,14 +1,18 @@
 Package: Rphylip
-Version: 0.1-02
-Date: 2013-12-1
+Version: 0.1-03
+Date: 2013-12-2
 Title: Rphylip: An R interface for PHYLIP
 Author: Liam J. Revell
 Maintainer: Liam J. Revell <liam.revell@umb.edu>
 Depends: R (>= 2.10), ape (>= 3.0-10)
 ZipData: no
-Description: Rphylip provides an R interface for the PHYLIP package
+Description: Rphylip provides an R interface for the PHYLIP package. All users of
+	Rphylip will thus first have to install the PHYLIP phylogeny methods program
+	package (Felsenstein 2013). 
+	See http://evolution.genetics.washington.edu/phylip.html for more information
+	about installing PHYLIP.
 License: GPL (>= 2)
 URL: http://www.phytools.org/Rphylip
-Packaged: 2013-12-1 12:00:00 EDT
+Packaged: 2013-12-2 12:00:00 EDT
 Repository: 
-Date/Publication: 2013-12-1 12:00:00 EDT
+Date/Publication: 2013-12-2 12:00:00 EDT
