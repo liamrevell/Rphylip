@@ -433,10 +433,15 @@ opt.Rdnaml<-function(X,path=NULL,...){
 		cat("-----------------------\n")
 		ll
 	}
+	## bounds for optimization
+	if(hasArg(bounds)) bounds<-list(...)$bounds
+	else bounds<-list()
+	bb=list(kappa=c(0.01,20),gamma=c(0.01,20),bf=cbind(rep(0.01,4),rep(1,4)))
+	bb[(namc<-names(bounds))]<-bounds
 	par<-c(1,10,rep(0.25,4))
 	fit<-optim(par,lik,X=X,tree=tree,path=path,method="L-BFGS-B",
-		lower=c(rep(0.01,2),rep(0.01,4)),upper=c(20,20,rep(1,4)),
-		control=list(fnscale=-1))
+		lower=c(bb$kappa[1],bb$gamma[1],bb$bf[,1]),
+		upper=c(bb$kappa[2],bb$gamma[2],bb$bf[,2]),control=list(fnscale=-1))
 	return(list(kappa=fit$par[1],gamma=fit$par[2],
 		bf=fit$par[3:6]/sum(fit$par[3:6]),logLik=fit$value))
 }
