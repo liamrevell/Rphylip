@@ -44,6 +44,17 @@ findPath<-function(string){
 			if(length(ii)>0) 
 				if(any(ll[ii]==string)||any(ll[ii]==paste(string,".exe",sep=""))) 
 					return(shortPathName(dd))
+		## check C:/Users/Username/Documents
+		ll<-list.files(paste("C:/Users/",uu,"/Documents",sep=""))
+		ii<-grep("phylip",ll)
+		if(length(ii)>0){
+			dd<-paste("C:/Users/",uu,"/Documents/",ll[ii],"/exe",sep="")
+			ll<-list.files(dd)
+			ii<-grep(string,ll)
+			if(length(ii)>0) 
+				if(any(ll[ii]==string)||any(ll[ii]==paste(string,".exe",sep=""))) 
+					return(shortPathName(dd))
+
 		}
 		return(NULL)
 	} else return(NULL)
