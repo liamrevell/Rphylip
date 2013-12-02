@@ -2,12 +2,12 @@
 \alias{Rcontrast}
 \title{R interface for contrast}
 \usage{
-Rcontrast(tree, X, path="." , ...)
+Rcontrast(tree, X, path=NULL, ...)
 }
 \arguments{
 	\item{tree}{object of class \code{"phylo"}.}
 	\item{X}{a \emph{matrix} of continuous valued traits (in columns) with rownames containing species names. For within-species contrasts analysis, the matrix should contain repeating (identical) row names for conspecifics.}
-	\item{path}{path to the executable containing contrast.}
+	\item{path}{path to the executable containing contrast. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file. (Currently works only for \code{.Platform$OS.type = "windows"}.)}
 	\item{...}{optional arguments to be passed to contrast. See details for more information.}
 }
 \details{

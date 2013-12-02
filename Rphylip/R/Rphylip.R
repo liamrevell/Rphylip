@@ -1,3 +1,54 @@
+## attempt to find path to PHYLIP executable
+## written by Liam J. Revell 2013
+
+findPath<-function(string){
+	if(.Platform$OS.type=="windows"){
+		## first, check current directory
+		ll<-list.files()
+		ii<-grep(string,ll)
+		if(length(ii)>0) 
+			if(any(ll[ii]==string)||any(ll[ii]==paste(string,".exe",sep=""))) 
+				return(".")
+		## check C:/Program Files
+		ll<-list.files("C:/Program Files/")
+		ii<-grep("phylip",ll)
+		if(length(ii)>0){
+			dd<-paste("C:/Program Files/",ll[ii],"/exe",sep="")
+			ll<-list.files(dd)
+			ii<-grep(string,ll)
+			if(length(ii)>0) 
+				if(any(ll[ii]==string)||any(ll[ii]==paste(string,".exe",sep=""))) 
+					return(shortPathName(dd))
+		}
+		## check C:/Progam Files (x86)
+		ll<-list.files("C:/Program Files (x86)/")
+		ii<-grep("phylip",ll)
+		if(length(ii)>0){
+			dd<-paste("C:/Program Files (x86)/",ll[ii],"/exe",sep="")
+			ll<-list.files(dd)
+			ii<-grep(string,ll)
+			if(length(ii)>0) 
+				if(any(ll[ii]==string)||any(ll[ii]==paste(string,".exe",sep="")))
+					return(shortPathName(dd))
+		}
+		## check C:/Users/Username
+		uu<-strsplit(getwd(),"")[[1]]
+		ii<-grep("/",uu)
+		uu<-paste(uu[(ii[2]+1):(ii[3]-1)],collapse="")
+		ll<-list.files(paste("C:/Users/",uu,sep=""))
+		ii<-grep("phylip",ll)
+		if(length(ii)>0){
+			dd<-paste("C:/Users/",uu,"/",ll[ii],"/exe",sep="")
+			ll<-list.files(dd)
+			ii<-grep(string,ll)
+			if(length(ii)>0) 
+				if(any(ll[ii]==string)||any(ll[ii]==paste(string,".exe",sep=""))) 
+					return(shortPathName(dd))
+		}
+		return(NULL)
+	} else return(NULL)
+}
+
 ## function writes DNAbin to file in PHYLIP format with numbers as labels
 ## written by Liam J. Revell 2013
 
@@ -46,7 +97,9 @@ file.warn<-function(gg){
 ## calls dnapars from PHYLIP 3.695 (Felsenstein 2013)
 ## written by Liam J. Revell 2013
 
-Rdnapars<-function(X,path=".",...){
+Rdnapars<-function(X,path=NULL,...){
+	if(is.null(path)) path<-findPath("dnapars")
+	if(is.null(path)) stop("No path provided and was not able to find path to dnapars")
 	if(hasArg(quiet)) quiet<-list(...)$quiet
 	else quiet<-FALSE
 	if(!quiet) if(file.warn(c("infile","outfile","outtree","weights"))==0) return(NULL)
@@ -130,7 +183,9 @@ Rdnapars<-function(X,path=".",...){
 ## calls contml from PHYLIP 3.695 (Felsenstein 2013)
 ## written by Liam J. Revell 2013
 
-Rcontml<-function(X,path=".",...){
+Rcontml<-function(X,path=NULL,...){
+	if(is.null(path)) path<-findPath("contml")
+	if(is.null(path)) stop("No path provided and was not able to find path to contml")
 	if(hasArg(quiet)) quiet<-list(...)$quiet
 	else quiet<-FALSE
 	if(!quiet) if(file.warn(c("infile","outfile","outtree"))==0) return(NULL)
@@ -250,7 +305,9 @@ Rcontml<-function(X,path=".",...){
 ## calls dnaml from PHYLIP 3.695 (Felsenstein 2013)
 ## written by Liam J. Revell 2013
 
-Rdnaml<-function(X,path=".",...){
+Rdnaml<-function(X,path=NULL,...){
+	if(is.null(path)) path<-findPath("dnaml")
+	if(is.null(path)) stop("No path provided and was not able to find path to dnaml")
 	if(class(X)!="DNAbin") stop("X should be an object of class 'DNAbin'")
 	if(hasArg(quiet)) quiet<-list(...)$quiet
 	else quiet<-FALSE
@@ -354,7 +411,9 @@ Rdnaml<-function(X,path=".",...){
 ## function to optimize parameters of Rdnaml
 ## written by Liam J. Revell 2013
 
-opt.Rdnaml<-function(X,path=".",...){
+opt.Rdnaml<-function(X,path=NULL,...){
+	if(is.null(path)) path<-findPath("dnaml")
+	if(is.null(path)) stop("No path provided and was not able to find path to dnaml")
 	if(hasArg(tree)) tree<-list(...)$tree
 	else {
 		cat("\nFinding starting tree for parameter optimization\n")
@@ -385,7 +444,9 @@ opt.Rdnaml<-function(X,path=".",...){
 ## function calls contrast from PHYLIP 3.695 (Felsenstein 2013)
 ## written by Liam J. Revell 2013
 
-Rcontrast<-function(tree,X,path=".",...){
+Rcontrast<-function(tree,X,path=NULL,...){
+	if(is.null(path)) path<-findPath("contrast")
+	if(is.null(path)) stop("No path provided and was not able to find path to contrast")
 	if(class(tree)!="phylo") stop("tree should be an object of class 'phylo'")
 	if(!is.binary.tree(tree)){
 		cat("Warning:\n  Tree is not binary, resolving with branches of zero length\n")

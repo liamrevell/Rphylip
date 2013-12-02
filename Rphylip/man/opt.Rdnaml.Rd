@@ -2,11 +2,11 @@
 \alias{opt.Rdnaml}
 \title{Parameter optimizer for Rdnaml}
 \usage{
-opt.Rdnaml(X, path="." , ...)
+opt.Rdnaml(X, path=NULL, ...)
 }
 \arguments{
 	\item{X}{an object of class \code{"DNAbin"}.}
-	\item{path}{path to the executable containing dnaml.}
+	\item{path}{path to the executable containing dnaml. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file. (Currently works only for \code{.Platform$OS.type = "windows"}.)}
 	\item{...}{optional arguments. See details for more information.}
 }
 \details{

@@ -13,7 +13,7 @@
 \end{center}
 \begin{description}
 \raggedright{}
-\item[Version]\AsIs{0.1-01}
+\item[Version]\AsIs{0.1-02}
 \item[Date]\AsIs{2013-12-1}
 \item[Title]\AsIs{Rphylip: An R interface for PHYLIP}
 \item[Author]\AsIs{Liam J. Revell}
@@ -39,14 +39,14 @@ This function is an wrapper for \code{\LinkA{Rdnaml}{Rdnaml}} that attempts to o
 %
 \begin{Usage}
 \begin{verbatim}
-opt.Rdnaml(X, path="." , ...)
+opt.Rdnaml(X, path=NULL, ...)
 \end{verbatim}
 \end{Usage}
 %
 \begin{Arguments}
 \begin{ldescription}
 \item[\code{X}] an object of class \code{"DNAbin"}.
-\item[\code{path}] path to the executable containing dnaml.
+\item[\code{path}] path to the executable containing dnaml. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file. (Currently works only for \code{.Platform\$OS.type = "windows"}.)
 \item[\code{...}] optional arguments. See details for more information.
 \end{ldescription}
 \end{Arguments}
@@ -71,6 +71,27 @@ Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distr
 \code{\LinkA{opt.Rdnaml}{opt.Rdnaml}}
 \end{SeeAlso}
 \inputencoding{utf8}
+\HeaderA{primates}{Example DNA dataset from primates}{primates}
+\keyword{datasets}{primates}
+%
+\begin{Description}\relax
+An object of class \code{"DNAbin"} containing nucleotide sequence data of mysterious origin for 12 species of primates.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+data(primates)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+The data are stored as a modified object \code{"DNAbin"}.
+\end{Format}
+%
+\begin{Source}\relax
+Unknown.
+\end{Source}
+\inputencoding{utf8}
 \HeaderA{Rcontml}{R interface for contml}{Rcontml}
 \keyword{phylogenetics}{Rcontml}
 \keyword{inference}{Rcontml}
@@ -82,14 +103,14 @@ This function is an R interface for contml in the PHYLIP package (Felsenstein 20
 %
 \begin{Usage}
 \begin{verbatim}
-Rcontml(X, path="." , ...)
+Rcontml(X, path=NULL, ...)
 \end{verbatim}
 \end{Usage}
 %
 \begin{Arguments}
 \begin{ldescription}
 \item[\code{X}] either (a) a \emph{matrix} of continuous valued traits (in columns) with rownames containing species names; or (b) a list of matrices in which each row contains the relative frequency of alleles at a locus for a species. In the latter case the rownames of each matrix in the list should contain the species names.
-\item[\code{path}] path to the executable containing contml.
+\item[\code{path}] path to the executable containing contml. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file. (Currently works only for \code{.Platform\$OS.type = "windows"}.)
 \item[\code{...}] optional arguments to be passed to contml. See details for more information.
 \end{ldescription}
 \end{Arguments}
@@ -125,7 +146,7 @@ This function is an R interface for contrast in the PHYLIP package (Felsenstein 
 %
 \begin{Usage}
 \begin{verbatim}
-Rcontrast(tree, X, path="." , ...)
+Rcontrast(tree, X, path=NULL, ...)
 \end{verbatim}
 \end{Usage}
 %
@@ -133,7 +154,7 @@ Rcontrast(tree, X, path="." , ...)
 \begin{ldescription}
 \item[\code{tree}] object of class \code{"phylo"}.
 \item[\code{X}] a \emph{matrix} of continuous valued traits (in columns) with rownames containing species names. For within-species contrasts analysis, the matrix should contain repeating (identical) row names for conspecifics.
-\item[\code{path}] path to the executable containing contrast.
+\item[\code{path}] path to the executable containing contrast. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file. (Currently works only for \code{.Platform\$OS.type = "windows"}.)
 \item[\code{...}] optional arguments to be passed to contrast. See details for more information.
 \end{ldescription}
 \end{Arguments}
@@ -173,14 +194,14 @@ This function is an R interface for dnaml in the PHYLIP package (Felsenstein 201
 %
 \begin{Usage}
 \begin{verbatim}
-Rdnaml(X, path="." , ...)
+Rdnaml(X, path=NULL , ...)
 \end{verbatim}
 \end{Usage}
 %
 \begin{Arguments}
 \begin{ldescription}
 \item[\code{X}] an object of class \code{"DNAbin"}.
-\item[\code{path}] path to the executable containing dnaml.
+\item[\code{path}] path to the executable containing dnaml. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file. (Currently works only for \code{.Platform\$OS.type = "windows"}.)
 \item[\code{...}] optional arguments to be passed to dnaml. See details for more information.
 \end{ldescription}
 \end{Arguments}
@@ -216,14 +237,14 @@ This function is an R interface for dnapars in the PHYLIP package (Felsenstein 2
 %
 \begin{Usage}
 \begin{verbatim}
-Rdnapars(X, path="." , ...)
+Rdnapars(X, path=NULL, ...)
 \end{verbatim}
 \end{Usage}
 %
 \begin{Arguments}
 \begin{ldescription}
 \item[\code{X}] an object of class \code{"DNAbin"}.
-\item[\code{path}] path to the executable containing dnapars.
+\item[\code{path}] path to the executable containing dnapars. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file. (Currently works only for \code{.Platform\$OS.type = "windows"}.)
 \item[\code{...}] optional arguments to be passed to dnapars. See details for more information.
 \end{ldescription}
 \end{Arguments}

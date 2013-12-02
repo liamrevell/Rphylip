@@ -2,11 +2,11 @@
 \alias{Rdnaml}
 \title{R interface for dnaml}
 \usage{
-Rdnaml(X, path="." , ...)
+Rdnaml(X, path=NULL , ...)
 }
 \arguments{
 	\item{X}{an object of class \code{"DNAbin"}.}
-	\item{path}{path to the executable containing dnaml.}
+	\item{path}{path to the executable containing dnaml. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file. (Currently works only for \code{.Platform$OS.type = "windows"}.)}
 	\item{...}{optional arguments to be passed to dnaml. See details for more information.}
 }
 \details{
