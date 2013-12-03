@@ -1,3 +1,24 @@
+## sets up PHYLIP in Mac OS X (based on http://evolution.gs.washington.edu/phylip/install.html)
+## written by Liam J. Revell
+
+setupOSX<-function(path=NULL){
+	if(.Platform$OS.type!="unix") stop("this function is for Mac OS X only")
+	if(is.null(path)){
+		## check /Applications for path to PHYLIP
+		ll<-list.files("/Applications/")
+		ii<-grep("phylip",ll)
+		if(length(ii)>0) path<-paste("/Applications/",ll[ii],sep="")
+		else stop("was not able to find path to phylip installation")
+	}
+	if(strplit(path,"")[length(strplit(path,""))]=="/"){
+		path<-strsplit(path,"")
+		path<-paste(path[2:length(path)-1],collapse="")
+	} 
+	system(paste("cp ",path,"/src/linkmac ",path,"/exe/linkmac",sep=""))
+	system(paste("chmod +x ",path,"/exe/linkmac",sep=""))
+	system(paste(path,"/exe/linkmac",sep=""))
+}		
+
 ## calls neighbor from PHYLIP 3.695 (Felsenstein 2013)
 ## written by Liam J. Revell 2013
 
@@ -129,6 +150,25 @@ findPath<-function(string){
 				if(any(ll[ii]==string)||any(ll[ii]==paste(string,".exe",sep=""))) 
 					return(shortPathName(dd))
 
+		}
+		return(NULL)
+	} else if(.Platform$OS.type=="unix"){
+		## first, check current directory
+		ll<-list.files()
+		ii<-grep(string,ll)
+		if(length(ii)>0) 
+			if(any(ll[ii]==string)) 
+				return(".")
+		## check /Applications
+		ll<-list.files("/Applications/")
+		ii<-grep("phylip",ll)
+		if(length(ii)>0){
+			dd<-paste("/Applications/",ll[ii],"/exe",sep="")
+			ll<-list.files(dd)
+			ii<-grep(string,ll)
+			if(length(ii)>0) 
+				if(any(ll[ii]==string)||any(ll[ii]==paste(string,".exe",sep=""))) 
+					return(dd)
 		}
 		return(NULL)
 	} else return(NULL)
