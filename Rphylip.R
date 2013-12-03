@@ -499,7 +499,7 @@ Rdnaml<-function(X,path=NULL,...){
 	} else weights<-NULL
 	if(hasArg(speedier)) speedier<-list(...)$speedier
 	else speedier<-FALSE
-	if(!speedier) oo<-c(oo,"s")
+	if((!speedier)&&(!clock)) oo<-c(oo,"s")
 	if(hasArg(global)) global<-list(...)$global
 	else global<-TRUE
 	if(global) oo<-c(oo,"g")
@@ -529,7 +529,8 @@ Rdnaml<-function(X,path=NULL,...){
 	tree$tip.label<-rownames(X)[as.numeric(tree$tip.label)]
 	if(hasArg(outgroup)){ 
 		outgroup<-list(...)$outgroup
-		tree<-outgroup.root(tree,outgroup,quiet)
+		if(!clock) tree<-outgroup.root(tree,outgroup,quiet)
+		else cat("\nMolecular clock trees are already rooted!\n\nIgnoring argument outgroup.\n\n")
 	}
 	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
 	else cleanup<-TRUE
