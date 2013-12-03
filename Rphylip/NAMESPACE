@@ -1,3 +1,4 @@
-export(opt.Rdnaml, Rcontml, Rcontrast, Rdnaml, Rdnapars, Rneighbor, setupOSX)
+export(opt.Rdnaml, Rcontml, Rcontrast, Rdnaml, Rdnamlk, Rdnapars, Rneighbor)
+export(setupOSX)
 
 

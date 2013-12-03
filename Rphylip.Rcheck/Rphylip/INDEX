@@ -1,6 +1,6 @@
 Rcontml                 R interface for contml
 Rcontrast               R interface for contrast
-Rdnaml                  R interface for dnaml
+Rdnaml                  R interfaces for dnaml and dnamlk
 Rdnapars                R interface for dnapars
 Rneighbor               R interface for neighbor
 Rphylip-package         Rphylip: An R interface for PHYLIP

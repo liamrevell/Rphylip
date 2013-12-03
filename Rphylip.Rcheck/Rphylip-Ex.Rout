@@ -32,8 +32,8 @@ Loading required package: ape
 > flush(stderr()); flush(stdout())
 > 
 > ### Name: Rdnaml
-> ### Title: R interface for dnaml
-> ### Aliases: Rdnaml
+> ### Title: R interfaces for dnaml and dnamlk
+> ### Aliases: Rdnaml Rdnamlk
 > ### Keywords: phylogenetics inference maximum likelihood
 > 
 > ### ** Examples
@@ -41,6 +41,7 @@ Loading required package: ape
 > ## Not run: 
 > ##D data(primates)
 > ##D tree<-Rdnaml(primates,kappa=10)
+> ##D clockTree<-Rdnamlk(primates,kappa=10)
 > ## End(Not run)
 > 
 > 
@@ -130,7 +131,7 @@ Loading required package: ape
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  0.5 0.06 0.6 NA NA 
+Time elapsed:  0.2 0 0.21 NA NA 
 > grDevices::dev.off()
 null device 
           1 

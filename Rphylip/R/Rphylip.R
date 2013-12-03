@@ -1,3 +1,10 @@
+## calls dnamlk from PHYLIP 3.695 (Felsenstein 2013)
+## written by Liam J. Revell 2013
+
+Rdnamlk<-function(X,path=NULL,...){
+	Rdnaml(X,path,clock=TRUE,...)
+}	
+
 ## clean up files
 ## written by Liam J. Revell 2013
 
@@ -433,8 +440,11 @@ Rcontml<-function(X,path=NULL,...){
 ## written by Liam J. Revell 2013
 
 Rdnaml<-function(X,path=NULL,...){
-	if(is.null(path)) path<-findPath("dnaml")
-	if(is.null(path)) stop("No path provided and was not able to find path to dnaml")
+	if(hasArg(clock)) clock<-list(...)$clock
+	else clock<-FALSE
+	exe<-if(clock) "dnamlk" else "dnaml"
+	if(is.null(path)) path<-findPath(exe)
+	if(is.null(path)) stop(paste("No path provided and was not able to find path to",exe))
 	if(class(X)!="DNAbin") stop("X should be an object of class 'DNAbin'")
 	if(hasArg(quiet)) quiet<-list(...)$quiet
 	else quiet<-FALSE
@@ -505,7 +515,7 @@ Rdnaml<-function(X,path=NULL,...){
 	write.dna(X)
 	system("touch outtree")
 	system("touch outfile")
-	temp<-system(paste(path,"/dnaml",sep=""),input=oo,show.output.on.console=(!quiet))
+	temp<-system(paste(path,"/",exe,sep=""),input=oo,show.output.on.console=(!quiet))
 	tree<-read.tree("outtree")
 	temp<-readLines("outfile")
 	logLik<-as.numeric(strsplit(temp[grep("Ln Likelihood",temp)],"=")[[1]][2])

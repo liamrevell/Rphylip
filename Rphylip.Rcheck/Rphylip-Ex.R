@@ -12,8 +12,8 @@ nameEx("Rdnaml")
 flush(stderr()); flush(stdout())
 
 ### Name: Rdnaml
-### Title: R interface for dnaml
-### Aliases: Rdnaml
+### Title: R interfaces for dnaml and dnamlk
+### Aliases: Rdnaml Rdnamlk
 ### Keywords: phylogenetics inference maximum likelihood
 
 ### ** Examples
@@ -21,6 +21,7 @@ flush(stderr()); flush(stdout())
 ## Not run: 
 ##D data(primates)
 ##D tree<-Rdnaml(primates,kappa=10)
+##D clockTree<-Rdnamlk(primates,kappa=10)
 ## End(Not run)
 
 
