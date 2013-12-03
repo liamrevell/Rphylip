@@ -16,7 +16,7 @@ setupOSX<-function(path=NULL){
 	} 
 	system(paste("cp ",path,"/src/linkmac ",path,"/exe/linkmac",sep=""))
 	system(paste("chmod +x ",path,"/exe/linkmac",sep=""))
-	system(paste(path,"/exe/linkmac",sep=""))
+	system(paste("cd ",path,"/exe/\n./linkmac",sep=""))
 }		
 
 ## calls neighbor from PHYLIP 3.695 (Felsenstein 2013)
