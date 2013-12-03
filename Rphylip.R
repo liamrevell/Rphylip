@@ -10,7 +10,7 @@ setupOSX<-function(path=NULL){
 		if(length(ii)>0) path<-paste("/Applications/",ll[ii],sep="")
 		else stop("was not able to find path to phylip installation")
 	}
-	if(strplit(path,"")[length(strplit(path,""))]=="/"){
+	if(strsplit(path,"")[length(strsplit(path,""))]=="/"){
 		path<-strsplit(path,"")
 		path<-paste(path[2:length(path)-1],collapse="")
 	} 
