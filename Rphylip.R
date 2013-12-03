@@ -79,7 +79,7 @@ Rneighbor<-function(D,path=NULL,...){
 	}
 	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
 	else cleanup<-TRUE
-	if(cleanup) cleanFiles(c("infile","outfile","outfile"))
+	if(cleanup) cleanFiles(c("infile","outfile","outtree"))
 	return(tree)
 }
 
@@ -300,7 +300,7 @@ Rdnapars<-function(X,path=NULL,...){
 	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
 	else cleanup<-TRUE
 	if(cleanup){
-		files<-c("infile","outfile","outfile")
+		files<-c("infile","outfile","outtree")
 		if(!is.null(weights)) files<-c(files,"weights")
 		if(intree) files<-c(files,"intree")
 		cleanFiles(files)
@@ -421,7 +421,7 @@ Rcontml<-function(X,path=NULL,...){
 	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
 	else cleanup<-TRUE
 	if(cleanup){
-		files<-c("infile","outfile","outfile")
+		files<-c("infile","outfile","outtree")
 		if(intree) files<-c(files,"intree")
 		cleanFiles(files)	
 	}
@@ -524,7 +524,7 @@ Rdnaml<-function(X,path=NULL,...){
 	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
 	else cleanup<-TRUE
 	if(cleanup){
-		files<-c("infile","outfile","outfile")
+		files<-c("infile","outfile","outtree")
 		if(!is.null(weights)) files<-c(files,"weights")
 		if(!is.null(rates)) files<-c(files,"rates")
 		if(intree) files<-c(files,"intree")
