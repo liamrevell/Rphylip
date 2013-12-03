@@ -3,5 +3,7 @@ Rcontrast               R interface for contrast
 Rdnaml                  R interface for dnaml
 Rdnapars                R interface for dnapars
 Rneighbor               R interface for neighbor
+Rphylip-package         Rphylip: An R interface for PHYLIP
 opt.Rdnaml              Parameter optimizer for Rdnaml
 primates                Example DNA dataset from primates
+setupOSX                Help set up PHYLIP in Mac OS X

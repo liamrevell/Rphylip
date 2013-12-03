@@ -107,11 +107,30 @@ Loading required package: ape
 > 
 > 
 > 
+> cleanEx()
+> nameEx("setupOSX")
+> ### * setupOSX
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: setupOSX
+> ### Title: Help set up PHYLIP in Mac OS X
+> ### Aliases: setupOSX
+> ### Keywords: phylogenetics utilities
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D setupOSX()
+> ## End(Not run)
+> 
+> 
+> 
 > ### * <FOOTER>
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  0.21 0 0.21 NA NA 
+Time elapsed:  0.5 0.06 0.6 NA NA 
 > grDevices::dev.off()
 null device 
           1 

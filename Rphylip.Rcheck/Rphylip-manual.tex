@@ -13,8 +13,8 @@
 \end{center}
 \begin{description}
 \raggedright{}
-\item[Version]\AsIs{0.1-03}
-\item[Date]\AsIs{2013-12-2}
+\item[Version]\AsIs{0.1-04}
+\item[Date]\AsIs{2013-12-3}
 \item[Title]\AsIs{Rphylip: An R interface for PHYLIP}
 \item[Author]\AsIs{Liam J. Revell}
 \item[Maintainer]\AsIs{Liam J. Revell }\email{liam.revell@umb.edu}\AsIs{}
@@ -28,9 +28,37 @@ about installing PHYLIP.}
 \item[License]\AsIs{GPL (>= 2)}
 \item[URL]\AsIs{}\url{http://www.phytools.org/Rphylip}\AsIs{}
 \item[Repository]\AsIs{}
-\item[Date/Publication]\AsIs{2013-12-2 12:00:00 EDT}
+\item[Date/Publication]\AsIs{2013-12-3 12:00:00 EDT}
 \end{description}
 \Rdcontents{\R{} topics documented:}
+\inputencoding{utf8}
+\HeaderA{Rphylip-package}{Rphylip: An R interface for PHYLIP}{Rphylip.Rdash.package}
+\aliasA{Rphylip}{Rphylip-package}{Rphylip}
+\keyword{package}{Rphylip-package}
+%
+\begin{Description}\relax
+\pkg{Rphylip} provides an R interface for programs in the PHYLIP phylogeny methods package (Felsenstein 2013).
+\end{Description}
+%
+\begin{Details}\relax
+The complete list of functions can be displayed with \code{library(help = Rphylip)}.
+
+Obviously, before any of the functions of this package can be used, users must first install PHYLIP (Felsenstein 2013). More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
+
+More information on \pkg{Rphylip} can be found at \url{http://www.phytools.org/Rphylip/} or \url{http://blog.phytools.org}.
+\end{Details}
+%
+\begin{Author}\relax
+Liam J. Revell
+
+Maintainer: Liam J. Revell <liam.revell@umb.edu>
+\end{Author}
+%
+\begin{References}\relax
+Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
+
+Revell, L. J. (2013) Rphylip: An R interface for PHYLIP. R package version x-y.z.
+\end{References}
 \inputencoding{utf8}
 \HeaderA{opt.Rdnaml}{Parameter optimizer for Rdnaml}{opt.Rdnaml}
 \keyword{phylogenetics}{opt.Rdnaml}
@@ -365,6 +393,47 @@ Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distr
 data(primates)
 D<-dist.dna(data(primates),model="JC")
 tree<-Rneighbor(D)
+
+## End(Not run)
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{setupOSX}{Help set up PHYLIP in Mac OS X}{setupOSX}
+\keyword{phylogenetics}{setupOSX}
+\keyword{utilities}{setupOSX}
+%
+\begin{Description}\relax
+This function attempts to help set up PHYLIP on a Mac OS X machine.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+setupOSX(path=NULL)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{path}] path to the executable containing dnaml. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+This function can be used to help set up PHYLIP (\url{http://evolution.genetics.washington.edu/phylip.html}) following the special instructions found here: \url{http://evolution.genetics.washington.edu/phylip/install.html}. \code{setupOSX} should only be run once - when PHYLIP is first installed.
+\end{Details}
+%
+\begin{Author}\relax
+Liam Revell \email{liam.revell@umb.edu}
+\end{Author}
+%
+\begin{References}\relax
+Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
+\end{References}
+%
+\begin{Examples}
+\begin{ExampleCode}
+## Not run: 
+setupOSX()
 
 ## End(Not run)
 \end{ExampleCode}

@@ -87,6 +87,25 @@ flush(stderr()); flush(stdout())
 
 
 
+cleanEx()
+nameEx("setupOSX")
+### * setupOSX
+
+flush(stderr()); flush(stdout())
+
+### Name: setupOSX
+### Title: Help set up PHYLIP in Mac OS X
+### Aliases: setupOSX
+### Keywords: phylogenetics utilities
+
+### ** Examples
+
+## Not run: 
+##D setupOSX()
+## End(Not run)
+
+
+
 ### * <FOOTER>
 ###
 options(digits = 7L)

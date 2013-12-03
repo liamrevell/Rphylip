@@ -1,3 +1,4 @@
+Rphylip-package	Rphylip-package
 opt.Rdnaml	opt.Rdnaml
 primates	primates
 Rcontml	Rcontml
@@ -5,3 +6,5 @@ Rcontrast	Rcontrast
 Rdnaml	Rdnaml
 Rdnapars	Rdnapars
 Rneighbor	Rneighbor
+Rphylip	Rphylip-package
+setupOSX	setupOSX

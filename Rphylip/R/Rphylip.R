@@ -1,3 +1,32 @@
+## clean up files
+## written by Liam J. Revell 2013
+
+cleanFiles<-function(fs){
+	if(.Platform$OS.type=="windows") for(i in 1:length(fs)) system(paste("rm",fs[i],sep=" "),show.output.on.console=FALSE)
+	else for(i in 1:length(fs)) system(paste("rm",fs[i],sep=" "))
+}
+
+## sets up PHYLIP in Mac OS X (based on http://evolution.gs.washington.edu/phylip/install.html)
+## written by Liam J. Revell
+
+setupOSX<-function(path=NULL){
+	if(.Platform$OS.type!="unix") stop("this function is for Mac OS X only")
+	if(is.null(path)){
+		## check /Applications for path to PHYLIP
+		ll<-list.files("/Applications/")
+		ii<-grep("phylip",ll)
+		if(length(ii)>0) path<-paste("/Applications/",ll[ii],sep="")
+		else stop("was not able to find path to phylip installation")
+	}
+	if(strsplit(path,"")[length(strsplit(path,""))]=="/"){
+		path<-strsplit(path,"")
+		path<-paste(path[2:length(path)-1],collapse="")
+	} 
+	system(paste("cp ",path,"/src/linkmac ",path,"/exe/linkmac",sep=""))
+	system(paste("chmod +x ",path,"/exe/linkmac",sep=""))
+	system(paste("cd ",path,"/exe/\n./linkmac",sep=""))
+}		
+
 ## calls neighbor from PHYLIP 3.695 (Felsenstein 2013)
 ## written by Liam J. Revell 2013
 
@@ -50,11 +79,7 @@ Rneighbor<-function(D,path=NULL,...){
 	}
 	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
 	else cleanup<-TRUE
-	if(cleanup){
-		system("rm infile",show.output.on.console=FALSE)
-		system("rm outtree",show.output.on.console=FALSE)
-		system("rm outfile",show.output.on.console=FALSE)
-	}
+	if(cleanup) cleanFiles(c("infile","outfile","outtree"))
 	return(tree)
 }
 
@@ -129,6 +154,25 @@ findPath<-function(string){
 				if(any(ll[ii]==string)||any(ll[ii]==paste(string,".exe",sep=""))) 
 					return(shortPathName(dd))
 
+		}
+		return(NULL)
+	} else if(.Platform$OS.type=="unix"){
+		## first, check current directory
+		ll<-list.files()
+		ii<-grep(string,ll)
+		if(length(ii)>0) 
+			if(any(ll[ii]==string)) 
+				return(".")
+		## check /Applications
+		ll<-list.files("/Applications/")
+		ii<-grep("phylip",ll)
+		if(length(ii)>0){
+			dd<-paste("/Applications/",ll[ii],"/exe",sep="")
+			ll<-list.files(dd)
+			ii<-grep(string,ll)
+			if(length(ii)>0) 
+				if(any(ll[ii]==string)||any(ll[ii]==paste(string,".exe",sep=""))) 
+					return(dd)
 		}
 		return(NULL)
 	} else return(NULL)
@@ -256,11 +300,10 @@ Rdnapars<-function(X,path=NULL,...){
 	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
 	else cleanup<-TRUE
 	if(cleanup){
-		system("rm infile",show.output.on.console=FALSE)
-		system("rm outtree",show.output.on.console=FALSE)
-		system("rm outfile",show.output.on.console=FALSE)
-		if(!is.null(weights)) system("rm weights",show.output.on.console=FALSE)
-		if(intree) system("rm intree",show.output.on.console=FALSE)	
+		files<-c("infile","outfile","outtree")
+		if(!is.null(weights)) files<-c(files,"weights")
+		if(intree) files<-c(files,"intree")
+		cleanFiles(files)
 	}
 	return(tree)
 }
@@ -378,10 +421,9 @@ Rcontml<-function(X,path=NULL,...){
 	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
 	else cleanup<-TRUE
 	if(cleanup){
-		system("rm infile",show.output.on.console=FALSE)
-		system("rm outtree",show.output.on.console=FALSE)
-		system("rm outfile",show.output.on.console=FALSE)
-		if(intree) system("rm intree",show.output.on.console=FALSE)	
+		files<-c("infile","outfile","outtree")
+		if(intree) files<-c(files,"intree")
+		cleanFiles(files)	
 	}
 	tree$logLik<-logLik
 	return(tree)
@@ -482,12 +524,11 @@ Rdnaml<-function(X,path=NULL,...){
 	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
 	else cleanup<-TRUE
 	if(cleanup){
-		system("rm infile",show.output.on.console=FALSE)
-		system("rm outtree",show.output.on.console=FALSE)
-		system("rm outfile",show.output.on.console=FALSE)
-		if(!is.null(weights)) system("rm weights",show.output.on.console=FALSE)
-		if(!is.null(rates)) system("rm categories",show.output.on.console=FALSE)
-		if(intree) system("rm intree",show.output.on.console=FALSE)	
+		files<-c("infile","outfile","outtree")
+		if(!is.null(weights)) files<-c(files,"weights")
+		if(!is.null(rates)) files<-c(files,"rates")
+		if(intree) files<-c(files,"intree")
+		cleanFiles(files)
 	}
 	tree$logLik<-logLik
 	return(tree)
@@ -588,11 +629,7 @@ Rcontrast<-function(tree,X,path=NULL,...){
 		}
 		if(hasArg(cleanup)) cleanup<-list(...)$cleanup
 		else cleanup<-TRUE
-		if(cleanup){
-			system("rm infile",show.output.on.console=FALSE)
-			system("rm intree",show.output.on.console=FALSE)
-			system("rm outfile",show.output.on.console=FALSE)
-		}
+		if(cleanup) cleanFiles(c("infile","intree","outfile"))
 		if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
 		return(list(Contrasts=Contrasts,Covariance_matrix=Covariance_matrix,
 			Regressions=Regressions,Correlations=Correlations))	
@@ -689,12 +726,8 @@ Rcontrast<-function(tree,X,path=NULL,...){
 		P<-pchisq(ChiSq,df-nonVa.df,lower.tail=FALSE)
 		if(hasArg(cleanup)) cleanup<-list(...)$cleanup
 		else cleanup<-TRUE
-		if(cleanup){
-			system("rm infile",show.output.on.console=FALSE)
-			system("rm intree",show.output.on.console=FALSE)
-			system("rm outfile",show.output.on.console=FALSE)
-		}
-		if(!quiet) 	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+		if(cleanup) cleanFiles(c("infile","intree","outfile"))
+		if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
 		return(list(VarA=VarA,VarE=VarE,VarA.Regressions=VarA.Regressions,
 			VarA.Correlations=VarA.Correlations,
 			VarE.Regressions=VarE.Regressions,
