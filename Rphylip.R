@@ -44,9 +44,9 @@ Rthreshml<-function(tree,X,types=NULL,path=NULL,...){
 		burnin<-list(...)$burnin
 		oo<-c(oo,"b",burnin)
 	}
-	if(hasArg(nchains)){
-		nchains<-list(...)$nchains
-		oo<-c(oo,"n",nchains)
+	if(hasArg(nchain)){
+		nchain<-list(...)$nchain
+		oo<-c(oo,"n",nchain)
 	}
 	if(hasArg(ngen)){
 		ngen<-list(...)$ngen
