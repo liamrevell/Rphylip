@@ -3,8 +3,14 @@
 
 crop<-function(x,n=1) sapply(x,function(x) strsplit(x,"")[[1]][1:n])
 
-## function to 
+## function to change vector to integers
+## written by Liam J. Revell 2013
 
+to.integers<-function(x){
+	types<-sort(unique(x))
+	ii<-as.integer(1:length(types)-1)
+	ii[sapply(x,function(x,y) which(y==x),y=types)]
+}
 
 ## calls threshml from PHYLIP (Felsenstein 2013)
 ## written by Liam J. Revell 2013
@@ -13,64 +19,89 @@ Rthreshml<-function(tree,X,types=NULL,path=NULL,...){
 	if(is.null(path)) path<-findPath("threshml")
 	if(is.null(path)) stop("No path provided and was not able to find path to threshml")
 	if(class(tree)!="phylo") stop("tree should be an object of class 'phylo'")
+	if(is.null(types)){
+		types<-sapply(X,class)
+		types[types=="numeric"]<-"continuous"
+		types[types%in%c("factor","character")]<-"discrete"
+	}
+	types<-crop(types)
 	if(hasArg(quiet)) quiet<-list(...)$quiet
 	else quiet<-FALSE
 	if(!quiet) if(file.warn(c("infile","intree","outfile"))==0) return(NULL)
-	oo<-c("r")
 	tree$tip.label<-sapply(tree$tip.label,function(x,y) which(x==y)[1],y=rownames(X))
+	## this is for the current idiosyncratic tree input file requirement of threshml
+	text<-write.tree(tree)
+	text<-strsplit(text,"")[[1]]
+	text<-paste(paste(text[1:(length(text)-1)],collapse=""),"0.00000000;\n",sep="")
+	write(text,file="intree")
+	if(any(types=="c")) write.continuous(X[,crop(types)=="c"])
+	if(any(types=="d")) write.dna(apply(X[,crop(types)=="d"],2,to.integers),append=any(types=="c"))
+	## start populating arguments
+	oo<-c("r")
+	if(!any(types=="d")) oo<-c(oo,"d")
+	if(any(types=="c")) oo<-c(oo,"c")
+	if(hasArg(burnin)){
+		burnin<-list(...)$burnin
+		oo<-c(oo,"b",burnin)
+	}
+	if(hasArg(nchains)){
+		nchains<-list(...)$nchains
+		oo<-c(oo,"n",nchains)
+	}
+	if(hasArg(ngen)){
+		ngen<-list(...)$ngen
+		oo<-c(oo,"s",ngen)
+	}
+	if(hasArg(proposal)){
+		proposal<-list(...)$proposal
+		oo<-c(oo,"p",proposal)
+	}
+	if(hasArg(lrtest)) lrtest<-list(...)$lrtest
+	else lrtest<-TRUE
+	if(lrtest) oo<-c(oo,"t")
+	if(quiet) oo<-c(oo,2)
+	oo<-c(oo,"y",sample(seq(1,99999,by=2),1))
+	system("touch outfile")
+	system(paste(path,"/threshml",sep=""),input=oo)
+	temp<-readLines("outfile")
 	
-	
-
-
-	
-
-	if(length(unique(rownames(X)))==nrow(X)){
-		
-		write.tree(tree,"intree")
-		write.continuous(X)
-		oo<-c(oo,"c")
-		if(quiet) oo<-c(oo,2)
-		oo<-c(oo,"y","r")
-		system("touch outfile")
-		system(paste(path,"/contrast",sep=""),input=oo)
-		temp<-readLines("outfile")
-		ii<-grep("Contrasts",temp)
-		Contrasts<-matrix(NA,tree$Nnode,ncol(X))
-		for(i in 1:tree$Nnode){
-			x<-strsplit(temp[i+ii+2]," ")[[1]]
-			Contrasts[i,]<-as.numeric(x[x!=""])
-		}
-		ii<-grep("Covariance",temp)
-		Covariance_matrix<-matrix(NA,ncol(X),ncol(X))
-		for(i in 1:ncol(X)){
-			x<-strsplit(temp[i+ii+2]," ")[[1]]
-			Covariance_matrix[i,]<-as.numeric(x[x!=""])
-		}
-		ii<-grep("Regressions",temp)
-		Regressions<-matrix(NA,ncol(X),ncol(X))
-		for(i in 1:ncol(X)){
-			x<-strsplit(temp[i+ii+2]," ")[[1]]
-			Regressions[i,]<-as.numeric(x[x!=""])
-		}
-		ii<-grep("Correlations",temp)
-		Correlations<-matrix(NA,ncol(X),ncol(X))
-		for(i in 1:ncol(X)){
-			x<-strsplit(temp[i+ii+2]," ")[[1]]
-			Correlations[i,]<-as.numeric(x[x!=""])
-		}
-		if(hasArg(cleanup)) cleanup<-list(...)$cleanup
-		else cleanup<-TRUE
-		if(cleanup) cleanFiles(c("infile","intree","outfile"))
-		if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
-		return(list(Contrasts=Contrasts,Covariance_matrix=Covariance_matrix,
-			Regressions=Regressions,Correlations=Correlations))	
-
+##		ii<-grep("Contrasts",temp)
+##		Contrasts<-matrix(NA,tree$Nnode,ncol(X))
+##		for(i in 1:tree$Nnode){
+##			x<-strsplit(temp[i+ii+2]," ")[[1]]
+##			Contrasts[i,]<-as.numeric(x[x!=""])
+##		}
+##		ii<-grep("Covariance",temp)
+##		Covariance_matrix<-matrix(NA,ncol(X),ncol(X))
+##		for(i in 1:ncol(X)){
+##			x<-strsplit(temp[i+ii+2]," ")[[1]]
+##			Covariance_matrix[i,]<-as.numeric(x[x!=""])
+##		}
+##		ii<-grep("Regressions",temp)
+##		Regressions<-matrix(NA,ncol(X),ncol(X))
+##		for(i in 1:ncol(X)){
+##			x<-strsplit(temp[i+ii+2]," ")[[1]]
+##			Regressions[i,]<-as.numeric(x[x!=""])
+##		}
+##		ii<-grep("Correlations",temp)
+##		Correlations<-matrix(NA,ncol(X),ncol(X))
+##		for(i in 1:ncol(X)){
+##			x<-strsplit(temp[i+ii+2]," ")[[1]]
+##			Correlations[i,]<-as.numeric(x[x!=""])
+##		}
+	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
+	else cleanup<-TRUE
+	if(cleanup) cleanFiles(c("infile","intree","outfile"))
+	if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+##		return(list(Contrasts=Contrasts,Covariance_matrix=Covariance_matrix,
+##			Regressions=Regressions,Correlations=Correlations))
+	return(NULL)
 }
 
 ## function to write continuous characters to file
 ## written by Liam J. Revell 2013
 
-write.continuous(X,append=FALSE){
+write.continuous<-function(X,append=FALSE){
 	write(paste("    ",nrow(X),"   ",ncol(X),sep=""),file="infile",append=append)
 	for(i in 1:nrow(X)){
 		sp<-as.character(i)
