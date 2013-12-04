@@ -1,3 +1,85 @@
+## function to crop to first n characters a vector of strings
+## written by Liam J. Revell 2013
+
+crop<-function(x,n=1) sapply(x,function(x) strsplit(x,"")[[1]][1:n])
+
+## function to 
+
+
+## calls threshml from PHYLIP (Felsenstein 2013)
+## written by Liam J. Revell 2013
+
+Rthreshml<-function(tree,X,types=NULL,path=NULL,...){
+	if(is.null(path)) path<-findPath("threshml")
+	if(is.null(path)) stop("No path provided and was not able to find path to threshml")
+	if(class(tree)!="phylo") stop("tree should be an object of class 'phylo'")
+	if(hasArg(quiet)) quiet<-list(...)$quiet
+	else quiet<-FALSE
+	if(!quiet) if(file.warn(c("infile","intree","outfile"))==0) return(NULL)
+	oo<-c("r")
+	tree$tip.label<-sapply(tree$tip.label,function(x,y) which(x==y)[1],y=rownames(X))
+	
+	
+
+
+	
+
+	if(length(unique(rownames(X)))==nrow(X)){
+		
+		write.tree(tree,"intree")
+		write.continuous(X)
+		oo<-c(oo,"c")
+		if(quiet) oo<-c(oo,2)
+		oo<-c(oo,"y","r")
+		system("touch outfile")
+		system(paste(path,"/contrast",sep=""),input=oo)
+		temp<-readLines("outfile")
+		ii<-grep("Contrasts",temp)
+		Contrasts<-matrix(NA,tree$Nnode,ncol(X))
+		for(i in 1:tree$Nnode){
+			x<-strsplit(temp[i+ii+2]," ")[[1]]
+			Contrasts[i,]<-as.numeric(x[x!=""])
+		}
+		ii<-grep("Covariance",temp)
+		Covariance_matrix<-matrix(NA,ncol(X),ncol(X))
+		for(i in 1:ncol(X)){
+			x<-strsplit(temp[i+ii+2]," ")[[1]]
+			Covariance_matrix[i,]<-as.numeric(x[x!=""])
+		}
+		ii<-grep("Regressions",temp)
+		Regressions<-matrix(NA,ncol(X),ncol(X))
+		for(i in 1:ncol(X)){
+			x<-strsplit(temp[i+ii+2]," ")[[1]]
+			Regressions[i,]<-as.numeric(x[x!=""])
+		}
+		ii<-grep("Correlations",temp)
+		Correlations<-matrix(NA,ncol(X),ncol(X))
+		for(i in 1:ncol(X)){
+			x<-strsplit(temp[i+ii+2]," ")[[1]]
+			Correlations[i,]<-as.numeric(x[x!=""])
+		}
+		if(hasArg(cleanup)) cleanup<-list(...)$cleanup
+		else cleanup<-TRUE
+		if(cleanup) cleanFiles(c("infile","intree","outfile"))
+		if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+		return(list(Contrasts=Contrasts,Covariance_matrix=Covariance_matrix,
+			Regressions=Regressions,Correlations=Correlations))	
+
+}
+
+## function to write continuous characters to file
+## written by Liam J. Revell 2013
+
+write.continuous(X,append=FALSE){
+	write(paste("    ",nrow(X),"   ",ncol(X),sep=""),file="infile",append=append)
+	for(i in 1:nrow(X)){
+		sp<-as.character(i)
+		sp<-paste(sp,paste(rep(" ",11-nchar(sp)),collapse=""),collapse="")
+		tt<-paste(sp,paste(X[i,],collapse=" "),collapse=" ")
+		write(tt,append=TRUE,file="infile")
+	}
+}
+
 ## calls dnamlk from PHYLIP 3.695 (Felsenstein 2013)
 ## written by Liam J. Revell 2013
 
@@ -188,8 +270,8 @@ findPath<-function(string){
 ## function writes DNAbin to file in PHYLIP format with numbers as labels
 ## written by Liam J. Revell 2013
 
-write.dna<-function(X){
-	write(paste("    ",nrow(X),"   ",ncol(X),sep=""),file="infile")
+write.dna<-function(X,append=FALSE){
+	write(paste("    ",nrow(X),"   ",ncol(X),sep=""),file="infile",append=append)
 	for(i in 1:nrow(X)){
 		sp<-as.character(i)
 		sp<-paste(sp,paste(rep(" ",11-nchar(sp)),collapse=""),collapse="")
@@ -601,13 +683,7 @@ Rcontrast<-function(tree,X,path=NULL,...){
 	if(length(unique(rownames(X)))==nrow(X)){
 		tree$tip.label<-sapply(tree$tip.label,function(x,y) which(x==y)[1],y=rownames(X))
 		write.tree(tree,"intree")
-		write(paste("    ",nrow(X),"   ",ncol(X),sep=""),file="infile")
-		for(i in 1:nrow(X)){
-			sp<-as.character(i)
-			sp<-paste(sp,paste(rep(" ",11-nchar(sp)),collapse=""),collapse="")
-			tt<-paste(sp,paste(X[i,],collapse=" "),collapse=" ")
-			write(tt,append=TRUE,file="infile")
-		}
+		write.continuous(X)
 		oo<-c(oo,"c")
 		if(quiet) oo<-c(oo,2)
 		oo<-c(oo,"y","r")
