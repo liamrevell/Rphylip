@@ -1,15 +1,15 @@
+require(phytools)
+
 source("Rphylip.R")
 
 ## sim code for Rthreshml
 
-tree<-pbtree(n=40)
-X<-fastBM(tree,nsim=2)
+tree<-pbtree(n=100)
+x<-fastBM(tree,nsim=2)
 th<-setNames(c(0,Inf),c(0,1))
-Y<-data.frame(X[,1],sapply(X[,1],threshState,th),X[,2],sapply(X[,2],threshState,th))
-names(Y)<-paste("X",1:4,sep="")
-X<-Y
-rm(Y)
-Rthreshml(tree,X,cleanup=FALSE,nchain=1)
+X<-data.frame(x[,1],sapply(x[,1],threshState,th),x[,2])
+names(X)<-paste("v",1:2,sep="")
+fit<-Rthreshml(tree,X,proposal=0.2)
 
 
 ## sim code for Rcontrast

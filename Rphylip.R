@@ -1,3 +1,27 @@
+## call treedist from PHYLIP 3.695 (Felsenstein 2013)
+## written by Liam J. Revell 2013
+
+Rtreedist<-function(trees,method=c("branch.score","symmetric"),path=NULL,....){
+	method<-method[1]
+	if(is.null(path)) path<-findPath("treedist")
+	if(is.null(path)) stop("No path provided and was not able to find path to treedist")
+	if(hasArg(trees2)) trees2<-list(...)$trees2
+	else trees2<-NULL
+	if(class(trees)!="multiPhylo"){
+		if(!(class(trees)=="phylo"&&(class(trees2)=="phylo"||class(trees2)=="multiPhylo")))
+			stop("tree should be an object of class 'phylo'")
+	}
+	if(hasArg(quiet)) quiet<-list(...)$quiet
+	else quiet<-FALSE
+	if(!quiet) if(file.warn(c("intree","intree2","outfile"))==0) return(NULL)
+	write.tree(trees,file="intree")
+	if(!is.null(trees2)) write.tree(trees2,file="intree2")
+	oo<-c("r")
+	
+
+	
+}
+
 ## function to crop to first n characters a vector of strings
 ## written by Liam J. Revell 2013
 
