@@ -68,6 +68,26 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
+nameEx("Rtreedist")
+### * Rtreedist
+
+flush(stderr()); flush(stdout())
+
+### Name: Rtreedist
+### Title: R interface for treedist
+### Aliases: Rtreedist
+### Keywords: phylogenetics
+
+### ** Examples
+
+## Not run: 
+##D trees<-rmtree(n=10,N=10)
+##D D<-Rtreedist(trees,method="symmetric")
+## End(Not run)
+
+
+
+cleanEx()
 nameEx("opt.Rdnaml")
 ### * opt.Rdnaml
 

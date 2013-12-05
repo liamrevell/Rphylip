@@ -6,7 +6,7 @@ Rneighbor(D, path=NULL , ...)
 }
 \arguments{
 	\item{D}{a distance matrix as an object of class \code{"matrix"} or \code{"dist"}. If a matrix, then \code{D} should be symmetrical with a diagonal of zeros.}
-	\item{path}{path to the executable containing neighbor. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file. (Currently works only for \code{.Platform$OS.type = "windows"}.)}
+	\item{path}{path to the executable containing neighbor. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file.}
 	\item{...}{optional arguments to be passed to neighbor. See details for more information.}
 }
 \details{

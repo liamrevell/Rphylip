@@ -13,8 +13,8 @@
 \end{center}
 \begin{description}
 \raggedright{}
-\item[Version]\AsIs{0.1-05}
-\item[Date]\AsIs{2013-12-3}
+\item[Version]\AsIs{0.1-06}
+\item[Date]\AsIs{2013-12-5}
 \item[Title]\AsIs{Rphylip: An R interface for PHYLIP}
 \item[Author]\AsIs{Liam J. Revell}
 \item[Maintainer]\AsIs{Liam J. Revell }\email{liam.revell@umb.edu}\AsIs{}
@@ -28,7 +28,7 @@ about installing PHYLIP.}
 \item[License]\AsIs{GPL (>= 2)}
 \item[URL]\AsIs{}\url{http://www.phytools.org/Rphylip}\AsIs{}
 \item[Repository]\AsIs{}
-\item[Date/Publication]\AsIs{2013-12-3 12:00:00 EDT}
+\item[Date/Publication]\AsIs{2013-12-5 12:00:00 EDT}
 \end{description}
 \Rdcontents{\R{} topics documented:}
 \inputencoding{utf8}
@@ -78,7 +78,7 @@ opt.Rdnaml(X, path=NULL, ...)
 \begin{Arguments}
 \begin{ldescription}
 \item[\code{X}] an object of class \code{"DNAbin"}.
-\item[\code{path}] path to the executable containing dnaml. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file. (Currently works only for \code{.Platform\$OS.type = "windows"}.)
+\item[\code{path}] path to the executable containing dnaml. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file.
 \item[\code{...}] optional arguments. See details for more information.
 \end{ldescription}
 \end{Arguments}
@@ -155,7 +155,7 @@ Rcontml(X, path=NULL, ...)
 \begin{Arguments}
 \begin{ldescription}
 \item[\code{X}] either (a) a \emph{matrix} of continuous valued traits (in columns) with rownames containing species names; or (b) a list of matrices in which each row contains the relative frequency of alleles at a locus for a species. In the latter case the rownames of each matrix in the list should contain the species names.
-\item[\code{path}] path to the executable containing contml. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file. (Currently works only for \code{.Platform\$OS.type = "windows"}.)
+\item[\code{path}] path to the executable containing contml. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file.
 \item[\code{...}] optional arguments to be passed to contml. See details for more information.
 \end{ldescription}
 \end{Arguments}
@@ -184,8 +184,7 @@ Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distr
 \inputencoding{utf8}
 \HeaderA{Rcontrast}{R interface for contrast}{Rcontrast}
 \keyword{phylogenetics}{Rcontrast}
-\keyword{inference}{Rcontrast}
-\keyword{maximum likelihood}{Rcontrast}
+\keyword{comparative method}{Rcontrast}
 %
 \begin{Description}\relax
 This function is an R interface for contrast in the PHYLIP package (Felsenstein 2013). contrast can be used to perform the among species phylogenetically independent contrasts method of Felsenstein (1985) and the within \& among species method of Felsenstein (2008).
@@ -203,7 +202,7 @@ Rcontrast(tree, X, path=NULL, ...)
 \begin{ldescription}
 \item[\code{tree}] object of class \code{"phylo"}.
 \item[\code{X}] a \emph{matrix} of continuous valued traits (in columns) with rownames containing species names. For within-species contrasts analysis, the matrix should contain repeating (identical) row names for conspecifics.
-\item[\code{path}] path to the executable containing contrast. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file. (Currently works only for \code{.Platform\$OS.type = "windows"}.)
+\item[\code{path}] path to the executable containing contrast. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file.
 \item[\code{...}] optional arguments to be passed to contrast. See details for more information.
 \end{ldescription}
 \end{Arguments}
@@ -252,7 +251,7 @@ Rdnamlk(X, path=NULL, ...)
 \begin{Arguments}
 \begin{ldescription}
 \item[\code{X}] an object of class \code{"DNAbin"}.
-\item[\code{path}] path to the executable containing dnaml. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file. (Currently works only for \code{.Platform\$OS.type = "windows"}.)
+\item[\code{path}] path to the executable containing dnaml. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file.
 \item[\code{...}] optional arguments to be passed to dnaml or dnamlk. See details for more information.
 \end{ldescription}
 \end{Arguments}
@@ -310,7 +309,7 @@ Rdnapars(X, path=NULL, ...)
 \begin{Arguments}
 \begin{ldescription}
 \item[\code{X}] an object of class \code{"DNAbin"}.
-\item[\code{path}] path to the executable containing dnapars. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file. (Currently works only for \code{.Platform\$OS.type = "windows"}.)
+\item[\code{path}] path to the executable containing dnapars. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file.
 \item[\code{...}] optional arguments to be passed to dnapars. See details for more information.
 \end{ldescription}
 \end{Arguments}
@@ -365,7 +364,7 @@ Rneighbor(D, path=NULL , ...)
 \begin{Arguments}
 \begin{ldescription}
 \item[\code{D}] a distance matrix as an object of class \code{"matrix"} or \code{"dist"}. If a matrix, then \code{D} should be symmetrical with a diagonal of zeros.
-\item[\code{path}] path to the executable containing neighbor. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file. (Currently works only for \code{.Platform\$OS.type = "windows"}.)
+\item[\code{path}] path to the executable containing neighbor. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file.
 \item[\code{...}] optional arguments to be passed to neighbor. See details for more information.
 \end{ldescription}
 \end{Arguments}
@@ -398,6 +397,103 @@ Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distr
 data(primates)
 D<-dist.dna(data(primates),model="JC")
 tree<-Rneighbor(D)
+
+## End(Not run)
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{Rthreshml}{R interface for threshml}{Rthreshml}
+\keyword{phylogenetics}{Rthreshml}
+\keyword{comparative method}{Rthreshml}
+%
+\begin{Description}\relax
+This function is an R interface for threshml in the PHYLIP package (Felsenstein 2013). threshml fits the threshold model of Felsenstein (2005; 2012).
+
+Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+Rthreshml(tree, X, types=NULL, path=NULL, ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{tree}] object of class \code{"phylo"}.
+\item[\code{X}] a \emph{matrix} of continuous valued traits (in columns) with rownames containing species names. For within-species contrasts analysis, the matrix should contain repeating (identical) row names for conspecifics.
+\item[\code{types}] character vector containing the types (e.g., \code{"discrete"}, \code{"continuous"}). If \code{types} are not supplied, \code{Rthreshml} will try to figure them out.
+\item[\code{path}] path to the executable containing contrast. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file.
+\item[\code{...}] optional arguments to be passed to threshml. See details for more information.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+Optional arguments include the following: \code{quiet} suppress some output to R console (defaults to \code{quiet = FALSE}); \code{burnin} burnin generations for the MCMC; \code{nchain} number of chains of the MCMC; \code{ngen} number of generations in each chain; \code{proposal} variance on the proposal distribution for the MCMC; \code{lrtest} logical value indicating whether to conduct a likelihood-ratio test of the hypothesis that some correlations are zero (does not appear to work in the present version); and \code{cleanup} remove PHYLIP input/output files after the analysis is completed (defaults to \code{cleanup = TRUE}).
+\end{Details}
+%
+\begin{Value}
+This function returns a list containing the results from threshml.
+\end{Value}
+%
+\begin{Author}\relax
+Liam Revell \email{liam.revell@umb.edu}
+\end{Author}
+%
+\begin{References}\relax
+
+Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
+\end{References}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{Rcontrast}{Rcontrast}}
+\end{SeeAlso}
+\inputencoding{utf8}
+\HeaderA{Rtreedist}{R interface for treedist}{Rtreedist}
+\keyword{phylogenetics}{Rtreedist}
+%
+\begin{Description}\relax
+This function is an R interface for treedist in the PHYLIP package (Felsenstein 2013). treedist can be used to compute the distance between trees by two different methods.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+Rtreedist(trees, method=c("branch.score","symmetric"), path=NULL, ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{trees}] an object of class \code{"multiPhylo"}. (Or, under rare circumstances, an object of class \code{"phylo"}. See below.)
+\item[\code{method}] method to compute the distance between trees. \code{method="branch.score"} is the branch score method of Kuhner \& Felsenstein (1994). \code{method="symmetric"} is the symmetric distance or Robinson-Foulds distance (Bourque 1978; Robinson \& Foulds 1981).
+\item[\code{path}] path to the directory containing the executable treedist. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file.
+\item[\code{...}] optional arguments to be passed to treedist. See details for more information.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+Optional arguments include the following: \code{quiet} suppress some output to R console (defaults to \code{quiet = FALSE}); \code{trees2} object of class \code{"multiPhylo"} or \code{"phylo"} - if two sets of trees are to be compared; \code{rooted} logical value indicating whether trees should be treated as rooted (defaults to \code{rooted = FALSE}); \code{distances} argument telling treedist which distances to compute - could be \code{"all"} (all pairwise in \code{trees}), \code{"all.1to2"} (all in \code{trees} by all in \code{trees2}), \code{"adjacent"} (adjacent species in \code{trees} only), and \code{"corresponding"} (all corresponding trees in \code{trees} and \code{trees2}); and \code{cleanup} remove PHYLIP input \& output files after the analysis is completed (defaults to \code{cleanup = TRUE}).
+
+Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
+\end{Details}
+%
+\begin{Value}
+This function returns a matrix of pairwise distances for \code{distances = "all"} and \code{distances = "all.1to2"}, or a named vector for \code{distances = "adjacent"} and \code{distances = "corresponding"}.
+\end{Value}
+%
+\begin{Author}\relax
+Liam Revell \email{liam.revell@umb.edu}
+\end{Author}
+%
+\begin{References}\relax
+Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
+\end{References}
+%
+\begin{Examples}
+\begin{ExampleCode}
+## Not run: 
+trees<-rmtree(n=10,N=10)
+D<-Rtreedist(trees,method="symmetric")
 
 ## End(Not run)
 \end{ExampleCode}

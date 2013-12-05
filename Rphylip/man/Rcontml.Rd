@@ -6,7 +6,7 @@ Rcontml(X, path=NULL, ...)
 }
 \arguments{
 	\item{X}{either (a) a \emph{matrix} of continuous valued traits (in columns) with rownames containing species names; or (b) a list of matrices in which each row contains the relative frequency of alleles at a locus for a species. In the latter case the rownames of each matrix in the list should contain the species names.}
-	\item{path}{path to the executable containing contml. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file. (Currently works only for \code{.Platform$OS.type = "windows"}.)}
+	\item{path}{path to the executable containing contml. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file.}
 	\item{...}{optional arguments to be passed to contml. See details for more information.}
 }
 \details{

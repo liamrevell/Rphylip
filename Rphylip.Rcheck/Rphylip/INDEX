@@ -4,6 +4,8 @@ Rdnaml                  R interfaces for dnaml and dnamlk
 Rdnapars                R interface for dnapars
 Rneighbor               R interface for neighbor
 Rphylip-package         Rphylip: An R interface for PHYLIP
+Rthreshml               R interface for threshml
+Rtreedist               R interface for treedist
 opt.Rdnaml              Parameter optimizer for Rdnaml
 primates                Example DNA dataset from primates
 setupOSX                Help set up PHYLIP in Mac OS X

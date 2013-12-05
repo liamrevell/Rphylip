@@ -6,7 +6,7 @@ Rdnapars(X, path=NULL, ...)
 }
 \arguments{
 	\item{X}{an object of class \code{"DNAbin"}.}
-	\item{path}{path to the executable containing dnapars. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file. (Currently works only for \code{.Platform$OS.type = "windows"}.)}
+	\item{path}{path to the executable containing dnapars. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file.}
 	\item{...}{optional arguments to be passed to dnapars. See details for more information.}
 }
 \details{
