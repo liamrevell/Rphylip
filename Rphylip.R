@@ -34,8 +34,8 @@ Rthreshml<-function(tree,X,types=NULL,path=NULL,...){
 	text<-strsplit(text,"")[[1]]
 	text<-paste(paste(text[1:(length(text)-1)],collapse=""),"0.00000000;\n",sep="")
 	write(text,file="intree")
-	if(any(types=="c")) write.continuous(X[,crop(types)=="c"])
-	if(any(types=="d")) write.dna(apply(X[,crop(types)=="d"],2,to.integers),append=any(types=="c"))
+	if(any(types=="c")) write.continuous(X[,types=="c"])
+	if(any(types=="d")) write.dna(apply(as.matrix(X[,types=="d"]),2,to.integers),append=any(types=="c"))
 	## start populating arguments
 	oo<-c("r")
 	if(!any(types=="d")) oo<-c(oo,"d")
@@ -57,51 +57,70 @@ Rthreshml<-function(tree,X,types=NULL,path=NULL,...){
 		oo<-c(oo,"p",proposal)
 	}
 	if(hasArg(lrtest)) lrtest<-list(...)$lrtest
-	else lrtest<-TRUE
-	if(lrtest) oo<-c(oo,"t")
+	else lrtest<-FALSE
+	if(lrtest){
+		# oo<-c(oo,"t")
+		cat("/nLR-test does not seem to work yet: ignoring argument lrtest.\n\n")
+	}
 	if(quiet) oo<-c(oo,2)
 	oo<-c(oo,"y",sample(seq(1,99999,by=2),1))
 	system("touch outfile")
 	system(paste(path,"/threshml",sep=""),input=oo)
 	temp<-readLines("outfile")
-	
-##		ii<-grep("Contrasts",temp)
-##		Contrasts<-matrix(NA,tree$Nnode,ncol(X))
-##		for(i in 1:tree$Nnode){
-##			x<-strsplit(temp[i+ii+2]," ")[[1]]
-##			Contrasts[i,]<-as.numeric(x[x!=""])
-##		}
-##		ii<-grep("Covariance",temp)
-##		Covariance_matrix<-matrix(NA,ncol(X),ncol(X))
-##		for(i in 1:ncol(X)){
-##			x<-strsplit(temp[i+ii+2]," ")[[1]]
-##			Covariance_matrix[i,]<-as.numeric(x[x!=""])
-##		}
-##		ii<-grep("Regressions",temp)
-##		Regressions<-matrix(NA,ncol(X),ncol(X))
-##		for(i in 1:ncol(X)){
-##			x<-strsplit(temp[i+ii+2]," ")[[1]]
-##			Regressions[i,]<-as.numeric(x[x!=""])
-##		}
-##		ii<-grep("Correlations",temp)
-##		Correlations<-matrix(NA,ncol(X),ncol(X))
-##		for(i in 1:ncol(X)){
-##			x<-strsplit(temp[i+ii+2]," ")[[1]]
-##			Correlations[i,]<-as.numeric(x[x!=""])
-##		}
+	cc<-which(types=="c")
+	dd<-which(types=="d")
+	## parse covariance matrix
+	ii<-grep("Covariance matrix",temp)+5
+	Covariance_matrix<-matrix(NA,ncol(X),ncol(X))
+	for(i in 1:ncol(X)){
+		x<-strsplit(temp[i+ii]," ")[[1]]
+		Covariance_matrix[i,]<-as.numeric(x[x!=""])[1:ncol(X)+1]
+	}
+	Covariance_matrix<-Covariance_matrix[c(cc,dd),c(cc,dd)]
+	rownames(Covariance_matrix)<-colnames(Covariance_matrix)<-colnames(X)
+	## parse transform matrix 1
+	ii<-grep("Transform from independent variables",temp)+4
+	Transform_indepvar_liab<-matrix(NA,ncol(X),ncol(X))
+	for(i in 1:ncol(X)){
+		x<-strsplit(temp[i+ii]," ")[[1]]
+		Transform_indepvar_liab[i,]<-as.numeric(x[x!=""])[1:ncol(X)+1]
+	}
+	Transform_indepvar_liab<-Transform_indepvar_liab[c(cc,dd),c(cc,dd)]
+	rownames(Transform_indepvar_liab)<-colnames(Transform_indepvar_liab)<-colnames(X)
+	## parse variances of change
+	ii<-grep("its change",temp)+1
+	Var_change<-vector()
+	for(i in 1:ncol(X)){
+		x<-strsplit(temp[i+ii]," ")[[1]]
+		Var_change[i]<-as.numeric(x[x!=""])[2]
+	}
+	Var_change<-Var_change[c(cc,dd)]
+	names(Var_change)<-colnames(X)
+	## parse transform matrix 2
+	ii<-grep("Transform from liabilities or characters",temp)+4
+	Transform_liab_cont<-matrix(NA,ncol(X),ncol(X))
+	for(i in 1:ncol(X)){
+		x<-strsplit(temp[i+ii]," ")[[1]]
+		Transform_liab_cont[i,]<-as.numeric(x[x!=""])[1:ncol(X)+1]
+	}
+	Transform_liab_cont<-Transform_liab_cont[c(cc,dd),c(cc,dd)]
+	rownames(Transform_liab_cont)<-colnames(Transform_liab_cont)<-colnames(X)
+	## done parsing
 	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
 	else cleanup<-TRUE
 	if(cleanup) cleanFiles(c("infile","intree","outfile"))
 	if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
-##		return(list(Contrasts=Contrasts,Covariance_matrix=Covariance_matrix,
-##			Regressions=Regressions,Correlations=Correlations))
-	return(NULL)
+	return(list(Covariance_matrix=Covariance_matrix,
+		Transform_indepvar_liab=Transform_indepvar_liab,
+		Var_change=Var_change,
+		Transform_liab_cont=Transform_liab_cont))
 }
 
 ## function to write continuous characters to file
 ## written by Liam J. Revell 2013
 
 write.continuous<-function(X,append=FALSE){
+	if(is.vector(X)) X<-as.matrix(X)
 	write(paste("    ",nrow(X),"   ",ncol(X),sep=""),file="infile",append=append)
 	for(i in 1:nrow(X)){
 		sp<-as.character(i)
