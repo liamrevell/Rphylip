@@ -2,6 +2,18 @@ require(phytools)
 
 source("Rphylip.R")
 
+## sim code for Rtreedist
+
+trees<-pbtree(n=26,tip.label=LETTERS,nsim=7)
+trees2<-pbtree(n=26,tip.label=LETTERS,nsim=17)
+D<-Rtreedist(trees,trees2=trees2,method="symmetric",quiet=TRUE)
+D<-Rtreedist(trees,method="symmetric")
+D<-Rtreedist(trees,method="branch.score")
+
+
+system.time(Rtreedist(trees,method="symmetric"))
+system.time(multiRF(trees))
+
 ## sim code for Rthreshml
 
 tree<-pbtree(n=100)

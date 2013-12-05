@@ -1,12 +1,15 @@
 ## call treedist from PHYLIP 3.695 (Felsenstein 2013)
 ## written by Liam J. Revell 2013
 
-Rtreedist<-function(trees,method=c("branch.score","symmetric"),path=NULL,....){
+Rtreedist<-function(trees,method=c("branch.score","symmetric"),path=NULL,...){
 	method<-method[1]
 	if(is.null(path)) path<-findPath("treedist")
 	if(is.null(path)) stop("No path provided and was not able to find path to treedist")
 	if(hasArg(trees2)) trees2<-list(...)$trees2
 	else trees2<-NULL
+	N1<-if(class(trees)=="phylo") 1 else length(trees)
+	if(!is.null(trees2)) N2<-if(class(trees2)=="phylo") 1 else length(trees2)
+	else N2<-N1
 	if(class(trees)!="multiPhylo"){
 		if(!(class(trees)=="phylo"&&(class(trees2)=="phylo"||class(trees2)=="multiPhylo")))
 			stop("tree should be an object of class 'phylo'")
@@ -17,9 +20,70 @@ Rtreedist<-function(trees,method=c("branch.score","symmetric"),path=NULL,....){
 	write.tree(trees,file="intree")
 	if(!is.null(trees2)) write.tree(trees2,file="intree2")
 	oo<-c("r")
-	
-
-	
+	if(method=="symmetric") oo<-c(oo,"d")
+	if(hasArg(rooted)) rooted<-list(...)$rooted
+	else rooted<-FALSE
+	if(rooted) oo<-c(oo,"r")
+	if(quiet) oo<-c(oo,1)
+	if(hasArg(distances)) distances<-list(...)$distances
+	else {
+		if(is.null(trees2)) distances<-"all"
+		else distances<-"all.1to2"
+	}
+	oo<-c(oo,2)
+	if(distances=="all") oo<-c(oo,"p","f")
+	else if(distances=="adjacent") oo<-c(oo,"a","s")
+	else if(distances=="corresponding"){
+		if(is.null(trees2)){
+			cat("\nWarning:")
+			cat("\n  distances=\"corresponding\" not permitted for one tree object\n")
+			cat("\n  defaulting to distances=\"all\"\n\n")
+			distances<-"all"
+			oo<-c(oo,"p","f")
+		} else oo<-c(oo,"c","s")
+	} else if(distances=="all.1to2"){
+		if(is.null(trees2)){
+			cat("\nWarning:")
+			cat("\n  distances=\"all.1to2\" not permitted for one tree object\n")
+			cat("\n  defaulting to distances=\"all\"\n\n")
+			distances<-"all"
+			oo<-c(oo,"p","f")
+		} else oo<-c(oo,"l","f")
+	}
+	oo<-c(oo,"y")
+	system("touch outfile")
+	system(paste(path,"/treedist",sep=""),input=oo)
+	temp<-readLines("outfile")
+	if(distances=="all"||distances=="all.1to2"){
+		cc<-if(method=="symmetric") 10 else 7
+		D<-matrix(NA,N1,N2)
+		if(distances=="all.1to2"){
+			rownames(D)<-paste(1,1:N1,sep=",")
+			colnames(D)<-paste(2,1:N2,sep=",")
+		} else rownames(D)<-colnames(D)<-1:N1
+		nm<-ceiling(N2/cc)-1
+		ii<-grep("---",temp)
+		for(i in 0:nm){
+			n<-min(cc,cc*(N2/cc-i))
+			for(j in 1:N1){
+				x<-strsplit(temp[j+ii[i+1]]," ")[[1]]
+				x<-x[x!=""]
+				D[j,1:n+cc*i]<-as.numeric(x[1:n+2])
+			}
+		}
+	} else if(distances=="adjacent"||distances=="corresponding"){
+		X<-read.table(file="outfile",header=FALSE,sep=" ")
+		if(distances=="adjacent") D<-setNames(X[,3],paste(X[,1],X[,2],sep=","))
+		else if(distances=="corresponding") D<-setNames(X[,2],X[,1])
+	}
+	if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
+	else cleanup<-TRUE
+	if(cleanup){ 
+		if(is.null(trees2)) cleanFiles(c("intree","outfile"))
+		else cleanFiles(c("intree","intree2","outfile"))
+	}
+	return(D)
 }
 
 ## function to crop to first n characters a vector of strings
