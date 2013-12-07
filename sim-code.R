@@ -17,11 +17,15 @@ system.time(multiRF(trees))
 ## sim code for Rthreshml
 
 tree<-pbtree(n=100)
-x<-fastBM(tree,nsim=2)
-th<-setNames(c(0,Inf),c(0,1))
-X<-data.frame(x[,1],sapply(x[,1],threshState,th),x[,2])
-names(X)<-paste("v",1:2,sep="")
-fit<-Rthreshml(tree,X,proposal=0.2)
+V<-matrix(c(1,0,0.8,0,
+	0,2,0,1.2,
+	0.8,0,1,0,
+	0,1.2,0,1),4,4)
+X<-sim.corrs(tree,V)
+th<-setNames(c(0,Inf),LETTERS[1:2])
+X<-data.frame(X[,1],X[,2],sapply(X[,3],threshState,th),sapply(X[,4],threshState,th))
+names(X)<-paste("v",1:ncol(X),sep="")
+fit<-Rthreshml(tree,X,proposal=0.1)
 
 
 ## sim code for Rcontrast

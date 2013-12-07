@@ -1,3 +1,61 @@
+## call dnadist from PHYLIP 3.695 (Felsenstein 2013)
+## written by Liam J. Revell 2013
+
+Rdnadist<-function(X,method=c("F84","K80","JC","LogDet"),path=NULL,...){
+	method<-method[1]
+	if(is.null(path)) path<-findPath("dnadist")
+	if(is.null(path)) stop("No path provided and was not able to find path to dnadist")
+	if(class(X)!="DNAbin") stop("X should be an object of class 'DNAbin'")
+	if(hasArg(quiet)) quiet<-list(...)$quiet
+	else quiet<-FALSE
+	if(!quiet) if(file.warn(c("infile","outfile","outtree","weights"))==0) return(NULL)
+	oo<-c("r"); ee<-vector()
+	if(method!="F84") oo<-c("r",rep("d",which(c("K80","JC","LogDet","similarity")==method)))
+	if(hasArg(gamma)){
+		gamma<-list(...)$gamma
+		oo<-c(oo,"g")
+		ee<-c(ee,1/sqrt(gamma))
+	}
+	if(hasArg(kappa)){
+		kappa<-list(...)$kappa
+		oo<-c(oo,"t",kappa)
+	}
+	if(hasArg(rates)){
+		rates<-list(...)$rates
+		if(hasArg(rate.categories)){
+			rate.categories<-list(...)$rate.categories
+			write(paste(rate.categories,collapse=""),file="categories")
+			ncats<-length(rates)
+			rates<-paste(rates,collapse=" ")
+			oo<-c(oo,"c",ncats,rates)
+		} else {
+			warning("cannot use rates argument without rate categories; ignoring argument rates")
+			rates<-NULL
+		}
+	} else rates<-NULL
+	if(hasArg(weights)){
+		oo<-c(oo,"w")
+		write(paste(weights,collapse=""),file="weights")
+	} else weights<-NULL
+	if(hasArg(bf)){
+		bf<-list(...)$bf
+		bf<-bf/sum(bf)
+		bf<-paste(bf,collapse=" ")
+		oo<-c(oo,"f",bf)
+	}
+	oo<-c(oo,ee,"y")
+	system("touch outfile")
+	write.dna(X)
+	system(paste(path,"/dnadist",sep=""),input=oo)
+	temp<-readLines("outfile")
+	xx<-strsplit(paste(temp,collapse=" ")," ")[[1]]
+	xx<-xx[xx!=""]
+	D<-matrix(NA,nrow(X),nrow(X))
+	for(i in 1:nrow(X)) D[i,]<-as.numeric(xx[1:nrow(X)+(i-1)*(nrow(X)+1)+2])
+	rownames(D)<-colnames(D)<-rownames(X)
+	return(D)
+}
+
 ## call treedist from PHYLIP 3.695 (Felsenstein 2013)
 ## written by Liam J. Revell 2013
 
@@ -456,6 +514,7 @@ file.warn<-function(gg){
 Rdnapars<-function(X,path=NULL,...){
 	if(is.null(path)) path<-findPath("dnapars")
 	if(is.null(path)) stop("No path provided and was not able to find path to dnapars")
+	if(class(X)!="DNAbin") stop("X should be an object of class 'DNAbin'")
 	if(hasArg(quiet)) quiet<-list(...)$quiet
 	else quiet<-FALSE
 	if(!quiet) if(file.warn(c("infile","outfile","outtree","weights"))==0) return(NULL)
@@ -771,6 +830,7 @@ Rdnaml<-function(X,path=NULL,...){
 opt.Rdnaml<-function(X,path=NULL,...){
 	if(is.null(path)) path<-findPath("dnaml")
 	if(is.null(path)) stop("No path provided and was not able to find path to dnaml")
+	if(class(X)!="DNAbin") stop("X should be an object of class 'DNAbin'")
 	if(hasArg(tree)) tree<-list(...)$tree
 	else {
 		cat("\nFinding starting tree for parameter optimization\n")
