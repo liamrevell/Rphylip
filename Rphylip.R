@@ -53,7 +53,10 @@ Rdnadist<-function(X,method=c("F84","K80","JC","LogDet"),path=NULL,...){
 	D<-matrix(NA,nrow(X),nrow(X))
 	for(i in 1:nrow(X)) D[i,]<-as.numeric(xx[1:nrow(X)+(i-1)*(nrow(X)+1)+2])
 	rownames(D)<-colnames(D)<-rownames(X)
-	return(D)
+	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
+	else cleanup<-TRUE
+	if(cleanup)cleanFiles(c("infile","outfile"))
+	return(as.dist(D))
 }
 
 ## call treedist from PHYLIP 3.695 (Felsenstein 2013)
