@@ -1,3 +1,45 @@
+## call consense from PHYLIP 3.695 (Felsenstein 2013)
+## written by Liam J. Revell 2013
+
+Rconsense<-function(trees,path=NULL,...){
+	if(is.null(path)) path<-findPath("dnapenny")
+	if(is.null(path)) stop("No path provided and was not able to find path to dnapenny")
+	if(class(trees)!="multiPhylo") stop("trees should be an object of class 'multiPhylo'")
+	if(hasArg(quiet)) quiet<-list(...)$quiet
+	else quiet<-FALSE
+	if(!quiet) if(file.warn(c("intree","outfile","outtree"))==0) return(NULL)
+	oo<-c("r")
+	if(hasArg(method)) method<-list(...)$method
+	else method<-"extended"
+	if(is.numeric(method)) oo<-c(oo,rep("c",3),method)
+	else if(method=="strict") oo<-c(oo,"c")
+	else if(method=="majority") oo<-c(oo,rep("c",2))
+	if(hasArg(outgroup)){
+		outgroup<-list(...)$outgroup
+		trees<-outgroup.root(trees,outgroup,quiet)
+	}
+	if(hasArg(rooted)) rooted<-list(...)$rooted
+	else rooted<-FALSE
+	if(rooted) oo<-c(oo,"r")
+	if(quiet) oo<-c(oo,"2")
+	oo<-c(oo,"y","r")
+	write.tree(trees)
+	system("touch outtree")
+	system("touch outfile")
+	system(paste(path,"/consense",sep=""),input=oo)
+	tree<-read.tree("outtree")
+	temp<-readLines("outfile")
+	if(!is.null(tree$edge.length)){
+		tree$node.label<-tree$edge.length[sapply(2:tree$Nnode+length(tree$tip.label),function(x,y) which(y==x),y=tree$edge[,2])]/length(trees)
+		tree$edge.length<-NULL
+	}
+	if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
+	else cleanup<-TRUE
+	if(cleanup) cleanFiles(c("intree","outfile","outtree"))
+	return(tree)
+}
+
 ## call dnapenny from PHYLIP 3.695 (Felsenstein 2013)
 ## written by Liam J. Revell 2013
 
