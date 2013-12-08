@@ -6,6 +6,27 @@ library('Rphylip')
 
 base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
 cleanEx()
+nameEx("Rdnadist")
+### * Rdnadist
+
+flush(stderr()); flush(stdout())
+
+### Name: Rdnadist
+### Title: R interfaces for dnadist
+### Aliases: Rdnadist
+### Keywords: phylogenetics inference maximum likelihood distance method
+
+### ** Examples
+
+## Not run: 
+##D data(primates)
+##D D<-Rdnadist(primates,kappa=10)
+##D tree<-Rneighbor(D)
+## End(Not run)
+
+
+
+cleanEx()
 nameEx("Rdnaml")
 ### * Rdnaml
 
@@ -42,6 +63,26 @@ flush(stderr()); flush(stdout())
 ## Not run: 
 ##D data(primates)
 ##D tree<-Rdnapars(primates)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("Rdnapenny")
+### * Rdnapenny
+
+flush(stderr()); flush(stdout())
+
+### Name: Rdnapenny
+### Title: R interface for dnapenny
+### Aliases: Rdnapenny
+### Keywords: phylogenetics inference parsimony
+
+### ** Examples
+
+## Not run: 
+##D data(primates)
+##D tree<-Rdnapenny(primates)
 ## End(Not run)
 
 

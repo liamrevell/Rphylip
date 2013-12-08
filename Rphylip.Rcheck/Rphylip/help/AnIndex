@@ -3,9 +3,11 @@ opt.Rdnaml	opt.Rdnaml
 primates	primates
 Rcontml	Rcontml
 Rcontrast	Rcontrast
+Rdnadist	Rdnadist
 Rdnaml	Rdnaml
 Rdnamlk	Rdnaml
 Rdnapars	Rdnapars
+Rdnapenny	Rdnapenny
 Rneighbor	Rneighbor
 Rphylip	Rphylip-package
 Rthreshml	Rthreshml

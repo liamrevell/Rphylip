@@ -1,7 +1,9 @@
 Rcontml                 R interface for contml
 Rcontrast               R interface for contrast
+Rdnadist                R interfaces for dnadist
 Rdnaml                  R interfaces for dnaml and dnamlk
 Rdnapars                R interface for dnapars
+Rdnapenny               R interface for dnapenny
 Rneighbor               R interface for neighbor
 Rphylip-package         Rphylip: An R interface for PHYLIP
 Rthreshml               R interface for threshml

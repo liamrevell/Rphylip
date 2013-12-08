@@ -13,8 +13,8 @@
 \end{center}
 \begin{description}
 \raggedright{}
-\item[Version]\AsIs{0.1-06}
-\item[Date]\AsIs{2013-12-5}
+\item[Version]\AsIs{0.1-07}
+\item[Date]\AsIs{2013-12-7}
 \item[Title]\AsIs{Rphylip: An R interface for PHYLIP}
 \item[Author]\AsIs{Liam J. Revell}
 \item[Maintainer]\AsIs{Liam J. Revell }\email{liam.revell@umb.edu}\AsIs{}
@@ -28,7 +28,7 @@ about installing PHYLIP.}
 \item[License]\AsIs{GPL (>= 2)}
 \item[URL]\AsIs{}\url{http://www.phytools.org/Rphylip}\AsIs{}
 \item[Repository]\AsIs{}
-\item[Date/Publication]\AsIs{2013-12-5 12:00:00 EDT}
+\item[Date/Publication]\AsIs{2013-12-7 12:00:00 EDT}
 \end{description}
 \Rdcontents{\R{} topics documented:}
 \inputencoding{utf8}
@@ -231,6 +231,64 @@ Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distr
 \code{\LinkA{pic}{pic}}
 \end{SeeAlso}
 \inputencoding{utf8}
+\HeaderA{Rdnadist}{R interfaces for dnadist}{Rdnadist}
+\keyword{phylogenetics}{Rdnadist}
+\keyword{inference}{Rdnadist}
+\keyword{maximum likelihood}{Rdnadist}
+\keyword{distance method}{Rdnadist}
+%
+\begin{Description}\relax
+This function is an R interface for dnadist in the PHYLIP package (Felsenstein 2013). dnadist can be used to estimate the evolutionary distances between DNA sequences under various models.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+Rdnadist(X, method=c("F84","K80","JC","LogDet"), path=NULL, ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{X}] an object of class \code{"DNAbin"}.
+\item[\code{method}] method for calculating the distances. Can be \code{"F84"} (Kishino \& Hasegawa 1989; Felsenstein \& Churchill 1996), \code{"K80"} (Kimura 1980), \code{"JC"} (Jukes \& Cantor 1969), or \code{"LogDet"} (Barry \& Hartigan 1987; Lake 1994; Steel 1994; Lockhart et. al. 1994). Also \code{method="similarity"} computes the sequence similarity among the rows of \code{X}.
+\item[\code{path}] path to the executable containing dnadist. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file.
+\item[\code{...}] optional arguments to be passed to dnadist. See details for more information.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+Optional arguments include the following: \code{quiet} suppress some output to R console (defaults to \code{quiet = FALSE}); \code{gamma} alpha shape parameter of a gamma model of rate heterogeneity among sites (defaults to no gamma rate heterogeneity); \code{kappa} transition:transversion ratio (defaults to \code{kappa = 2.0}); \code{rates} vector of rates (defaults to single rate); \code{rate.categories} vector of rate categories corresponding to the order of \code{rates}; \code{weights} vector of weights of length equal to the number of columns in \code{X} (defaults to unweighted); \code{bf} vector of base frequencies in alphabetical order (i.e., A, C, G, \& T) - if not provided, then defaults to empirical frequencies; and \code{cleanup} remove PHYLIP input \& output files after the analysis is completed (defaults to \code{cleanup = TRUE}).
+
+Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
+\end{Details}
+%
+\begin{Value}
+This function returns an object of class \code{"dist"}.
+\end{Value}
+%
+\begin{Author}\relax
+Liam Revell \email{liam.revell@umb.edu}
+\end{Author}
+%
+\begin{References}\relax
+Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
+\end{References}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{Rneighbor}{Rneighbor}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+## Not run: 
+data(primates)
+D<-Rdnadist(primates,kappa=10)
+tree<-Rneighbor(D)
+
+## End(Not run)
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
 \HeaderA{Rdnaml}{R interfaces for dnaml and dnamlk}{Rdnaml}
 \aliasA{Rdnamlk}{Rdnaml}{Rdnamlk}
 \keyword{phylogenetics}{Rdnaml}
@@ -297,7 +355,7 @@ clockTree<-Rdnamlk(primates,kappa=10)
 \keyword{parsimony}{Rdnapars}
 %
 \begin{Description}\relax
-This function is an R interface for dnapars in the PHYLIP package (Felsenstein 2013). dnapars can be used for ML phylogeny estimation from DNA sequences.
+This function is an R interface for dnapars in the PHYLIP package (Felsenstein 2013). dnapars can be used for MP phylogeny estimation from DNA sequences.
 \end{Description}
 %
 \begin{Usage}
@@ -341,6 +399,61 @@ Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distr
 ## Not run: 
 data(primates)
 tree<-Rdnapars(primates)
+
+## End(Not run)
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{Rdnapenny}{R interface for dnapenny}{Rdnapenny}
+\keyword{phylogenetics}{Rdnapenny}
+\keyword{inference}{Rdnapenny}
+\keyword{parsimony}{Rdnapenny}
+%
+\begin{Description}\relax
+This function is an R interface for dnapenny in the PHYLIP package (Felsenstein 2013). dnapenny performs branch \& bound parsimony searching following Hendy \& Penny (1982).
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+Rdnapenny(X, path=NULL, ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{X}] an object of class \code{"DNAbin"}.
+\item[\code{path}] path to the executable containing dnapenny. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file.
+\item[\code{...}] optional arguments to be passed to dnapenny. See details for more information.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+Optional arguments include the following: \code{quiet} suppress some output to R console (defaults to \code{quiet = FALSE}); \code{groups} number of groups of 1,000 trees (defaults to \code{groups = 10000}); \code{report} reporting frequency, in numbers of trees (defaults to \code{report = 1000}); \code{simple} simple branch \& bound (defaults to \code{simple = TRUE}); \code{threshold} threshold value for threshold parsimony (defaults to ordinary parsimony); \code{weights} vector of weights of length equal to the number of columns in \code{X} (defaults to unweighted); \code{outgroup} outgroup if outgroup rooting of the estimated tree is desired; and \code{cleanup} remove PHYLIP input \& output files after the analysis is completed (defaults to \code{cleanup = TRUE}).
+
+Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
+\end{Details}
+%
+\begin{Value}
+This function returns an object of class \code{"phylo"} or \code{"multiPhylo"} that is the tree or trees with the best parsimony score. \code{tree\$score} gives the parsimony score, for \code{"phylo"} object \code{tree}.
+\end{Value}
+%
+\begin{Author}\relax
+Liam Revell \email{liam.revell@umb.edu}
+\end{Author}
+%
+\begin{References}\relax
+Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
+\end{References}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{Rdnaml}{Rdnaml}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+## Not run: 
+data(primates)
+tree<-Rdnapenny(primates)
 
 ## End(Not run)
 \end{ExampleCode}
