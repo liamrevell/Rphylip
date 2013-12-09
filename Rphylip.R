@@ -1,3 +1,119 @@
+## calls proml from PHYLIP 3.695 (Felsenstein 2013)
+## written by Liam J. Revell 2013
+
+Rproml<-function(X,path=NULL,...){
+	if(hasArg(clock)) clock<-list(...)$clock
+	else clock<-FALSE
+	exe<-if(clock) "promlk" else "proml"
+	if(is.null(path)) path<-findPath(exe)
+	if(is.null(path)) stop(paste("No path provided and was not able to find path to",exe))
+	if(hasArg(quiet)) quiet<-list(...)$quiet
+	else quiet<-FALSE
+	if(!quiet) if(file.warn(c("categories","infile","intree","outfile","outtree","weights"))==0) return(NULL)
+	oo<-c("r"); ee<-vector()
+	if(hasArg(tree)){
+		oo<-c(oo,"u")
+		tree<-list(...)$tree
+		tree$tip.label<-sapply(tree$tip.label,function(x,y) which(x==y),y=rownames(X))
+		write.tree(tree,"intree")
+		intree<-TRUE
+	} else intree<-FALSE
+	if(hasArg(model)) model<-list(...)$model
+	else model<-"JTT"
+	if(model=="PMB") oo<-c(oo,"p")
+	else if(model=="PAM") oo<-c(oo,rep("p",2))
+	if(hasArg(rates)){
+		rates<-list(...)$rates
+		if(hasArg(rate.categories)){
+			rate.categories<-list(...)$rate.categories
+			write(paste(rate.categories,collapse=""),file="categories")
+			ncats<-length(rates)
+			rates<-paste(rates,collapse=" ")
+			oo<-c(oo,"c",ncats,rates)
+		} else {
+			warning("cannot use rates argument without rate categories; ignoring argument rates")
+			rates<-NULL
+		}
+	} else rates<-NULL
+	if(hasArg(gamma)) gamma<-list(...)$gamma
+	else gamma<-NULL
+	if(hasArg(inv)) inv<-list(...)$inv
+	else inv<-NULL
+	if(hasArg(ncat)) ncat<-list(...)$ncat
+	else ncat<-4
+	if(!is.null(gamma)&&is.null(inv)){
+		oo<-c(oo,"r")
+		ee<-c(ee,1/sqrt(gamma),ncat)
+	} else if(!is.null(gamma)&&!is.null(inv)){
+		oo<-c(oo,"r","r")
+		ee<-c(ee,1/sqrt(gamma),inv)
+	}	
+
+
+
+	if(hasArg(kappa)){
+		kappa<-list(...)$kappa
+		oo<-c(oo,"t",kappa)
+	}
+	if(hasArg(bf)){
+		bf<-list(...)$bf
+		bf<-bf/sum(bf)
+		bf<-paste(bf,collapse=" ")
+		oo<-c(oo,"f",bf)
+	}
+
+	if(hasArg(weights)){
+		oo<-c(oo,"w")
+		write(paste(weights,collapse=""),file="weights")
+	} else weights<-NULL
+	if(hasArg(speedier)) speedier<-list(...)$speedier
+	else speedier<-FALSE
+	if((!speedier)&&(!clock)) oo<-c(oo,"s")
+	if(hasArg(global)) global<-list(...)$global
+	else global<-TRUE
+	if(global) oo<-c(oo,"g")
+	if(hasArg(random.order)) random.order<-list(...)$random.order
+	else random.order<-TRUE
+	if(random.order){
+		if(hasArg(random.addition)) random.addition<-list(...)$random.addition
+		else random.addition<-10
+		oo<-c(oo,"j",sample(seq(1,99999,by=2),1),random.addition)
+	}
+	if(quiet) oo<-c(oo,2)
+	oo<-c(oo,"y",ee,"r")
+	write.dna(X)
+	system("touch outtree")
+	system("touch outfile")
+	temp<-system(paste(path,"/",exe,sep=""),input=oo,show.output.on.console=(!quiet))
+	tree<-read.tree("outtree")
+	temp<-readLines("outfile")
+	logLik<-as.numeric(strsplit(temp[grep("Ln Likelihood",temp)],"=")[[1]][2])
+	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet){
+		cat("Translation table\n")
+		cat("-----------------\n")
+		temp<-lapply(1:nrow(X),function(x,y) cat(paste("\t",paste(x,y[x],sep="\t"),"\n",sep="")),y=rownames(X))
+		cat("\n")
+	}
+	tree$tip.label<-rownames(X)[as.numeric(tree$tip.label)]
+	if(hasArg(outgroup)){ 
+		outgroup<-list(...)$outgroup
+		if(!clock) tree<-outgroup.root(tree,outgroup,quiet)
+		else cat("\nMolecular clock trees are already rooted!\n\nIgnoring argument outgroup.\n\n")
+	}
+	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
+	else cleanup<-TRUE
+	if(cleanup){
+		files<-c("infile","outfile","outtree")
+		if(!is.null(weights)) files<-c(files,"weights")
+		if(!is.null(rates)) files<-c(files,"rates")
+		if(intree) files<-c(files,"intree")
+		cleanFiles(files)
+	}
+	tree$logLik<-logLik
+	return(tree)
+}
+
 ## call consense from PHYLIP 3.695 (Felsenstein 2013)
 ## written by Liam J. Revell 2013
 
