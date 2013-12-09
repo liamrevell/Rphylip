@@ -6,6 +6,26 @@ library('Rphylip')
 
 base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
 cleanEx()
+nameEx("Rconsense")
+### * Rconsense
+
+flush(stderr()); flush(stdout())
+
+### Name: Rconsense
+### Title: R interface for consense
+### Aliases: Rconsense
+### Keywords: phylogenetics
+
+### ** Examples
+
+## Not run: 
+##D trees<-rmtree(n=10,N=10)
+##D tree<-Rconsense(trees)
+## End(Not run)
+
+
+
+cleanEx()
 nameEx("Rdnadist")
 ### * Rdnadist
 

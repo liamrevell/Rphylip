@@ -1,6 +1,9 @@
 Rphylip-package	Rphylip-package
+as.proseq	as.proseq
 opt.Rdnaml	opt.Rdnaml
 primates	primates
+print.proseq	print.proseq
+Rconsense	Rconsense
 Rcontml	Rcontml
 Rcontrast	Rcontrast
 Rdnadist	Rdnadist
@@ -8,8 +11,11 @@ Rdnaml	Rdnaml
 Rdnamlk	Rdnaml
 Rdnapars	Rdnapars
 Rdnapenny	Rdnapenny
+read.protein	read.protein
 Rneighbor	Rneighbor
 Rphylip	Rphylip-package
+Rproml	Rproml
+Rpromlk	Rproml
 Rthreshml	Rthreshml
 Rtreedist	Rtreedist
 setupOSX	setupOSX

@@ -1,4 +1,6 @@
-export(opt.Rdnaml, Rcontml, Rcontrast, Rdnadist, Rdnaml, Rdnamlk, Rdnapars)
-export(Rdnapenny, Rneighbor, Rthreshml, Rtreedist, setupOSX)
+export(as.proseq, opt.Rdnaml, print.proseq, Rcontml, Rconsense, Rcontrast)
+export(Rdnadist, Rdnaml, Rdnamlk, Rdnapars, Rdnapenny, read.protein, Rneighbor)
+export(Rthreshml, Rtreedist, setupOSX)
 
+S3method(print, proseq)
 

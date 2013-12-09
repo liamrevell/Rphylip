@@ -13,8 +13,8 @@
 \end{center}
 \begin{description}
 \raggedright{}
-\item[Version]\AsIs{0.1-07}
-\item[Date]\AsIs{2013-12-7}
+\item[Version]\AsIs{0.1-08}
+\item[Date]\AsIs{2013-12-9}
 \item[Title]\AsIs{Rphylip: An R interface for PHYLIP}
 \item[Author]\AsIs{Liam J. Revell}
 \item[Maintainer]\AsIs{Liam J. Revell }\email{liam.revell@umb.edu}\AsIs{}
@@ -28,7 +28,7 @@ about installing PHYLIP.}
 \item[License]\AsIs{GPL (>= 2)}
 \item[URL]\AsIs{}\url{http://www.phytools.org/Rphylip}\AsIs{}
 \item[Repository]\AsIs{}
-\item[Date/Publication]\AsIs{2013-12-7 12:00:00 EDT}
+\item[Date/Publication]\AsIs{2013-12-9 12:00:00 EDT}
 \end{description}
 \Rdcontents{\R{} topics documented:}
 \inputencoding{utf8}
@@ -59,6 +59,40 @@ Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distr
 
 Revell, L. J. (2013) Rphylip: An R interface for PHYLIP. R package version x-y.z.
 \end{References}
+\inputencoding{utf8}
+\HeaderA{as.proseq}{Converts objects to protein sequences}{as.proseq}
+\keyword{phylogenetics}{as.proseq}
+\keyword{inference}{as.proseq}
+\keyword{maximum likelihood}{as.proseq}
+%
+\begin{Description}\relax
+Converts objects to class \code{"proseq"}.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+as.proseq(x, ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x}] an object containing amino sequences. (Presently only objects of class \code{"phyDat"} are permitted.)
+\item[\code{...}] optional arguments.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+An object of class \code{"proseq"} containing protein sequences.
+\end{Value}
+%
+\begin{Author}\relax
+Liam Revell \email{liam.revell@umb.edu}
+\end{Author}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{print.proseq}{print.proseq}}, \code{\LinkA{Rproml}{Rproml}}
+\end{SeeAlso}
 \inputencoding{utf8}
 \HeaderA{opt.Rdnaml}{Parameter optimizer for Rdnaml}{opt.Rdnaml}
 \keyword{phylogenetics}{opt.Rdnaml}
@@ -136,6 +170,92 @@ The data are stored as a modified object \code{"DNAbin"}.
 \begin{Source}\relax
 Unknown.
 \end{Source}
+\inputencoding{utf8}
+\HeaderA{print.proseq}{Print method protein sequences}{print.proseq}
+\keyword{phylogenetics}{print.proseq}
+\keyword{inference}{print.proseq}
+\keyword{maximum likelihood}{print.proseq}
+%
+\begin{Description}\relax
+Print method for an object of class \code{"proseq"}.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+## S3 method for class 'proseq'
+print(x, printlen=6, digits=3, ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x}] an object of class \code{"proseq"}.
+\item[\code{printlen}] number of sequence names to print.
+\item[\code{digits}] number of digits to print.
+\item[\code{...}] optional arguments.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+Prints to screen.
+\end{Value}
+%
+\begin{Author}\relax
+Liam Revell \email{liam.revell@umb.edu}
+\end{Author}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{as.proseq}{as.proseq}}, \code{\LinkA{Rproml}{Rproml}}
+\end{SeeAlso}
+\inputencoding{utf8}
+\HeaderA{Rconsense}{R interface for consense}{Rconsense}
+\keyword{phylogenetics}{Rconsense}
+%
+\begin{Description}\relax
+This function is an R interface for consense in the PHYLIP package (Felsenstein 2013). consense can be used to compute the consensus tree from a set of phylogenies. 
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+Rconsense(trees, path=NULL, ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{trees}] an object of class \code{"multiPhylo"}.
+\item[\code{path}] path to the directory containing the executable consense. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file.
+\item[\code{...}] optional arguments to be passed to consense. See details for more information.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+Optional arguments include the following: \code{quiet} suppress some output to R console (defaults to \code{quiet = FALSE}); \code{method} which can be \code{"extended"} (extended majority rule consensus, the default), \code{"strict"} (strict consensus), or regular majority rule consensus (\code{"majority"}); \code{"outgroup"} single taxon label or vector of taxa that should be used to root all trees before analysis; \code{rooted} logical value indicated whether to treat the input trees as rooted (defaults to \code{rooted = FALSE}); and \code{cleanup} remove PHYLIP input \& output files after the analysis is completed (defaults to \code{cleanup = TRUE}).
+
+Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
+\end{Details}
+%
+\begin{Value}
+This function returns an object of class \code{"phylo"}. For methods other than \code{method = "strict"}, \code{tree\$node.label} contains the proportion of phylogenies in \code{trees} containing that subtree.
+\end{Value}
+%
+\begin{Author}\relax
+Liam Revell \email{liam.revell@umb.edu}
+\end{Author}
+%
+\begin{References}\relax
+Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
+\end{References}
+%
+\begin{Examples}
+\begin{ExampleCode}
+## Not run: 
+trees<-rmtree(n=10,N=10)
+tree<-Rconsense(trees)
+
+## End(Not run)
+\end{ExampleCode}
+\end{Examples}
 \inputencoding{utf8}
 \HeaderA{Rcontml}{R interface for contml}{Rcontml}
 \keyword{phylogenetics}{Rcontml}
@@ -459,6 +579,41 @@ tree<-Rdnapenny(primates)
 \end{ExampleCode}
 \end{Examples}
 \inputencoding{utf8}
+\HeaderA{read.protein}{Reads protein sequences from file in multiple formats}{read.protein}
+\keyword{phylogenetics}{read.protein}
+\keyword{inference}{read.protein}
+\keyword{maximum likelihood}{read.protein}
+%
+\begin{Description}\relax
+Reads protein sequences from a file.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+read.protein(file, format="fasta", ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{file}] file name for file containing protein sequences.
+\item[\code{format}] format of input file. Permitted formats are \code{"fasta"} and \code{"sequential"}. See \code{\LinkA{read.dna}{read.dna}} for more information.
+\item[\code{...}] optional arguments.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+An object of class \code{"proseq"} containing protein sequences.
+\end{Value}
+%
+\begin{Author}\relax
+Liam Revell \email{liam.revell@umb.edu}
+\end{Author}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{as.proseq}{as.proseq}}, \code{\LinkA{print.proseq}{print.proseq}}, \code{\LinkA{Rproml}{Rproml}}
+\end{SeeAlso}
+\inputencoding{utf8}
 \HeaderA{Rneighbor}{R interface for neighbor}{Rneighbor}
 \keyword{phylogenetics}{Rneighbor}
 \keyword{inference}{Rneighbor}
@@ -514,6 +669,55 @@ tree<-Rneighbor(D)
 ## End(Not run)
 \end{ExampleCode}
 \end{Examples}
+\inputencoding{utf8}
+\HeaderA{Rproml}{R interfaces for proml and promlk}{Rproml}
+\aliasA{Rpromlk}{Rproml}{Rpromlk}
+\keyword{phylogenetics}{Rproml}
+\keyword{inference}{Rproml}
+\keyword{maximum likelihood}{Rproml}
+%
+\begin{Description}\relax
+This function is an R interface for proml in the PHYLIP package (Felsenstein 2013). proml can be used for ML phylogeny estimation from amino acid sequences.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+Rproml(X, path=NULL, ...)
+Rpromlk(X, path=NULL, ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{X}] an object of class \code{"DNAbin"}.
+\item[\code{path}] path to the executable containing proml. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file.
+\item[\code{...}] optional arguments to be passed to proml or promlk. See details for more information.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+Optional arguments include the following: \code{quiet} suppress some output to R console (defaults to \code{quiet = FALSE}); \code{tree} object of class \code{"phylo"} - if supplied, then the model will be optimized on a fixed input topology; \code{model} amino acid model - could be \code{"JTT"} (Jones et al. 1992), \code{"PMB"} (Veerassamy et al. 2003), or \code{"PAM"} (Dayhoff \& Eck 1968; Dayhoff et al. 1979; Koisol \& Goldman 2005); \code{rates} vector of rates (defaults to single rate); \code{rate.categories} vector of rate categories corresponding to the order of \code{rates}; \code{gamma} alpha shape parameter of a gamma model of rate heterogeneity among sites (defaults to no gamma rate heterogeneity); \code{ncat} number of rate categories for the gamma model; \code{inv} proportion of invariant sites for the invariant sites model (defaults to \code{inv = 0}); \code{weights} vector of weights of length equal to the number of columns in \code{X} (defaults to unweighted); \code{speedier} speedier but rougher analysis (defaults to \code{speedier = FALSE}); \code{global} perform global search (defaults to \code{global = TRUE}); \code{random.order} add taxa to tree in random order (defaults to \code{random.order = TRUE}); \code{random.addition} number of random addition replicates for \code{random.order = TRUE} (defaults to \code{random.addition = 10}); \code{outgroup} outgroup if outgroup rooting of the estimated tree is desired; and \code{cleanup} remove PHYLIP input \& output files after the analysis is completed (defaults to \code{cleanup = TRUE}).
+
+Finally \code{clock=TRUE} enforces a molecular clock. The argument \code{clock} is only available for \code{Rproml}. If \code{clock=TRUE} then promlk is used internally. For \code{Rpromlk} a molecular clock is assumed, thus \code{Rproml(...,clock=TRUE)} and \code{Rpromlk(...)} are equivalent. Note that in PHYLIP 3.695 my tests of promlk yielded peculiar results (all branch lengths zero length, random topology), so I'm not sure what to make of that.
+
+Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
+\end{Details}
+%
+\begin{Value}
+This function returns an object of class \code{"phylo"} that is the optimized tree.
+\end{Value}
+%
+\begin{Author}\relax
+Liam Revell \email{liam.revell@umb.edu}
+\end{Author}
+%
+\begin{References}\relax
+Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
+\end{References}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{Rdnaml}{Rdnaml}}, \code{\LinkA{Rcontml}{Rcontml}}
+\end{SeeAlso}
 \inputencoding{utf8}
 \HeaderA{Rthreshml}{R interface for threshml}{Rthreshml}
 \keyword{phylogenetics}{Rthreshml}

@@ -1,7 +1,28 @@
+## convert phangorn phyDat to proseq
+## written by Liam J. Revell 2013
+
+as.proseq<-function(x,...){
+	if(class(x)=="phyDat"&&attr(x,"type")=="AA"){
+		X<-matrix(NA,length(x),length(attr(x,"index")))
+		rownames(X)<-names(x)
+		for(i in 1:ncol(X)){
+			ii<-sapply(x,function(x,y,i) x[y[i]],y=attr(x,"index"),i=i)
+			X[,i]<-attr(x,"levels")[ii]
+		}
+		X<-toupper(X)
+		class(X)<-"proseq"
+		return(X)
+	} else {
+		cat("Warning:\n  cannot convert object x to object of class 'proseq'.\n")
+		cat("  returning NULL. Sorry!\n\n")
+		return(NULL)
+	}
+}
+
 ## read protein sequences from file
 ## written by Liam J. Revell 2013
 
-read.protein<-function(file,format="fasta"){
+read.protein<-function(file,format="fasta",...){
 	X<-readLines(file)
 	if(format=="fasta"){
 		ii<-grep(">",X)
@@ -11,16 +32,30 @@ read.protein<-function(file,format="fasta"){
 		for(i in 1:nrow(ii)) Y[[i]]<-strsplit(gsub(" ","",paste(X[ii[i,1]:ii[i,2]],collapse="")),"")[[1]]
 		l<-sapply(Y,length)
 		if(all(l==min(l))) Y<-t(sapply(Y,function(x) x))
-		Y<-tolower(Y)
-		class(Y)<-"protseq"
+		Y<-toupper(Y)
+		class(Y)<-"proseq"
+	} else if(format=="sequential"){
+		xx<-strsplit(X[1]," ")[[1]]
+		N<-as.numeric(xx[1])
+		l<-as.numeric(xx[2])
+		Y<-matrix(NA,N,l); nn<-vector()
+		for(i in 1:N){
+			xx<-strsplit(X[i+1]," ")[[1]]
+			xx<-xx[xx!=""]
+			nn[i]<-xx[1]
+			Y[i,]<-strsplit(paste(xx[2:length(xx)],collapse=""),"")[[1]]
+		}
+		rownames(Y)<-nn
+		Y<-toupper(Y)
+		class(Y)<-"proseq"
 	}
 	return(Y)
 }
 
-## S3 print method for "protseq"
+## S3 print method for "proseq"
 ## written by Liam J. Revell 2013
 
-print.protseq<-function(x,printlen=6,digits=3,...){
+print.proseq<-function(x,printlen=6,digits=3,...){
 	type<-if(is.list(x)) "list" else "matrix"
 	N<-if(type=="list") length(x) else nrow(x)
 	cat(paste(N," protein sequences in character format stored in a ",type,".\n\n",sep=""))
@@ -55,7 +90,7 @@ Rproml<-function(X,path=NULL,...){
 	exe<-if(clock) "promlk" else "proml"
 	if(is.null(path)) path<-findPath(exe)
 	if(is.null(path)) stop(paste("No path provided and was not able to find path to",exe))
-	if(class(X)!="protseq") stop("X should be an object of class 'protseq'")
+	if(class(X)!="proseq") stop("X should be an object of class 'proseq'")
 	if(hasArg(quiet)) quiet<-list(...)$quiet
 	else quiet<-FALSE
 	if(!quiet) if(file.warn(c("categories","infile","intree","outfile","outtree","weights"))==0) return(NULL)
@@ -153,8 +188,8 @@ Rproml<-function(X,path=NULL,...){
 ## written by Liam J. Revell 2013
 
 Rconsense<-function(trees,path=NULL,...){
-	if(is.null(path)) path<-findPath("dnapenny")
-	if(is.null(path)) stop("No path provided and was not able to find path to dnapenny")
+	if(is.null(path)) path<-findPath("consense")
+	if(is.null(path)) stop("No path provided and was not able to find path to consense")
 	if(class(trees)!="multiPhylo") stop("trees should be an object of class 'multiPhylo'")
 	if(hasArg(quiet)) quiet<-list(...)$quiet
 	else quiet<-FALSE
