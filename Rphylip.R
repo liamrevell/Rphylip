@@ -1,3 +1,51 @@
+## read protein sequences from file
+## written by Liam J. Revell 2013
+
+read.protein<-function(file,format="fasta"){
+	X<-readLines(file)
+	if(format=="fasta"){
+		ii<-grep(">",X)
+		nn<-gsub(">","",X[ii])
+		Y<-setNames(vector("list",length=length(nn)),nn)
+		ii<-cbind(ii+1,c(ii[2:length(ii)]-1,length(X)))
+		for(i in 1:nrow(ii)) Y[[i]]<-strsplit(gsub(" ","",paste(X[ii[i,1]:ii[i,2]],collapse="")),"")[[1]]
+		l<-sapply(Y,length)
+		if(all(l==min(l))) Y<-t(sapply(Y,function(x) x))
+		Y<-tolower(Y)
+		class(Y)<-"protseq"
+	}
+	return(Y)
+}
+
+## S3 print method for "protseq"
+## written by Liam J. Revell 2013
+
+print.protseq<-function(x,printlen=6,digits=3,...){
+	type<-if(is.list(x)) "list" else "matrix"
+	N<-if(type=="list") length(x) else nrow(x)
+	cat(paste(N," protein sequences in character format stored in a ",type,".\n\n",sep=""))
+	l<-if(type=="list") sapply(x,length) else ncol(x)
+	if(type=="list"){
+		cat(paste("Mean sequence length:",round(mean(l),digits),"\n"))
+		cat(paste("   Shortest sequence:",min(l),"\n"))
+		cat(paste("    Longest sequence:",max(l),"\n\n"))
+		cat(paste("Labels:",paste(names(x)[1:min(printlen,N)],collapse=" "),"...\n\n"))
+	} else { 
+		cat(paste("All sequences of same length:",l,"\n\n"))
+		cat(paste("Labels:",paste(rownames(x)[1:min(printlen,N)],collapse=" "),"...\n\n"))
+	}
+	cat("Amino acid composition:\n")
+	ff<-summary(as.factor(x))
+	print(round(ff/sum(ff),digits))
+}
+
+## calls dnamlk from PHYLIP 3.695 (Felsenstein 2013)
+## written by Liam J. Revell 2013
+
+Rpromlk<-function(X,path=NULL,...){
+	Rproml(X,path,clock=TRUE,...)
+}
+	
 ## calls proml from PHYLIP 3.695 (Felsenstein 2013)
 ## written by Liam J. Revell 2013
 
@@ -7,6 +55,7 @@ Rproml<-function(X,path=NULL,...){
 	exe<-if(clock) "promlk" else "proml"
 	if(is.null(path)) path<-findPath(exe)
 	if(is.null(path)) stop(paste("No path provided and was not able to find path to",exe))
+	if(class(X)!="protseq") stop("X should be an object of class 'protseq'")
 	if(hasArg(quiet)) quiet<-list(...)$quiet
 	else quiet<-FALSE
 	if(!quiet) if(file.warn(c("categories","infile","intree","outfile","outtree","weights"))==0) return(NULL)
@@ -48,20 +97,6 @@ Rproml<-function(X,path=NULL,...){
 		oo<-c(oo,"r","r")
 		ee<-c(ee,1/sqrt(gamma),inv)
 	}	
-
-
-
-	if(hasArg(kappa)){
-		kappa<-list(...)$kappa
-		oo<-c(oo,"t",kappa)
-	}
-	if(hasArg(bf)){
-		bf<-list(...)$bf
-		bf<-bf/sum(bf)
-		bf<-paste(bf,collapse=" ")
-		oo<-c(oo,"f",bf)
-	}
-
 	if(hasArg(weights)){
 		oo<-c(oo,"w")
 		write(paste(weights,collapse=""),file="weights")
