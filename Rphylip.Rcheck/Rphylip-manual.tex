@@ -150,21 +150,23 @@ tree<-Rdnaml(primates,kappa=fit$kappa,gamma=fit$gamma,bf=fit$bf)
 \end{ExampleCode}
 \end{Examples}
 \inputencoding{utf8}
-\HeaderA{primates}{Example DNA dataset from primates}{primates}
+\HeaderA{primates}{Example datasets}{primates}
+\aliasA{chloroplast}{primates}{chloroplast}
 \keyword{datasets}{primates}
 %
 \begin{Description}\relax
-An object of class \code{"DNAbin"} containing nucleotide sequence data of mysterious origin for 12 species of primates.
+\code{primates} is an object of class \code{"DNAbin"} containing nucleotide sequence data of mysterious origin for 12 species of primates. \code{chloroplast} is an object of class\code{"proseq"} containing a chloroplast alignment from the phangorn package (Schliep 2011).
 \end{Description}
 %
 \begin{Usage}
 \begin{verbatim}
 data(primates)
+data(chloroplast)
 \end{verbatim}
 \end{Usage}
 %
 \begin{Format}
-The data are stored as a modified object \code{"DNAbin"}.
+The data are stored as an object of class \code{"DNAbin"} or \code{"proseq"}.
 \end{Format}
 %
 \begin{Source}\relax
@@ -718,6 +720,16 @@ Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distr
 \begin{SeeAlso}\relax
 \code{\LinkA{Rdnaml}{Rdnaml}}, \code{\LinkA{Rcontml}{Rcontml}}
 \end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+## Not run: 
+data(chloroplast)
+tree<-Rproml(chloroplast)
+
+## End(Not run)
+\end{ExampleCode}
+\end{Examples}
 \inputencoding{utf8}
 \HeaderA{Rthreshml}{R interface for threshml}{Rthreshml}
 \keyword{phylogenetics}{Rthreshml}

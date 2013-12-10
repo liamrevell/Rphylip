@@ -1,14 +1,16 @@
 \name{primates}
 \alias{primates}
-\title{Example DNA dataset from primates}
+\alias{chloroplast}
+\title{Example datasets}
 \description{
-	An object of class \code{"DNAbin"} containing nucleotide sequence data of mysterious origin for 12 species of primates.
+	\code{primates} is an object of class \code{"DNAbin"} containing nucleotide sequence data of mysterious origin for 12 species of primates. \code{chloroplast} is an object of class\code{"proseq"} containing a chloroplast alignment from the phangorn package (Schliep 2011).
 }
 \usage{
 data(primates)
+data(chloroplast)
 }
 \format{
-	The data are stored as a modified object \code{"DNAbin"}.
+	The data are stored as an object of class \code{"DNAbin"} or \code{"proseq"}.
 }
 \source{
 	Unknown.

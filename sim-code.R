@@ -2,6 +2,12 @@ require(phytools)
 
 source("Rphylip.R")
 
+## sim code for Rproml
+
+X<-read.protein("chloroplast.aa")
+X
+tree<-Rproml(X,speedier=TRUE,global=FALSE)
+
 ## sim code for Rtreedist
 
 trees<-pbtree(n=26,tip.label=LETTERS,nsim=7)

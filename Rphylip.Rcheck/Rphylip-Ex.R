@@ -129,6 +129,26 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
+nameEx("Rproml")
+### * Rproml
+
+flush(stderr()); flush(stdout())
+
+### Name: Rproml
+### Title: R interfaces for proml and promlk
+### Aliases: Rproml Rpromlk
+### Keywords: phylogenetics inference maximum likelihood
+
+### ** Examples
+
+## Not run: 
+##D data(chloroplast)
+##D tree<-Rproml(chloroplast)
+## End(Not run)
+
+
+
+cleanEx()
 nameEx("Rtreedist")
 ### * Rtreedist
 

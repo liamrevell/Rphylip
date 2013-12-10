@@ -33,7 +33,8 @@ Rpromlk(X, path=NULL, ...)
 }
 \examples{
 \dontrun{
-
+data(chloroplast)
+tree<-Rproml(chloroplast)
 }
 }
 \keyword{phylogenetics}

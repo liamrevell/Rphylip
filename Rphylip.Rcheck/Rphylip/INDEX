@@ -12,7 +12,7 @@ Rthreshml               R interface for threshml
 Rtreedist               R interface for treedist
 as.proseq               Converts objects to protein sequences
 opt.Rdnaml              Parameter optimizer for Rdnaml
-primates                Example DNA dataset from primates
+primates                Example datasets
 print.proseq            Print method protein sequences
 read.protein            Reads protein sequences from file in multiple
                         formats

@@ -149,6 +149,26 @@ Loading required package: ape
 > 
 > 
 > cleanEx()
+> nameEx("Rproml")
+> ### * Rproml
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Rproml
+> ### Title: R interfaces for proml and promlk
+> ### Aliases: Rproml Rpromlk
+> ### Keywords: phylogenetics inference maximum likelihood
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D data(chloroplast)
+> ##D tree<-Rproml(chloroplast)
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
 > nameEx("Rtreedist")
 > ### * Rtreedist
 > 
@@ -212,7 +232,7 @@ Loading required package: ape
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  0.2 0.01 0.22 NA NA 
+Time elapsed:  0.47 0.08 0.54 NA NA 
 > grDevices::dev.off()
 null device 
           1 
