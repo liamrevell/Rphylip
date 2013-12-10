@@ -7,6 +7,7 @@ source("Rphylip.R")
 X<-read.protein("chloroplast.aa")
 X
 tree<-Rproml(X,speedier=TRUE,global=FALSE)
+plot(tree,type="unrooted",no.margin=TRUE,edge.width=2,cex=0.8)
 
 ## sim code for Rtreedist
 
