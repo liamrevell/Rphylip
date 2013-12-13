@@ -18,7 +18,6 @@ as.proseq(x, ...)
 \seealso{
 	\code{\link{print.proseq}}, \code{\link{Rproml}}
 }
-\keyword{phylogenetics}
-\keyword{inference}
-\keyword{maximum likelihood}
+\keyword{utilities}
+\keyword{amino acid}
 

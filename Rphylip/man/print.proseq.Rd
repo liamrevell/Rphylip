@@ -18,9 +18,8 @@
 }
 \author{Liam Revell \email{liam.revell@umb.edu}}
 \seealso{
-	\code{\link{as.proseq}}, \code{\link{Rproml}}
+	\code{\link{as.proseq}}, \code{\link{print.DNAbin}}, \code{\link{Rproml}}
 }
-\keyword{phylogenetics}
-\keyword{inference}
-\keyword{maximum likelihood}
+\keyword{utilities}
+\keyword{amino acid}
 

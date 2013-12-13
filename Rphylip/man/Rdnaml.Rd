@@ -16,20 +16,26 @@ Rdnamlk(X, path=NULL, ...)
 
 	Finally \code{clock=TRUE} enforces a molecular clock. The argument \code{clock} is only available for \code{Rdnaml}. If \code{clock=TRUE} then dnamlk is used internally. For \code{Rdnamlk} a molecular clock is assumed, thus \code{Rdnaml(...,clock=TRUE)} and \code{Rdnamlk(...)} are equivalent.
 
-	Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
+	Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 1989, 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
 }
 \description{
-	This function is an R interface for dnaml in the PHYLIP package (Felsenstein 2013). dnaml can be used for ML phylogeny estimation from DNA sequences.
+	This function is an R interface for dnaml in the PHYLIP package (Felsenstein 2013). dnaml can be used for ML phylogeny estimation from DNA sequences (Felsenstein 1981; Felsenstein & Churchill 1996).
 }
 \value{
 	This function returns an object of class \code{"phylo"} that is the optimized tree.
 }
 \references{
+	Felsenstein, J. (1981) Evolutionary trees from DNA sequences: A Maximum Likelihood approach. \emph{Journal of Molecular Evolution}, 17, 368-376.
+
+	Felsenstein, J. (1989) PHYLIP--Phylogeny Inference Package (Version 3.2). \emph{Cladistics}, 5, 164-166.
+
 	Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
+
+	Felsenstein, J., Churchill, G. A. (1996) A Hidden Markov Model approach to variation among sites in rate of evolution. \emph{Molecular Biology and Evolution}, 13, 93-104.
 }
 \author{Liam Revell \email{liam.revell@umb.edu}}
 \seealso{
-	\code{\link{opt.Rdnaml}}, \code{\link{Rcontml}}
+	\code{\link{opt.Rdnaml}}, \code{\link{Rcontml}}, \code{\link{Rproml}}
 }
 \examples{
 \dontrun{

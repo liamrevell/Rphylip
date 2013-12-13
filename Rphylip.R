@@ -1184,6 +1184,7 @@ Rcontrast<-function(tree,X,path=NULL,...){
 		cat("Warning:\n  Tree is not binary, resolving with branches of zero length\n")
 		tree<-multi2di(tree)
 	}
+	if(is.vector(X)) X<-as.matrix(X)
 	if(hasArg(quiet)) quiet<-list(...)$quiet
 	else quiet<-FALSE
 	if(!quiet) if(file.warn(c("infile","intree","outfile"))==0) return(NULL)
@@ -1311,14 +1312,14 @@ Rcontrast<-function(tree,X,path=NULL,...){
 		aa<-strsplit(strsplit(temp[ii],"=")[[1]][2]," ")[[1]]
 		aa<-aa[aa!=""]
 		logLik<-as.numeric(sub(",","",aa[1]))
-		df<-2*(ncol(X)*(ncol(X)-1)/2+ncol(X))
+		k<-2*(ncol(X)*(ncol(X)-1)/2+ncol(X))
 		ii<-grep("Log likelihood without varA",temp)
 		aa<-strsplit(strsplit(temp[ii],"=")[[1]][2]," ")[[1]]
 		aa<-aa[aa!=""]
 		nonVa.logLik<-as.numeric(sub(",","",aa[1]))
-		nonVa.df<-ncol(X)*(ncol(X)-1)/2+ncol(X)		
+		nonVa.k<-ncol(X)*(ncol(X)-1)/2+ncol(X)		
 		ChiSq<-2*(logLik-nonVa.logLik)
-		P<-pchisq(ChiSq,df-nonVa.df,lower.tail=FALSE)
+		P<-pchisq(ChiSq,k-nonVa.k,lower.tail=FALSE)
 		if(hasArg(cleanup)) cleanup<-list(...)$cleanup
 		else cleanup<-TRUE
 		if(cleanup) cleanFiles(c("infile","intree","outfile"))
@@ -1330,7 +1331,7 @@ Rcontrast<-function(tree,X,path=NULL,...){
 			nonVa.VarE=nonVa.VarE,
 			nonVa.VarE.Regressions=nonVa.VarE.Regressions,
 			nonVa.VarE.Correlations=nonVa.VarE.Correlations,
-			logLik=logLik,df=df,nonVa.logLik=nonVa.logLik,
-			nonVa.df=nonVa.df))
+			logLik=logLik,k=k,nonVa.logLik=nonVa.logLik,
+			nonVa.k=nonVa.k,P=P))
 	}
 }

@@ -5,7 +5,7 @@
 setupOSX(path=NULL)
 }
 \arguments{
-	\item{path}{path to the executable containing dnaml. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file.}
+	\item{path}{path to the folder containing the PHYLIP package. If \code{path = NULL}, the R will search several commonly used directories.}
 }
 \details{
 	This function can be used to help set up PHYLIP (\url{http://evolution.genetics.washington.edu/phylip.html}) following the special instructions found here: \url{http://evolution.genetics.washington.edu/phylip/install.html}. \code{setupOSX} should only be run once - when PHYLIP is first installed.

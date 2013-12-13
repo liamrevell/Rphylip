@@ -7,7 +7,7 @@ Rproml(X, path=NULL, ...)
 Rpromlk(X, path=NULL, ...)
 }
 \arguments{
-	\item{X}{an object of class \code{"DNAbin"}.}
+	\item{X}{an object of class \code{"proseq"}.}
 	\item{path}{path to the executable containing proml. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file.}
 	\item{...}{optional arguments to be passed to proml or promlk. See details for more information.}
 }
@@ -19,17 +19,29 @@ Rpromlk(X, path=NULL, ...)
 	Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
 }
 \description{
-	This function is an R interface for proml in the PHYLIP package (Felsenstein 2013). proml can be used for ML phylogeny estimation from amino acid sequences.
+	This function is an R interface for proml in the PHYLIP package (Felsenstein 1989, 2013). proml can be used for ML phylogeny estimation from amino acid sequences.
 }
 \value{
 	This function returns an object of class \code{"phylo"} that is the optimized tree.
 }
 \references{
+	Dayhoff, M.O., Eck, R.V. (1968) \emph{Atlas of Protein Sequence and Structure 1967-1968}. National Biomedical Research Foundation, Silver Spring, Maryland.
+
+	Dayhoff, M.O., Schwartz, R.M., Orcutt, B.C. (1979) A model of evolutionary change in proteins. pp. 345-352 in \emph{Atlas of Protein Sequence and Structure, Volume 5, Supplement 3, 1978}, ed. M.O. Dayhoff. National Biomedical Research Foundataion, Silver Spring, Maryland.
+
+	Felsenstein, J. (1989) PHYLIP--Phylogeny Inference Package (Version 3.2). \emph{Cladistics}, 5, 164-166.
+
 	Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
+
+	Jones, D.T., Taylor, W.R., Thornton, J.M. (1992) The rapid generation of mutation data matrices from protein sequences. \emph{Computer Applications in the Biosciences (CABIOS)}, 8, 275-282.
+
+	Koisol, C., Goldman, N. (2005) Different versions of the Dayhoff rate matrix. \emph{Molecular Biology and Evolution}, 22, 193-199.
+
+	Veerassamy, S., Smith, A., Tillier, E.R. (2003) A transition probability model for amino acid substitutions from blocks. \emph{Journal of Computational Biology}, 10, 997-1010.
 }
 \author{Liam Revell \email{liam.revell@umb.edu}}
 \seealso{
-	\code{\link{Rdnaml}}, \code{\link{Rcontml}}
+	\code{\link{as.proseq}}, \code{\link{Rdnaml}}, \code{\link{read.protein}}
 }
 \examples{
 \dontrun{
@@ -40,3 +52,4 @@ tree<-Rproml(chloroplast)
 \keyword{phylogenetics}
 \keyword{inference}
 \keyword{maximum likelihood}
+\keyword{amino acid}
