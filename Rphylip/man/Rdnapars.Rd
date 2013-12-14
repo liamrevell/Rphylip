@@ -15,7 +15,7 @@ Rdnapars(X, path=NULL, ...)
 	Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 1989, 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
 }
 \description{
-	This function is an R interface for dnapars in the PHYLIP package (Felsenstein 2013). dnapars can be used for MP phylogeny estimation from DNA sequences (Eck & Dayhoff 1966; Kluge & Farris 1969; Fitch 1971.
+	This function is an R interface for dnapars in the PHYLIP package (Felsenstein 2013). dnapars can be used for MP phylogeny estimation from DNA sequences (Eck & Dayhoff 1966; Kluge & Farris 1969; Fitch 1971).
 }
 \value{
 	This function returns an object of class \code{"phylo"} that is the optimized tree.
