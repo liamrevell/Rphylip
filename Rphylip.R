@@ -11,7 +11,7 @@ Rprotdist<-function(X,path=NULL,...){
 	oo<-c("r"); ee<-vector()
 	if(hasArg(model)) model<-list(...)$model
 	else model<-"JTT"
-	if(model!="JTT") oo<-c(oo,rep("p",which(c("PMB","PAM","Kimura","similarity","categories")=="method")))
+	if(model!="JTT") oo<-c(oo,rep("p",which(c("PMB","PAM","Kimura","similarity","categories")==model)))
 	if(model!="Kimura"&&model!="similarity"){
 		if(hasArg(gamma)){
 			gamma<-list(...)$gamma
@@ -252,6 +252,7 @@ read.protein<-function(file,format="fasta",...){
 
 print.proseq<-function(x,printlen=6,digits=3,...){
 	type<-if(is.list(x)) "list" else "matrix"
+
 	N<-if(type=="list") length(x) else nrow(x)
 	cat(paste(N," protein sequences in character format stored in a ",type,".\n\n",sep=""))
 	l<-if(type=="list") sapply(x,length) else ncol(x)
@@ -976,6 +977,7 @@ write.dna<-function(X,append=FALSE){
 	for(i in 1:nrow(X)){
 		sp<-as.character(i)
 		sp<-paste(sp,paste(rep(" ",11-nchar(sp)),collapse=""),collapse="")
+
 		tt<-paste(sp,paste(X[i,],collapse=""),collapse=" ")
 		write(tt,append=TRUE,file="infile")
 	}
