@@ -16,7 +16,9 @@ Rpromlk(X, path=NULL, ...)
 
 	Finally \code{clock=TRUE} enforces a molecular clock. The argument \code{clock} is only available for \code{Rproml}. If \code{clock=TRUE} then promlk is used internally. For \code{Rpromlk} a molecular clock is assumed, thus \code{Rproml(...,clock=TRUE)} and \code{Rpromlk(...)} are equivalent. Note that in PHYLIP 3.695 my tests of promlk yielded peculiar results (all branch lengths zero length, random topology), so I'm not sure what to make of that.
 
-	Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
+	More information about the proml and promlk programs in PHYLIP can be found here \url{http://evolution.genetics.washington.edu/phylip/doc/proml.html}, and here \url{http://evolution.genetics.washington.edu/phylip/doc/promlk.html}.
+
+	Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 1989, 2013) should first be installed. Instructions for installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
 }
 \description{
 	This function is an R interface for proml in the PHYLIP package (Felsenstein 1989, 2013). proml can be used for ML phylogeny estimation from amino acid sequences.

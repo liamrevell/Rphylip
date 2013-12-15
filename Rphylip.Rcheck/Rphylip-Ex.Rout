@@ -34,7 +34,7 @@ Loading required package: ape
 > ### Name: Rconsense
 > ### Title: R interface for consense
 > ### Aliases: Rconsense
-> ### Keywords: phylogenetics
+> ### Keywords: phylogenetics consensus
 > 
 > ### ** Examples
 > 
@@ -157,13 +157,54 @@ Loading required package: ape
 > ### Name: Rproml
 > ### Title: R interfaces for proml and promlk
 > ### Aliases: Rproml Rpromlk
-> ### Keywords: phylogenetics inference maximum likelihood
+> ### Keywords: phylogenetics inference maximum likelihood amino acid
 > 
 > ### ** Examples
 > 
 > ## Not run: 
 > ##D data(chloroplast)
 > ##D tree<-Rproml(chloroplast)
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("Rprotdist")
+> ### * Rprotdist
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Rprotdist
+> ### Title: R interfaces for protdist
+> ### Aliases: Rprotdist
+> ### Keywords: phylogenetics maximum likelihood distance method amino acid
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D data(chloroplast)
+> ##D D<-Rprotdist(chloroplast,model="PAM")
+> ##D tree<-Rneighbor(D)
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("Rprotpars")
+> ### * Rprotpars
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Rprotpars
+> ### Title: R interface for protpars
+> ### Aliases: Rprotpars
+> ### Keywords: phylogenetics inference parsimony amino acid
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D data(chloroplast)
+> ##D tree<-Rprotpars(chloroplast)
 > ## End(Not run)
 > 
 > 
@@ -197,7 +238,7 @@ Loading required package: ape
 > ### Name: opt.Rdnaml
 > ### Title: Parameter optimizer for Rdnaml
 > ### Aliases: opt.Rdnaml
-> ### Keywords: phylogenetics inference maximum likelihood
+> ### Keywords: phylogenetics inference maximum likelihood DNA
 > 
 > ### ** Examples
 > 
@@ -232,7 +273,7 @@ Loading required package: ape
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  0.47 0.08 0.54 NA NA 
+Time elapsed:  0.23 0 0.23 NA NA 
 > grDevices::dev.off()
 null device 
           1 

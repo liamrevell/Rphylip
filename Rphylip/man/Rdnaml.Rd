@@ -16,7 +16,9 @@ Rdnamlk(X, path=NULL, ...)
 
 	Finally \code{clock=TRUE} enforces a molecular clock. The argument \code{clock} is only available for \code{Rdnaml}. If \code{clock=TRUE} then dnamlk is used internally. For \code{Rdnamlk} a molecular clock is assumed, thus \code{Rdnaml(...,clock=TRUE)} and \code{Rdnamlk(...)} are equivalent.
 
-	Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 1989, 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
+	More information about the dnaml and dnamlk programs in PHYLIP can be found here \url{http://evolution.genetics.washington.edu/phylip/doc/dnaml.html}, and here \url{http://evolution.genetics.washington.edu/phylip/doc/dnamlk.html}.
+
+	Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 1989, 2013) should first be installed. Instructions for installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
 }
 \description{
 	This function is an R interface for dnaml in the PHYLIP package (Felsenstein 2013). dnaml can be used for ML phylogeny estimation from DNA sequences (Felsenstein 1981; Felsenstein & Churchill 1996).

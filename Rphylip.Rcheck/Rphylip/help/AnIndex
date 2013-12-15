@@ -17,6 +17,8 @@ Rneighbor	Rneighbor
 Rphylip	Rphylip-package
 Rproml	Rproml
 Rpromlk	Rproml
+Rprotdist	Rprotdist
+Rprotpars	Rprotpars
 Rthreshml	Rthreshml
 Rtreedist	Rtreedist
 setupOSX	setupOSX

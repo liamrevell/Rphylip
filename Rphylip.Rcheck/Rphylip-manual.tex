@@ -13,8 +13,8 @@
 \end{center}
 \begin{description}
 \raggedright{}
-\item[Version]\AsIs{0.1-08}
-\item[Date]\AsIs{2013-12-9}
+\item[Version]\AsIs{0.1-09}
+\item[Date]\AsIs{2013-12-15}
 \item[Title]\AsIs{Rphylip: An R interface for PHYLIP}
 \item[Author]\AsIs{Liam J. Revell}
 \item[Maintainer]\AsIs{Liam J. Revell }\email{liam.revell@umb.edu}\AsIs{}
@@ -28,7 +28,7 @@ about installing PHYLIP.}
 \item[License]\AsIs{GPL (>= 2)}
 \item[URL]\AsIs{}\url{http://www.phytools.org/Rphylip}\AsIs{}
 \item[Repository]\AsIs{}
-\item[Date/Publication]\AsIs{2013-12-9 12:00:00 EDT}
+\item[Date/Publication]\AsIs{2013-12-15 12:00:00 EDT}
 \end{description}
 \Rdcontents{\R{} topics documented:}
 \inputencoding{utf8}
@@ -37,7 +37,7 @@ about installing PHYLIP.}
 \keyword{package}{Rphylip-package}
 %
 \begin{Description}\relax
-\pkg{Rphylip} provides an R interface for programs in the PHYLIP phylogeny methods package (Felsenstein 2013).
+\pkg{Rphylip} provides an R interface for programs in the PHYLIP phylogeny methods package (Felsenstein 1989, 2013).
 \end{Description}
 %
 \begin{Details}\relax
@@ -45,7 +45,7 @@ The complete list of functions can be displayed with \code{library(help = Rphyli
 
 Obviously, before any of the functions of this package can be used, users must first install PHYLIP (Felsenstein 2013). More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
 
-More information on \pkg{Rphylip} can be found at \url{http://www.phytools.org/Rphylip/} or \url{http://blog.phytools.org}.
+More information on \pkg{Rphylip} can be found at \url{http://www.phytools.org/Rphylip/} or \url{http://blog.phytools.org}. The latest code for the development version of Rphylip can also be found on github at the following URL: \url{http://github.com/liamrevell/Rphylip}.
 \end{Details}
 %
 \begin{Author}\relax
@@ -55,15 +55,16 @@ Maintainer: Liam J. Revell <liam.revell@umb.edu>
 \end{Author}
 %
 \begin{References}\relax
+Felsenstein, J. (1989) PHYLIP--Phylogeny Inference Package (Version 3.2). \emph{Cladistics}, 5, 164-166.
+
 Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
 
-Revell, L. J. (2013) Rphylip: An R interface for PHYLIP. R package version x-y.z.
+Revell, L. J. (2013) Rphylip: An R interface for PHYLIP. R package version 0-1.09.
 \end{References}
 \inputencoding{utf8}
 \HeaderA{as.proseq}{Converts objects to protein sequences}{as.proseq}
-\keyword{phylogenetics}{as.proseq}
-\keyword{inference}{as.proseq}
-\keyword{maximum likelihood}{as.proseq}
+\keyword{utilities}{as.proseq}
+\keyword{amino acid}{as.proseq}
 %
 \begin{Description}\relax
 Converts objects to class \code{"proseq"}.
@@ -98,6 +99,7 @@ Liam Revell \email{liam.revell@umb.edu}
 \keyword{phylogenetics}{opt.Rdnaml}
 \keyword{inference}{opt.Rdnaml}
 \keyword{maximum likelihood}{opt.Rdnaml}
+\keyword{DNA}{opt.Rdnaml}
 %
 \begin{Description}\relax
 This function is an wrapper for \code{\LinkA{Rdnaml}{Rdnaml}} that attempts to optimize \code{gamma} (the alpha shape parameter of the gamma model of rate heterogeneity among sites), \code{kappa} (the transition:transversion ratio), and \code{bf} (the base frequencies).
@@ -120,7 +122,9 @@ opt.Rdnaml(X, path=NULL, ...)
 \begin{Details}\relax
 Optional arguments include the following: \code{tree} fixed tree to use in optimization - if not provided, it will be estimated using \code{\LinkA{Rdnaml}{Rdnaml}} under the default conditions; \code{bounds} a list with bounds for optimization - for \code{kappa} and \code{gamma} this should be a two-element vector, whereas for \code{bf} this should be a 4 x 2 matrix with lower bounds in column 1 and upper bounds in column 2.
 
-Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
+More information about the dnaml program in PHYLIP can be found here \url{http://evolution.genetics.washington.edu/phylip/doc/dnaml.html}.
+
+Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 1989, 2013) should first be installed. Instructions for installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
 \end{Details}
 %
 \begin{Value}
@@ -132,11 +136,17 @@ Liam Revell \email{liam.revell@umb.edu}
 \end{Author}
 %
 \begin{References}\relax
+Felsenstein, J. (1981) Evolutionary trees from DNA sequences: A Maximum Likelihood approach. \emph{Journal of Molecular Evolution}, 17, 368-376.
+
+Felsenstein, J. (1989) PHYLIP--Phylogeny Inference Package (Version 3.2). \emph{Cladistics}, 5, 164-166.
+
 Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
+
+Felsenstein, J., Churchill, G. A. (1996) A Hidden Markov Model approach to variation among sites in rate of evolution. \emph{Molecular Biology and Evolution}, 13, 93-104.
 \end{References}
 %
 \begin{SeeAlso}\relax
-\code{\LinkA{opt.Rdnaml}{opt.Rdnaml}}
+\code{\LinkA{Rdnaml}{Rdnaml}}
 \end{SeeAlso}
 %
 \begin{Examples}
@@ -174,9 +184,8 @@ Unknown.
 \end{Source}
 \inputencoding{utf8}
 \HeaderA{print.proseq}{Print method protein sequences}{print.proseq}
-\keyword{phylogenetics}{print.proseq}
-\keyword{inference}{print.proseq}
-\keyword{maximum likelihood}{print.proseq}
+\keyword{utilities}{print.proseq}
+\keyword{amino acid}{print.proseq}
 %
 \begin{Description}\relax
 Print method for an object of class \code{"proseq"}.
@@ -207,11 +216,12 @@ Liam Revell \email{liam.revell@umb.edu}
 \end{Author}
 %
 \begin{SeeAlso}\relax
-\code{\LinkA{as.proseq}{as.proseq}}, \code{\LinkA{Rproml}{Rproml}}
+\code{\LinkA{as.proseq}{as.proseq}}, \code{\LinkA{print.DNAbin}{print.DNAbin}}, \code{\LinkA{Rproml}{Rproml}}
 \end{SeeAlso}
 \inputencoding{utf8}
 \HeaderA{Rconsense}{R interface for consense}{Rconsense}
 \keyword{phylogenetics}{Rconsense}
+\keyword{consensus}{Rconsense}
 %
 \begin{Description}\relax
 This function is an R interface for consense in the PHYLIP package (Felsenstein 2013). consense can be used to compute the consensus tree from a set of phylogenies. 
@@ -234,7 +244,9 @@ Rconsense(trees, path=NULL, ...)
 \begin{Details}\relax
 Optional arguments include the following: \code{quiet} suppress some output to R console (defaults to \code{quiet = FALSE}); \code{method} which can be \code{"extended"} (extended majority rule consensus, the default), \code{"strict"} (strict consensus), or regular majority rule consensus (\code{"majority"}); \code{"outgroup"} single taxon label or vector of taxa that should be used to root all trees before analysis; \code{rooted} logical value indicated whether to treat the input trees as rooted (defaults to \code{rooted = FALSE}); and \code{cleanup} remove PHYLIP input \& output files after the analysis is completed (defaults to \code{cleanup = TRUE}).
 
-Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
+More information about the consense program in PHYLIP can be found here \url{http://evolution.genetics.washington.edu/phylip/doc/consense.html}.
+
+Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 1989, 2013) should first be installed. Instructions for installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
 \end{Details}
 %
 \begin{Value}
@@ -246,6 +258,10 @@ Liam Revell \email{liam.revell@umb.edu}
 \end{Author}
 %
 \begin{References}\relax
+Margush, T., McMorris, F.R. (1981) Consensus n-trees. \emph{Bulletin of Mathematical Biology}, 43, 239-244.
+
+Felsenstein, J. (1989) PHYLIP--Phylogeny Inference Package (Version 3.2). \emph{Cladistics}, 5, 164-166.
+
 Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
 \end{References}
 %
@@ -263,6 +279,7 @@ tree<-Rconsense(trees)
 \keyword{phylogenetics}{Rcontml}
 \keyword{inference}{Rcontml}
 \keyword{maximum likelihood}{Rcontml}
+\keyword{continuous characters}{Rcontml}
 %
 \begin{Description}\relax
 This function is an R interface for contml in the PHYLIP package (Felsenstein 2013). contml can be used for ML phylogeny estimation from gene frequency data or continuous characters. The continuous characters should be rotated so as to be uncorrelated before analysis.
@@ -285,7 +302,9 @@ Rcontml(X, path=NULL, ...)
 \begin{Details}\relax
 Optional arguments include the following: \code{quiet} suppress some output to R console (defaults to \code{quiet = FALSE}); \code{tree} object of class \code{"phylo"} - if supplied, then the model will be optimized on a fixed input topology; \code{global} perform global search (defaults to \code{global = TRUE}); \code{random.order} add taxa to tree in random order (defaults to \code{random.order = TRUE}); \code{random.addition} number of random addition replicates for \code{random.order = TRUE} (defaults to \code{random.addition = 10}); \code{outgroup} outgroup if outgroup rooting of the estimated tree is desired; and \code{cleanup} remove PHYLIP input/output files after the analysis is completed (defaults to \code{cleanup = TRUE}).
 
-Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
+More information about the contml program in PHYLIP can be found here \url{http://evolution.genetics.washington.edu/phylip/doc/contml.html}.
+
+Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 1989, 2013) should first be installed. Instructions for installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
 \end{Details}
 %
 \begin{Value}
@@ -297,21 +316,31 @@ Liam Revell \email{liam.revell@umb.edu}
 \end{Author}
 %
 \begin{References}\relax
+Felsenstein, J. (1981) Maximum likelihood estimation of evolutionary trees from continuous characters. \emph{American Journal of Human Genetics}, 25, 471-492.
+
+Felsenstein, J. (1981) Maximum likelihood estimation of evolutionary trees from continuous characters. \emph{American Journal of Human Genetics}, 25, 471-492.
+
+Felsenstein, J. (1989) PHYLIP--Phylogeny Inference Package (Version 3.2). \emph{Cladistics}, 5, 164-166.
+
 Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
 \end{References}
 %
 \begin{SeeAlso}\relax
-\code{\LinkA{Rdnaml}{Rdnaml}}
+\code{\LinkA{Rdnaml}{Rdnaml}}, \code{\LinkA{Rproml}{Rproml}}
 \end{SeeAlso}
 \inputencoding{utf8}
 \HeaderA{Rcontrast}{R interface for contrast}{Rcontrast}
 \keyword{phylogenetics}{Rcontrast}
 \keyword{comparative method}{Rcontrast}
+\keyword{continuous characters}{Rcontrast}
+\keyword{maximum likelihood}{Rcontrast}
 %
 \begin{Description}\relax
 This function is an R interface for contrast in the PHYLIP package (Felsenstein 2013). contrast can be used to perform the among species phylogenetically independent contrasts method of Felsenstein (1985) and the within \& among species method of Felsenstein (2008).
 
-Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
+More information about the contrast program in PHYLIP can be found here \url{http://evolution.genetics.washington.edu/phylip/doc/contrast.html}.
+
+Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 1989, 2013) should first be installed. Instructions for installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
 \end{Description}
 %
 \begin{Usage}
@@ -323,7 +352,7 @@ Rcontrast(tree, X, path=NULL, ...)
 \begin{Arguments}
 \begin{ldescription}
 \item[\code{tree}] object of class \code{"phylo"}.
-\item[\code{X}] a \emph{matrix} of continuous valued traits (in columns) with rownames containing species names. For within-species contrasts analysis, the matrix should contain repeating (identical) row names for conspecifics.
+\item[\code{X}] a \emph{matrix} of continuous valued traits (in columns) with rownames containing species names. For one trait, \code{X} can be a matrix with one column or a vector with \code{names(X)} containing species names matching \code{tree\$tip.label}. For within-species contrasts analysis, the matrix should contain repeating (identical) row names for conspecifics.
 \item[\code{path}] path to the executable containing contrast. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file.
 \item[\code{...}] optional arguments to be passed to contrast. See details for more information.
 \end{ldescription}
@@ -334,7 +363,9 @@ Optional arguments include the following: \code{quiet} suppress some output to R
 \end{Details}
 %
 \begin{Value}
-This function returns an object of class \code{"phylo"} that is the optimized tree.
+If \code{X} contains one observation per species (say, the species mean), then \code{Rcontrast} returns a list with the following components: \code{Contrasts}, a matrix with all phylogenetically independent contrats; \code{Covariance\_matrix}, a matrix containing the evolutionary variances (on diagonals) and covariances; \code{Regressions}, a matrix containing the pair-wise bivariate regression coefficients (columns on rows); \code{Correlations}, a correlation matrix of contrasts.
+
+If \code{X} contains more than one sample per species, then \code{Rcontrast} returns a list with the following elements: \code{VarA}, the estimated among-species variance-covariance matrix; \code{VarE}, the estimated within-species (i.e., 'environmental') variance-covariance matrix; \code{VarA.Regression}, a matrix containing the pair-wise bivariate among-species regression coefficients (columns on rows); \code{VarA.Correlations}, a matrix with the among-species evolutionary correlations; \code{VarE.Regressions}, the pair-wise bivariate within-species regression coefficients; \code{VarE.Correlations}, the within-species correlations; \code{nonVa.VarE}, \code{nonVa.VarE.Regressions}, and \code{nonVa.VarA.Correlations}, estimates obtained when \code{VarA} is not included in the model; \code{logLik} and \code{nonVa.logLik}, log-likelihood when \code{VarA} is included (or not) in the model; \code{k} and \code{nonVa.k} the number of parameters estimated in each model; and \code{P} the p-value of a likelihood-ratio test of \code{VarA}, in which \code{df = k - nonVa.k}. 
 \end{Value}
 %
 \begin{Author}\relax
@@ -342,15 +373,17 @@ Liam Revell \email{liam.revell@umb.edu}
 \end{Author}
 %
 \begin{References}\relax
-Felsenstein, J. (1985) Phylogenies and the comparative method. American Naturalist, 125, 1-15.
+Felsenstein, J. (1985) Phylogenies and the comparative method. \emph{American Naturalist}, 125, 1-15.
 
-Felsenstein, J. (2008) Comparative methods with sampling error and within-species variation: Contrasts revisited and revised. American Naturalist, 171, 713-725.
+Felsenstein, J. (1989) PHYLIP--Phylogeny Inference Package (Version 3.2). \emph{Cladistics}, 5, 164-166.
+
+Felsenstein, J. (2008) Comparative methods with sampling error and within-species variation: Contrasts revisited and revised. \emph{American Naturalist}, 171, 713-725.
 
 Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
 \end{References}
 %
 \begin{SeeAlso}\relax
-\code{\LinkA{pic}{pic}}
+\code{\LinkA{pic}{pic}}, \code{Rcontml}, \code{Rthreshml}
 \end{SeeAlso}
 \inputencoding{utf8}
 \HeaderA{Rdnadist}{R interfaces for dnadist}{Rdnadist}
@@ -381,7 +414,9 @@ Rdnadist(X, method=c("F84","K80","JC","LogDet"), path=NULL, ...)
 \begin{Details}\relax
 Optional arguments include the following: \code{quiet} suppress some output to R console (defaults to \code{quiet = FALSE}); \code{gamma} alpha shape parameter of a gamma model of rate heterogeneity among sites (defaults to no gamma rate heterogeneity); \code{kappa} transition:transversion ratio (defaults to \code{kappa = 2.0}); \code{rates} vector of rates (defaults to single rate); \code{rate.categories} vector of rate categories corresponding to the order of \code{rates}; \code{weights} vector of weights of length equal to the number of columns in \code{X} (defaults to unweighted); \code{bf} vector of base frequencies in alphabetical order (i.e., A, C, G, \& T) - if not provided, then defaults to empirical frequencies; and \code{cleanup} remove PHYLIP input \& output files after the analysis is completed (defaults to \code{cleanup = TRUE}).
 
-Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
+More information about the dnadist program in PHYLIP can be found here \url{http://evolution.genetics.washington.edu/phylip/doc/dnadist.html}.
+
+Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 1989, 2013) should first be installed. Instructions for installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
 \end{Details}
 %
 \begin{Value}
@@ -393,7 +428,24 @@ Liam Revell \email{liam.revell@umb.edu}
 \end{Author}
 %
 \begin{References}\relax
+
+Barry, D., Hartigan, J.A. (1987) Statistical analysis of hominoid molecular evolution. \emph{Statistical Science}, 2, 191-200.
+
 Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
+
+Felsenstein, J., Churchill, G. A. (1996) A Hidden Markov Model approach to variation among sites in rate of evolution. \emph{Molecular Biology and Evolution}, 13, 93-104.
+
+Jukes, T.H., Cantor, C.R. (1969) Evolution of protein molecules. pp. 21-132 in \emph{Mammalian Protein Metabolism Vol. III}, ed. M.N. Munro. Academic Press, New York.
+
+Kimura, M. (1980) A simple model for estimating evolutionary rates of base substitutions through comparative studies of nucleotide sequences. \emph{Journal of Molecular Evolution}, 16, 111-120.
+
+Kishino, H., Hasegawa, M. (1989) Evaluation of the maximum likelihood estimate of teh evolutionary tree topology from DNA sequence data, and the branching order in Hominoidea. \emph{Journal of Molecular Evolutioon}, 29, 170-179.
+
+Lake, J.A. (1994) Reconstructing evolutionary trees from DNA and protein sequences: Paralinear distances. \emph{Proceedings of the National Academy of Sciences}, 91, 1455-1459.
+
+Lockhart, P.J., Steel, M.A., Hendy, M.D., Penny, D. (1994) Recovering evolutionary trees under a more realistic model of sequence evolution. \emph{Molecular Biology and Evolution}, 11, 605-612.
+
+Steel, M.A. (1994) Recovering a tree from the Markov leaf colourations it generates under a Markov model. \emph{Applied Mathematics Letters}, 7, 19-23.
 \end{References}
 %
 \begin{SeeAlso}\relax
@@ -418,7 +470,7 @@ tree<-Rneighbor(D)
 \keyword{maximum likelihood}{Rdnaml}
 %
 \begin{Description}\relax
-This function is an R interface for dnaml in the PHYLIP package (Felsenstein 2013). dnaml can be used for ML phylogeny estimation from DNA sequences.
+This function is an R interface for dnaml in the PHYLIP package (Felsenstein 2013). dnaml can be used for ML phylogeny estimation from DNA sequences (Felsenstein 1981; Felsenstein \& Churchill 1996).
 \end{Description}
 %
 \begin{Usage}
@@ -441,7 +493,9 @@ Optional arguments include the following: \code{quiet} suppress some output to R
 
 Finally \code{clock=TRUE} enforces a molecular clock. The argument \code{clock} is only available for \code{Rdnaml}. If \code{clock=TRUE} then dnamlk is used internally. For \code{Rdnamlk} a molecular clock is assumed, thus \code{Rdnaml(...,clock=TRUE)} and \code{Rdnamlk(...)} are equivalent.
 
-Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
+More information about the dnaml and dnamlk programs in PHYLIP can be found here \url{http://evolution.genetics.washington.edu/phylip/doc/dnaml.html}, and here \url{http://evolution.genetics.washington.edu/phylip/doc/dnamlk.html}.
+
+Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 1989, 2013) should first be installed. Instructions for installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
 \end{Details}
 %
 \begin{Value}
@@ -453,11 +507,17 @@ Liam Revell \email{liam.revell@umb.edu}
 \end{Author}
 %
 \begin{References}\relax
+Felsenstein, J. (1981) Evolutionary trees from DNA sequences: A Maximum Likelihood approach. \emph{Journal of Molecular Evolution}, 17, 368-376.
+
+Felsenstein, J. (1989) PHYLIP--Phylogeny Inference Package (Version 3.2). \emph{Cladistics}, 5, 164-166.
+
 Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
+
+Felsenstein, J., Churchill, G. A. (1996) A Hidden Markov Model approach to variation among sites in rate of evolution. \emph{Molecular Biology and Evolution}, 13, 93-104.
 \end{References}
 %
 \begin{SeeAlso}\relax
-\code{\LinkA{opt.Rdnaml}{opt.Rdnaml}}, \code{\LinkA{Rcontml}{Rcontml}}
+\code{\LinkA{opt.Rdnaml}{opt.Rdnaml}}, \code{\LinkA{Rcontml}{Rcontml}}, \code{\LinkA{Rproml}{Rproml}}
 \end{SeeAlso}
 %
 \begin{Examples}
@@ -477,7 +537,7 @@ clockTree<-Rdnamlk(primates,kappa=10)
 \keyword{parsimony}{Rdnapars}
 %
 \begin{Description}\relax
-This function is an R interface for dnapars in the PHYLIP package (Felsenstein 2013). dnapars can be used for MP phylogeny estimation from DNA sequences.
+This function is an R interface for dnapars in the PHYLIP package (Felsenstein 2013). dnapars can be used for MP phylogeny estimation from DNA sequences (Eck \& Dayhoff 1966; Kluge \& Farris 1969; Fitch 1971).
 \end{Description}
 %
 \begin{Usage}
@@ -497,7 +557,9 @@ Rdnapars(X, path=NULL, ...)
 \begin{Details}\relax
 Optional arguments include the following: \code{quiet} suppress some output to R console (defaults to \code{quiet = FALSE}); \code{tree} object of class \code{"phylo"} - if supplied, then the parsimony score will be computed on a fixed input topology; \code{thorough} logical value indicating whether to conduct a more thorough search (defaults to \code{thorough=TRUE}); \code{nsave} number of trees to save if multiple equally parsimonious trees are found (defaults to \code{nsave=10000}); \code{random.order} add taxa to tree in random order (defaults to \code{random.order = TRUE}); \code{random.addition} number of random addition replicates for \code{random.order = TRUE} (defaults to \code{random.addition = 10}); \code{threshold} threshold value for threshold parsimony (defaults to ordinary parsimony); \code{transversion} logical value indicating whether to use transversion parsimony (defaults to \code{transversion=FALSE}); \code{weights} vector of weights of length equal to the number of columns in \code{X} (defaults to unweighted); \code{outgroup} outgroup if outgroup rooting of the estimated tree is desired; and \code{cleanup} remove PHYLIP input \& output files after the analysis is completed (defaults to \code{cleanup = TRUE}).
 
-Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
+More information about the dnapars program in PHYLIP can be found here \url{http://evolution.genetics.washington.edu/phylip/doc/dnapars.html}.
+
+Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 1989, 2013) should first be installed. Instructions for installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
 \end{Details}
 %
 \begin{Value}
@@ -509,11 +571,19 @@ Liam Revell \email{liam.revell@umb.edu}
 \end{Author}
 %
 \begin{References}\relax
+Eck. R.V., Dayhoff, M.O. (1966) \emph{Atlas of Protein Sequence and Structure 1966}. National Biomedical Research Foundation, Silver Spring, Maryland.
+
+Felsenstein, J. (1989) PHYLIP--Phylogeny Inference Package (Version 3.2). \emph{Cladistics}, 5, 164-166.
+
 Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
+
+Fitch, W.M. (1971) Toward defining the course of evolution: Minimu change for a specified tree topology. \emph{Systematic Zoology}, 20, 406-416.
+
+Kluge, A.G., Farris, J.S. (1969) Quantitative phyletics and the evolution of anurans. \emph{Systematic Zoology}, 18, 1-32.
 \end{References}
 %
 \begin{SeeAlso}\relax
-\code{\LinkA{Rdnaml}{Rdnaml}}
+\code{\LinkA{Rdnaml}{Rdnaml}}, \code{\LinkA{Rdnapenny}{Rdnapenny}}
 \end{SeeAlso}
 %
 \begin{Examples}
@@ -552,7 +622,9 @@ Rdnapenny(X, path=NULL, ...)
 \begin{Details}\relax
 Optional arguments include the following: \code{quiet} suppress some output to R console (defaults to \code{quiet = FALSE}); \code{groups} number of groups of 1,000 trees (defaults to \code{groups = 10000}); \code{report} reporting frequency, in numbers of trees (defaults to \code{report = 1000}); \code{simple} simple branch \& bound (defaults to \code{simple = TRUE}); \code{threshold} threshold value for threshold parsimony (defaults to ordinary parsimony); \code{weights} vector of weights of length equal to the number of columns in \code{X} (defaults to unweighted); \code{outgroup} outgroup if outgroup rooting of the estimated tree is desired; and \code{cleanup} remove PHYLIP input \& output files after the analysis is completed (defaults to \code{cleanup = TRUE}).
 
-Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
+More information about the dnapenny program in PHYLIP can be found here \url{http://evolution.genetics.washington.edu/phylip/doc/dnapenny.html}.
+
+Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 1989, 2013) should first be installed. Instructions for installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
 \end{Details}
 %
 \begin{Value}
@@ -564,11 +636,15 @@ Liam Revell \email{liam.revell@umb.edu}
 \end{Author}
 %
 \begin{References}\relax
+Felsenstein, J. (1989) PHYLIP--Phylogeny Inference Package (Version 3.2). \emph{Cladistics}, 5, 164-166.
+
 Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
+
+Hendy, M.D., Penny, D. (1982) Branch and bound algorithms to determine minimal evolutionary trees. \emph{Mathematical Biosciences}, 60, 133-142.
 \end{References}
 %
 \begin{SeeAlso}\relax
-\code{\LinkA{Rdnaml}{Rdnaml}}
+\code{\LinkA{Rdnapars}{Rdnapars}}
 \end{SeeAlso}
 %
 \begin{Examples}
@@ -583,8 +659,8 @@ tree<-Rdnapenny(primates)
 \inputencoding{utf8}
 \HeaderA{read.protein}{Reads protein sequences from file in multiple formats}{read.protein}
 \keyword{phylogenetics}{read.protein}
-\keyword{inference}{read.protein}
-\keyword{maximum likelihood}{read.protein}
+\keyword{utilities}{read.protein}
+\keyword{amino acid}{read.protein}
 %
 \begin{Description}\relax
 Reads protein sequences from a file.
@@ -622,7 +698,7 @@ Liam Revell \email{liam.revell@umb.edu}
 \keyword{distance method}{Rneighbor}
 %
 \begin{Description}\relax
-This function is an R interface for neighbor in the PHYLIP package (Felsenstein 2013). neighbor can be used for neighbor-joining and UPGMA phylogeny inference.
+This function is an R interface for neighbor in the PHYLIP package (Felsenstein 2013). neighbor can be used for neighbor-joining (Saitou \& Nei 1987) and UPGMA (Sokal \& Michener 1958) phylogeny inference.
 \end{Description}
 %
 \begin{Usage}
@@ -642,7 +718,9 @@ Rneighbor(D, path=NULL , ...)
 \begin{Details}\relax
 Optional arguments include the following: \code{quiet} suppress some output to R console (defaults to \code{quiet = FALSE}); \code{method} - can be \code{"NJ"} or \code{"nj"} (for neighbor-joining), or \code{"UPGMA"} or \code{"UPGMA"} (for UPGMA); \code{random.order} add taxa to tree in random order (defaults to \code{random.order = TRUE}); \code{outgroup} outgroup if outgroup rooting of the estimated tree is desired (only works for \code{method = "NJ"}, UPGMA trees are already rooted); and \code{cleanup} remove PHYLIP input \& output files after the analysis is completed (defaults to \code{cleanup = TRUE}).
 
-Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
+More information about the neighbor program in PHYLIP can be found here \url{http://evolution.genetics.washington.edu/phylip/doc/neighbor.html}.
+
+Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 1989, 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
 \end{Details}
 %
 \begin{Value}
@@ -654,11 +732,17 @@ Liam Revell \email{liam.revell@umb.edu}
 \end{Author}
 %
 \begin{References}\relax
+Saitou, N., Nei, M. (1987) The neighbor-joining method: A new method for reconstructing phylogenetic trees. \emph{Molecular Biology and Evolution}, 4, 406-425.
+
+Sokal, R., Michener, C. (1958) A statistical method for evaluating systematic relationships. \emph{University of Kansas Science Bulletin}, 38, 1409-1438.	
+
+Felsenstein, J. (1989) PHYLIP--Phylogeny Inference Package (Version 3.2). \emph{Cladistics}, 5, 164-166.
+
 Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
 \end{References}
 %
 \begin{SeeAlso}\relax
-\code{\LinkA{Rdnaml}{Rdnaml}}
+\code{\LinkA{Rdnadist}{Rdnadist}}
 \end{SeeAlso}
 %
 \begin{Examples}
@@ -677,9 +761,10 @@ tree<-Rneighbor(D)
 \keyword{phylogenetics}{Rproml}
 \keyword{inference}{Rproml}
 \keyword{maximum likelihood}{Rproml}
+\keyword{amino acid}{Rproml}
 %
 \begin{Description}\relax
-This function is an R interface for proml in the PHYLIP package (Felsenstein 2013). proml can be used for ML phylogeny estimation from amino acid sequences.
+This function is an R interface for proml in the PHYLIP package (Felsenstein 1989, 2013). proml can be used for ML phylogeny estimation from amino acid sequences.
 \end{Description}
 %
 \begin{Usage}
@@ -691,7 +776,7 @@ Rpromlk(X, path=NULL, ...)
 %
 \begin{Arguments}
 \begin{ldescription}
-\item[\code{X}] an object of class \code{"DNAbin"}.
+\item[\code{X}] an object of class \code{"proseq"}.
 \item[\code{path}] path to the executable containing proml. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file.
 \item[\code{...}] optional arguments to be passed to proml or promlk. See details for more information.
 \end{ldescription}
@@ -702,7 +787,9 @@ Optional arguments include the following: \code{quiet} suppress some output to R
 
 Finally \code{clock=TRUE} enforces a molecular clock. The argument \code{clock} is only available for \code{Rproml}. If \code{clock=TRUE} then promlk is used internally. For \code{Rpromlk} a molecular clock is assumed, thus \code{Rproml(...,clock=TRUE)} and \code{Rpromlk(...)} are equivalent. Note that in PHYLIP 3.695 my tests of promlk yielded peculiar results (all branch lengths zero length, random topology), so I'm not sure what to make of that.
 
-Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
+More information about the proml and promlk programs in PHYLIP can be found here \url{http://evolution.genetics.washington.edu/phylip/doc/proml.html}, and here \url{http://evolution.genetics.washington.edu/phylip/doc/promlk.html}.
+
+Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 1989, 2013) should first be installed. Instructions for installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
 \end{Details}
 %
 \begin{Value}
@@ -714,11 +801,23 @@ Liam Revell \email{liam.revell@umb.edu}
 \end{Author}
 %
 \begin{References}\relax
+Dayhoff, M.O., Eck, R.V. (1968) \emph{Atlas of Protein Sequence and Structure 1967-1968}. National Biomedical Research Foundation, Silver Spring, Maryland.
+
+Dayhoff, M.O., Schwartz, R.M., Orcutt, B.C. (1979) A model of evolutionary change in proteins. pp. 345-352 in \emph{Atlas of Protein Sequence and Structure, Volume 5, Supplement 3, 1978}, ed. M.O. Dayhoff. National Biomedical Research Foundataion, Silver Spring, Maryland.
+
+Felsenstein, J. (1989) PHYLIP--Phylogeny Inference Package (Version 3.2). \emph{Cladistics}, 5, 164-166.
+
 Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
+
+Jones, D.T., Taylor, W.R., Thornton, J.M. (1992) The rapid generation of mutation data matrices from protein sequences. \emph{Computer Applications in the Biosciences (CABIOS)}, 8, 275-282.
+
+Koisol, C., Goldman, N. (2005) Different versions of the Dayhoff rate matrix. \emph{Molecular Biology and Evolution}, 22, 193-199.
+
+Veerassamy, S., Smith, A., Tillier, E.R. (2003) A transition probability model for amino acid substitutions from blocks. \emph{Journal of Computational Biology}, 10, 997-1010.
 \end{References}
 %
 \begin{SeeAlso}\relax
-\code{\LinkA{Rdnaml}{Rdnaml}}, \code{\LinkA{Rcontml}{Rcontml}}
+\code{\LinkA{as.proseq}{as.proseq}}, \code{\LinkA{Rdnaml}{Rdnaml}}, \code{\LinkA{read.protein}{read.protein}}
 \end{SeeAlso}
 %
 \begin{Examples}
@@ -731,12 +830,153 @@ tree<-Rproml(chloroplast)
 \end{ExampleCode}
 \end{Examples}
 \inputencoding{utf8}
+\HeaderA{Rprotdist}{R interfaces for protdist}{Rprotdist}
+\keyword{phylogenetics}{Rprotdist}
+\keyword{maximum likelihood}{Rprotdist}
+\keyword{distance method}{Rprotdist}
+\keyword{amino acid}{Rprotdist}
+%
+\begin{Description}\relax
+This function is an R interface for protdist in the PHYLIP package (Felsenstein 2013). protdist can be used to estimate the evolutionary distances between amino acid sequences under various models.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+Rprotdist(X, path=NULL, ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{X}] an object of class \code{"proseq"} containing aligned amino acid sequences.
+\item[\code{path}] path to the executable containing protdist. If \code{path = NULL}, the R will search sev arguments to be passed to protdist. See details for more information.
+\item[\code{...}] optional arguments to be passed to protdist. See details for more information.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+Optional arguments include the following: \code{quiet} suppress some output to R console (defaults to \code{quiet = FALSE}); \code{model} can be \code{"JTT"} (Jones et al. 1992), \code{"PMB"} (Veerassamy et al. 2003), \code{"PAM"} (Dayhoff \& Eck 1968; Dayhoff et al. 1979; Koisol \& Goldman 2005), \code{"Kimura"} (a simple model based on Kimura 1980), \code{"similarity"} which gives the similarity between sequences, and \code{"categories"} which is due to Felsenstein; \code{gamma} alpha shape parameter of a gamma model of rate heterogeneity among sites (defaults to no gamma rate heterogeneity) - note that gamma rate heterogeneity does not apply to \code{model = "Kimura"} or \code{model = "similarity"}; \code{kappa} transition:transversion ratio (defaults to \code{kappa = 2.0}), \code{genetic.code}, type of genetic code to assume (options are \code{"universal"}, the default, \code{"mitochondrial"}, \code{"vertebrate.mitochondrial"}, \code{"fly.mitochondrial"}, and \code{"yeast.mitochondrial"}), \code{categorization}, categorization scheme for amino acids (options are \code{"GHB"}, the George et al. 1988 classification, \code{"Hall"}, a classification scheme provided by Ben Hall, and \code{"chemical"}, a scheme based on Conn \& Stumpf 1963); and, finally, \code{ease}, a numerical parameter that indicates the facility of getting between amino acids of different categories in which 0 is nearly impossible, and 1 is no difficulty (defaults to \code{ease = 0.457}) - note that \code{kappa}, \code{bf}, \code{genetic.code}, \code{categorization}, and \code{ease} apply only to \code{model = "categories"}; \code{rates} vector of rates (defaults to single rate); \code{rate.categories} vector of rate categories corresponding to the order of \code{rates}; \code{weights} vector of weights of length equal to the number of columns in \code{X} (defaults to unweighted); and \code{cleanup} remove PHYLIP input \& output files after the analysis is completed (defaults to \code{cleanup = TRUE}).
+
+More information about the protdist program in PHYLIP can be found here \url{http://evolution.genetics.washington.edu/phylip/doc/protdist.html}.
+
+Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 1989, 2013) should first be installed. Instructions for installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
+\end{Details}
+%
+\begin{Value}
+This function returns an object of class \code{"dist"}.
+\end{Value}
+%
+\begin{Author}\relax
+Liam Revell \email{liam.revell@umb.edu}
+\end{Author}
+%
+\begin{References}\relax
+Conn, E.E., Stumpf, P.K. (1963) \emph{Outlines of Biochemistry}. John Wiley and Sons, New York. 
+
+Dayhoff, M.O., Eck, R.V. (1968) \emph{Atlas of Protein Sequence and Structure 1967-1968}. National Biomedical Research Foundation, Silver Spring, Maryland.
+
+Dayhoff, M.O., Schwartz, R.M., Orcutt, B.C. (1979) A model of evolutionary change in proteins. pp. 345-352 in \emph{Atlas of Protein Sequence and Structure, Volume 5, Supplement 3, 1978}, ed. M.O. Dayhoff. National Biomedical Research Foundataion, Silver Spring, Maryland.
+
+Felsenstein, J. (1989) PHYLIP--Phylogeny Inference Package (Version 3.2). \emph{Cladistics}, 5, 164-166.
+
+Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
+
+George, D.G., Hunt, L.T., Barker., W.C. (1988) \emph{Current methods in sequence comparison and analysis}. pp. 127-149 in Macromolecular Sequencing and Synthesis, ed. D. H. Schlesinger. Alan R. Liss, New York. 
+
+Jones, D.T., Taylor, W.R., Thornton, J.M. (1992) The rapid generation of mutation data matrices from protein sequences. \emph{Computer Applications in the Biosciences (CABIOS)}, 8, 275-282.
+
+Kimura, M. (1980) A simple model for estimating evolutionary rates of base substitutions through comparative studies of nucleotide sequences. \emph{Journal of Molecular Evolution}, 16, 111-120.
+
+Koisol, C., Goldman, N. (2005) Different versions of the Dayhoff rate matrix. \emph{Molecular Biology and Evolution}, 22, 193-199.
+
+Veerassamy, S., Smith, A., Tillier, E.R. (2003) A transition probability model for amino acid substitutions from blocks. \emph{Journal of Computational Biology}, 10, 997-1010.
+\end{References}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{Rneighbor}{Rneighbor}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+## Not run: 
+data(chloroplast)
+D<-Rprotdist(chloroplast,model="PAM")
+tree<-Rneighbor(D)
+
+## End(Not run)
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{Rprotpars}{R interface for protpars}{Rprotpars}
+\keyword{phylogenetics}{Rprotpars}
+\keyword{inference}{Rprotpars}
+\keyword{parsimony}{Rprotpars}
+\keyword{amino acid}{Rprotpars}
+%
+\begin{Description}\relax
+This function is an R interface for protpars in the PHYLIP package (Felsenstein 2013). protpars can be used for MP phylogeny estimation from protein sequences (Eck \& Dayhoff 1966; Fitch 1971).
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+Rprotpars(X, path=NULL, ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{X}] an object of class \code{"proseq"} containing aligned amino acid sequences.
+\item[\code{path}] path to the executable containing protpars. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file.
+\item[\code{...}] optional arguments to be passed to protpars. See details for more information.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+Optional arguments include the following: \code{quiet} suppress some output to R console (defaults to \code{quiet = FALSE}); \code{tree} object of class \code{"phylo"} - if supplied, then the parsimony score will be computed on a fixed input topology; \code{random.order} add taxa to tree in random order (defaults to \code{random.order = TRUE}); \code{random.addition} number of random addition replicates for \code{random.order = TRUE} (defaults to \code{random.addition = 10}); \code{threshold} threshold value for threshold parsimony (defaults to ordinary parsimony); \code{genetic.code}, type of genetic code to assume (options are \code{"universal"}, the default, \code{"mitochondrial"}, \code{"vertebrate.mitochondrial"}, \code{"fly.mitochondrial"}, and \code{"yeast.mitochondrial"}); \code{weights} vector of weights of length equal to the number of columns in \code{X} (defaults to unweighted); \code{outgroup} outgroup if outgroup rooting of the estimated tree is desired; and \code{cleanup} remove PHYLIP input \& output files after the analysis is completed (defaults to \code{cleanup = TRUE}).
+
+More information about the protpars program in PHYLIP can be found here \url{http://evolution.genetics.washington.edu/phylip/doc/protpars.html}.
+
+Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 1989, 2013) should first be installed. Instructions for installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
+\end{Details}
+%
+\begin{Value}
+This function returns an object of class \code{"phylo"} that is the optimized tree.
+\end{Value}
+%
+\begin{Author}\relax
+Liam Revell \email{liam.revell@umb.edu}
+\end{Author}
+%
+\begin{References}\relax
+Eck. R.V., Dayhoff, M.O. (1966) \emph{Atlas of Protein Sequence and Structure 1966}. National Biomedical Research Foundation, Silver Spring, Maryland.
+
+Felsenstein, J. (1989) PHYLIP--Phylogeny Inference Package (Version 3.2). \emph{Cladistics}, 5, 164-166.
+
+Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
+
+Fitch, W.M. (1971) Toward defining the course of evolution: Minimu change for a specified tree topology. \emph{Systematic Zoology}, 20, 406-416.
+\end{References}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{as.proseq}{as.proseq}}, \code{\LinkA{Rdnapars}{Rdnapars}}, \code{\LinkA{read.protein}{read.protein}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+## Not run: 
+data(chloroplast)
+tree<-Rprotpars(chloroplast)
+
+## End(Not run)
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
 \HeaderA{Rthreshml}{R interface for threshml}{Rthreshml}
 \keyword{phylogenetics}{Rthreshml}
 \keyword{comparative method}{Rthreshml}
 %
 \begin{Description}\relax
-This function is an R interface for threshml in the PHYLIP package (Felsenstein 2013). threshml fits the threshold model of Felsenstein (2005; 2012).
+This function is an R interface for threshml in the PHYLIP package (Felsenstein 1989, 2013). threshml fits the threshold model of Felsenstein (2005; 2012). Note that threshml is new \& not in the currently released version of PHYLIP (as of December 2013). It can be downloaded from its webpage here: \url{http://evolution.gs.washington.edu/phylip/download/threshml/}. If not specifying \code{path}, the executable file for threshml (e.g., threshml.exe in Windows) should be placed in the folder containing all other executable files for PHYLIP (e.g., C:/Program Files/phylip=3.695/exe in Windows).
 
 Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
 \end{Description}
@@ -750,9 +990,9 @@ Rthreshml(tree, X, types=NULL, path=NULL, ...)
 \begin{Arguments}
 \begin{ldescription}
 \item[\code{tree}] object of class \code{"phylo"}.
-\item[\code{X}] a \emph{matrix} of continuous valued traits (in columns) with rownames containing species names. For within-species contrasts analysis, the matrix should contain repeating (identical) row names for conspecifics.
-\item[\code{types}] character vector containing the types (e.g., \code{"discrete"}, \code{"continuous"}). If \code{types} are not supplied, \code{Rthreshml} will try to figure them out.
-\item[\code{path}] path to the executable containing contrast. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file.
+\item[\code{X}] a \emph{data.frame} of continuous valued or discrete character traits with rownames containing species names. Discrete \& continuous characters can be supplied in any order. All discrete character traits must be two-state, but can be coded using any convention (i.e., \code{0, 1}, \code{"A","B"}, etc.).
+\item[\code{types}] character vector containing the types (e.g., \code{"discrete"}, \code{"continuous"}). If \code{types} are not supplied, \code{Rthreshml} will try to figure out which columns via \code{is.numeric}.
+\item[\code{path}] path to the executable containing threshml. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file.
 \item[\code{...}] optional arguments to be passed to threshml. See details for more information.
 \end{ldescription}
 \end{Arguments}
@@ -770,6 +1010,11 @@ Liam Revell \email{liam.revell@umb.edu}
 \end{Author}
 %
 \begin{References}\relax
+Felsenstein, J. (1989) PHYLIP--Phylogeny Inference Package (Version 3.2). \emph{Cladistics}, 5, 164-166.
+
+Felsenstein, J. (2005) Using the quantitative genetic threshold model for inferences between and within species \emph{Philosophical Transactions of the Royal Society London B}, 360, 1427-1434.
+
+Felsenstein, J. (2012) A comparative method for both discrete and continuous characters using the threshold model. \emph{American Naturalist}, 179, 145-156.
 
 Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
 \end{References}
@@ -803,7 +1048,9 @@ Rtreedist(trees, method=c("branch.score","symmetric"), path=NULL, ...)
 \begin{Details}\relax
 Optional arguments include the following: \code{quiet} suppress some output to R console (defaults to \code{quiet = FALSE}); \code{trees2} object of class \code{"multiPhylo"} or \code{"phylo"} - if two sets of trees are to be compared; \code{rooted} logical value indicating whether trees should be treated as rooted (defaults to \code{rooted = FALSE}); \code{distances} argument telling treedist which distances to compute - could be \code{"all"} (all pairwise in \code{trees}), \code{"all.1to2"} (all in \code{trees} by all in \code{trees2}), \code{"adjacent"} (adjacent species in \code{trees} only), and \code{"corresponding"} (all corresponding trees in \code{trees} and \code{trees2}); and \code{cleanup} remove PHYLIP input \& output files after the analysis is completed (defaults to \code{cleanup = TRUE}).
 
-Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
+More information about the treedist program in PHYLIP can be found here \url{http://evolution.genetics.washington.edu/phylip/doc/treedist.html}.
+
+Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 1989, 2013) should first be installed. Instructions for installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
 \end{Details}
 %
 \begin{Value}
@@ -815,7 +1062,15 @@ Liam Revell \email{liam.revell@umb.edu}
 \end{Author}
 %
 \begin{References}\relax
+Bourque, M. (1978) \emph{Arbres de Steiner et reseaux dont certains sommets sont a localisation variable}. Ph.D. Dissertation, Universite de Montreal, Montreal, Quebec.
+
+Felsenstein, J. (1989) PHYLIP--Phylogeny Inference Package (Version 3.2). \emph{Cladistics}, 5, 164-166.
+
 Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
+
+Kuhner, M.K., Felsenstein, J. (1994) A simulation comparison of phylogeny algorithms under equal and unequal evolutionary rates. \emph{Molecular Biology and Evolution}, 11, 459-468.
+
+Robinson, D.F., Foulds, L.R. (1981) Comparison of phylogenetic trees. \emph{Mathematical Biosciences}, 53, 131-147.
 \end{References}
 %
 \begin{Examples}
@@ -844,7 +1099,7 @@ setupOSX(path=NULL)
 %
 \begin{Arguments}
 \begin{ldescription}
-\item[\code{path}] path to the executable containing dnaml. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file.
+\item[\code{path}] path to the folder containing the PHYLIP package. If \code{path = NULL}, the R will search several commonly used directories.
 \end{ldescription}
 \end{Arguments}
 %

@@ -1,3 +1,198 @@
+## call protdist from PHYLIP 3.695 (Felsenstein 2013)
+## written by Liam J. Revell 2013
+
+Rprotdist<-function(X,path=NULL,...){
+	if(is.null(path)) path<-findPath("protdist")
+	if(is.null(path)) stop("No path provided and was not able to find path to protdist")
+	if(class(X)!="proseq") stop("X should be an object of class 'proseq'")
+	if(hasArg(quiet)) quiet<-list(...)$quiet
+	else quiet<-FALSE
+	if(!quiet) if(file.warn(c("infile","outfile","weights","categories"))==0) return(NULL)
+	oo<-c("r"); ee<-vector()
+	if(hasArg(model)) model<-list(...)$model
+	else model<-"JTT"
+	if(model!="JTT") oo<-c(oo,rep("p",which(c("PMB","PAM","Kimura","similarity","categories")=="method")))
+	if(model!="Kimura"&&model!="similarity"){
+		if(hasArg(gamma)){
+			gamma<-list(...)$gamma
+			oo<-c(oo,"g")
+			ee<-c(ee,1/sqrt(gamma))
+		}
+	}
+	if(model=="categories"){
+		if(hasArg(kappa)){
+			kappa<-list(...)$kappa
+			oo<-c(oo,"t",kappa)
+		}
+		if(hasArg(bf)){
+			bf<-list(...)$bf
+			bf<-bf/sum(bf)
+			bf<-paste(bf,collapse=" ")
+			oo<-c(oo,"f",bf)
+		}
+		if(hasArg(genetic.code)){ 
+			genetic.code<-list(...)$genetic.code
+			oo<-c(oo,"u")
+			genetic.code<-tolower(genetic.code)
+			if(genetic.code=="universal") oo<-c(oo,"u")
+			else if(genetic.code=="mitochondrial") oo<-c(oo,"m")
+			else if(genetic.code=="vertebrate.mitochondrial") oo<-c(oo,"v")
+			else if(genetic.code=="fly.mitochondrial") oo<-c(oo,"f")
+			else if(genetic.code=="yeast.mitochondrial") oo<-c(oo,"y")
+			else {
+				cat(paste("Warning:\n  don't recognize genetic code of type",genetic.code,".\n"))
+				cat("   setting genetic code to type 'universal'.\n\n")
+				oo<-c(oo,"u")
+			}
+		}
+		if(hasArg(categorization)){
+			categorization<-list(...)$categorization
+			oo<-c(oo,"a")
+			categorization<-tolower(categorization)
+			if(categorization=="ghb") oo<-c(oo,"g")
+			else if(categorization=="chemical") oo<-c(oo,"c")
+			else if(categorization=="hall") oo<-c(oo,"h")
+			else {
+				cat(paste("Warning:\n  don't recognize categorization of type",categorization,".\n"))
+				cat("   setting categorization to default type.\n\n")
+				oo<-c(oo,"g")
+			}
+		}
+		if(hasArg(ease)){
+			ease<-list(...)$ease
+			oo<-c(oo,"e",ease)
+		}
+	}
+	if(hasArg(rates)){
+		rates<-list(...)$rates
+		if(hasArg(rate.categories)){
+			rate.categories<-list(...)$rate.categories
+			write(paste(rate.categories,collapse=""),file="categories")
+			ncats<-length(rates)
+			rates<-paste(rates,collapse=" ")
+			oo<-c(oo,"c",ncats,rates)
+		} else {
+			warning("cannot use rates argument without rate categories; ignoring argument rates")
+			rates<-NULL
+		}
+	} else rates<-NULL
+	if(hasArg(weights)){
+		oo<-c(oo,"w")
+		write(paste(weights,collapse=""),file="weights")
+	} else weights<-NULL
+	oo<-c(oo,ee,"y")
+	system("touch outfile")
+	write.dna(X)
+	system(paste(path,"/protdist",sep=""),input=oo)
+	temp<-readLines("outfile")
+	xx<-strsplit(paste(temp,collapse=" ")," ")[[1]]
+	xx<-xx[xx!=""]
+	D<-matrix(NA,nrow(X),nrow(X))
+	for(i in 1:nrow(X)) D[i,]<-as.numeric(xx[1:nrow(X)+(i-1)*(nrow(X)+1)+2])
+	rownames(D)<-colnames(D)<-rownames(X)
+	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
+	else cleanup<-TRUE
+	if(cleanup){
+		files<-c("infile","outfile")
+		if(!is.null(weights)) files<-c(files,"weights")
+		if(!is.null(rates)) files<-c(files,"categories")
+		cleanFiles(files)
+	}
+	return(as.dist(D))
+}
+
+## calls protpars from PHYLIP 3.695 (Felsenstein 2013)
+## written by Liam J. Revell 2013
+
+Rprotpars<-function(X,path=NULL,...){
+	if(is.null(path)) path<-findPath("protpars")
+	if(is.null(path)) stop("No path provided and was not able to find path to protpars")
+	if(class(X)!="proseq") stop("X should be an object of class 'proseq'")
+	if(hasArg(quiet)) quiet<-list(...)$quiet
+	else quiet<-FALSE
+	if(!quiet) if(file.warn(c("infile","intree","outfile","outtree","weights"))==0) return(NULL)
+	oo<-c("r")
+	if(hasArg(tree)){
+		oo<-c(oo,"u")
+		tree<-list(...)$tree
+		tree$tip.label<-sapply(tree$tip.label,function(x,y) which(x==y),y=rownames(X))
+		write.tree(tree,"intree")
+		intree<-TRUE
+	} else intree<-FALSE
+	if(hasArg(random.order)) random.order<-list(...)$random.order
+	else random.order<-TRUE
+	if(random.order){
+		if(hasArg(random.addition)) random.addition<-list(...)$random.addition
+		else random.addition<-10
+		oo<-c(oo,"j",sample(seq(1,99999,by=2),1),random.addition)
+	}
+	if(hasArg(threshold)) threshold<-list(...)$threshold
+	else threshold<-0
+	if(threshold!=0) oo<-c(oo,"t",threshold)
+	if(hasArg(genetic.code)){ 
+		genetic.code<-list(...)$genetic.code
+		oo<-c(oo,"c")
+		genetic.code<-tolower(genetic.code)
+		if(genetic.code=="universal") oo<-c(oo,"u")
+		else if(genetic.code=="mitochondrial") oo<-c(oo,"m")
+		else if(genetic.code=="vertebrate.mitochondrial") oo<-c(oo,"v")
+		else if(genetic.code=="fly.mitochondrial") oo<-c(oo,"f")
+		else if(genetic.code=="yeast.mitochondrial") oo<-c(oo,"y")
+		else {
+			cat(paste("Warning:\n  don't recognize genetic code of type",genetic.code,".\n"))
+			cat("   setting genetic code to type 'universal'.\n\n")
+			oo<-c(oo,"u")
+		}
+	}
+	if(hasArg(weights)){
+		oo<-c(oo,"w")
+		write(paste(weights,collapse=""),file="weights")
+	} else weights<-NULL
+	if(quiet) oo<-c(oo,2)
+	oo<-c(oo,"y","r")
+	write.dna(X)
+	system("touch outtree")
+	system("touch outfile")
+	system(paste(path,"/protpars",sep=""),input=oo)
+	tree<-read.tree("outtree")
+	temp<-readLines("outfile")
+	ii<-grep("requires a total of",temp)
+	for(i in 1:length(ii)){
+		xx<-strsplit(temp[ii[i]],"  ")[[1]]
+		if(length(ii)>1) tree[[i]]$pscore<-as.numeric(xx[length(xx)])
+		else tree$pscore<-as.numeric(xx[length(xx)])
+	}
+	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet){
+		cat("Translation table\n")
+		cat("-----------------\n")
+		temp<-lapply(1:nrow(X),function(x,y) cat(paste("\t",paste(x,y[x],sep="\t"),"\n",sep="")),y=rownames(X))
+		cat("\n")
+	}
+	if(class(tree)=="phylo") tree$tip.label<-rownames(X)[as.numeric(tree$tip.label)]
+	else if(class(tree)=="multiPhylo"){
+		foo<-function(x,y){
+			x$tip.label<-y[as.numeric(x$tip.label)]
+			x
+		}
+		tree<-lapply(tree,foo,y=rownames(X))
+		class(tree)<-"multiPhylo"
+	}	
+	if(hasArg(outgroup)){ 
+		outgroup<-list(...)$outgroup
+		tree<-outgroup.root(tree,outgroup,quiet)
+	}
+	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
+	else cleanup<-TRUE
+	if(cleanup){
+		files<-c("infile","outfile","outtree")
+		if(!is.null(weights)) files<-c(files,"weights")
+		if(intree) files<-c(files,"intree")
+		cleanFiles(files)
+	}
+	return(tree)
+}
+
 ## convert phangorn phyDat to proseq
 ## written by Liam J. Revell 2013
 
@@ -315,7 +510,7 @@ Rdnadist<-function(X,method=c("F84","K80","JC","LogDet"),path=NULL,...){
 	if(class(X)!="DNAbin") stop("X should be an object of class 'DNAbin'")
 	if(hasArg(quiet)) quiet<-list(...)$quiet
 	else quiet<-FALSE
-	if(!quiet) if(file.warn(c("infile","outfile","outtree","weights"))==0) return(NULL)
+	if(!quiet) if(file.warn(c("infile","outfile","weights"))==0) return(NULL)
 	oo<-c("r"); ee<-vector()
 	if(method!="F84") oo<-c("r",rep("d",which(c("K80","JC","LogDet","similarity")==method)))
 	if(hasArg(gamma)){
@@ -827,7 +1022,7 @@ Rdnapars<-function(X,path=NULL,...){
 	if(class(X)!="DNAbin") stop("X should be an object of class 'DNAbin'")
 	if(hasArg(quiet)) quiet<-list(...)$quiet
 	else quiet<-FALSE
-	if(!quiet) if(file.warn(c("infile","outfile","outtree","weights"))==0) return(NULL)
+	if(!quiet) if(file.warn(c("infile","intree","outfile","outtree","weights"))==0) return(NULL)
 	oo<-c("r")
 	if(hasArg(tree)){
 		oo<-c(oo,"u")
@@ -1184,6 +1379,7 @@ Rcontrast<-function(tree,X,path=NULL,...){
 		cat("Warning:\n  Tree is not binary, resolving with branches of zero length\n")
 		tree<-multi2di(tree)
 	}
+	if(is.vector(X)) X<-as.matrix(X)
 	if(hasArg(quiet)) quiet<-list(...)$quiet
 	else quiet<-FALSE
 	if(!quiet) if(file.warn(c("infile","intree","outfile"))==0) return(NULL)
@@ -1311,14 +1507,14 @@ Rcontrast<-function(tree,X,path=NULL,...){
 		aa<-strsplit(strsplit(temp[ii],"=")[[1]][2]," ")[[1]]
 		aa<-aa[aa!=""]
 		logLik<-as.numeric(sub(",","",aa[1]))
-		df<-2*(ncol(X)*(ncol(X)-1)/2+ncol(X))
+		k<-2*(ncol(X)*(ncol(X)-1)/2+ncol(X))
 		ii<-grep("Log likelihood without varA",temp)
 		aa<-strsplit(strsplit(temp[ii],"=")[[1]][2]," ")[[1]]
 		aa<-aa[aa!=""]
 		nonVa.logLik<-as.numeric(sub(",","",aa[1]))
-		nonVa.df<-ncol(X)*(ncol(X)-1)/2+ncol(X)		
+		nonVa.k<-ncol(X)*(ncol(X)-1)/2+ncol(X)		
 		ChiSq<-2*(logLik-nonVa.logLik)
-		P<-pchisq(ChiSq,df-nonVa.df,lower.tail=FALSE)
+		P<-pchisq(ChiSq,k-nonVa.k,lower.tail=FALSE)
 		if(hasArg(cleanup)) cleanup<-list(...)$cleanup
 		else cleanup<-TRUE
 		if(cleanup) cleanFiles(c("infile","intree","outfile"))
@@ -1330,7 +1526,7 @@ Rcontrast<-function(tree,X,path=NULL,...){
 			nonVa.VarE=nonVa.VarE,
 			nonVa.VarE.Regressions=nonVa.VarE.Regressions,
 			nonVa.VarE.Correlations=nonVa.VarE.Correlations,
-			logLik=logLik,df=df,nonVa.logLik=nonVa.logLik,
-			nonVa.df=nonVa.df))
+			logLik=logLik,k=k,nonVa.logLik=nonVa.logLik,
+			nonVa.k=nonVa.k,P=P))
 	}
 }

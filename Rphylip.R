@@ -1,3 +1,106 @@
+## call protdist from PHYLIP 3.695 (Felsenstein 2013)
+## written by Liam J. Revell 2013
+
+Rprotdist<-function(X,path=NULL,...){
+	if(is.null(path)) path<-findPath("protdist")
+	if(is.null(path)) stop("No path provided and was not able to find path to protdist")
+	if(class(X)!="proseq") stop("X should be an object of class 'proseq'")
+	if(hasArg(quiet)) quiet<-list(...)$quiet
+	else quiet<-FALSE
+	if(!quiet) if(file.warn(c("infile","outfile","weights","categories"))==0) return(NULL)
+	oo<-c("r"); ee<-vector()
+	if(hasArg(model)) model<-list(...)$model
+	else model<-"JTT"
+	if(model!="JTT") oo<-c(oo,rep("p",which(c("PMB","PAM","Kimura","similarity","categories")=="method")))
+	if(model!="Kimura"&&model!="similarity"){
+		if(hasArg(gamma)){
+			gamma<-list(...)$gamma
+			oo<-c(oo,"g")
+			ee<-c(ee,1/sqrt(gamma))
+		}
+	}
+	if(model=="categories"){
+		if(hasArg(kappa)){
+			kappa<-list(...)$kappa
+			oo<-c(oo,"t",kappa)
+		}
+		if(hasArg(bf)){
+			bf<-list(...)$bf
+			bf<-bf/sum(bf)
+			bf<-paste(bf,collapse=" ")
+			oo<-c(oo,"f",bf)
+		}
+		if(hasArg(genetic.code)){ 
+			genetic.code<-list(...)$genetic.code
+			oo<-c(oo,"u")
+			genetic.code<-tolower(genetic.code)
+			if(genetic.code=="universal") oo<-c(oo,"u")
+			else if(genetic.code=="mitochondrial") oo<-c(oo,"m")
+			else if(genetic.code=="vertebrate.mitochondrial") oo<-c(oo,"v")
+			else if(genetic.code=="fly.mitochondrial") oo<-c(oo,"f")
+			else if(genetic.code=="yeast.mitochondrial") oo<-c(oo,"y")
+			else {
+				cat(paste("Warning:\n  don't recognize genetic code of type",genetic.code,".\n"))
+				cat("   setting genetic code to type 'universal'.\n\n")
+				oo<-c(oo,"u")
+			}
+		}
+		if(hasArg(categorization)){
+			categorization<-list(...)$categorization
+			oo<-c(oo,"a")
+			categorization<-tolower(categorization)
+			if(categorization=="ghb") oo<-c(oo,"g")
+			else if(categorization=="chemical") oo<-c(oo,"c")
+			else if(categorization=="hall") oo<-c(oo,"h")
+			else {
+				cat(paste("Warning:\n  don't recognize categorization of type",categorization,".\n"))
+				cat("   setting categorization to default type.\n\n")
+				oo<-c(oo,"g")
+			}
+		}
+		if(hasArg(ease)){
+			ease<-list(...)$ease
+			oo<-c(oo,"e",ease)
+		}
+	}
+	if(hasArg(rates)){
+		rates<-list(...)$rates
+		if(hasArg(rate.categories)){
+			rate.categories<-list(...)$rate.categories
+			write(paste(rate.categories,collapse=""),file="categories")
+			ncats<-length(rates)
+			rates<-paste(rates,collapse=" ")
+			oo<-c(oo,"c",ncats,rates)
+		} else {
+			warning("cannot use rates argument without rate categories; ignoring argument rates")
+			rates<-NULL
+		}
+	} else rates<-NULL
+	if(hasArg(weights)){
+		oo<-c(oo,"w")
+		write(paste(weights,collapse=""),file="weights")
+	} else weights<-NULL
+	oo<-c(oo,ee,"y")
+	system("touch outfile")
+	write.dna(X)
+	system(paste(path,"/protdist",sep=""),input=oo)
+	temp<-readLines("outfile")
+	xx<-strsplit(paste(temp,collapse=" ")," ")[[1]]
+	xx<-xx[xx!=""]
+	D<-matrix(NA,nrow(X),nrow(X))
+	for(i in 1:nrow(X)) D[i,]<-as.numeric(xx[1:nrow(X)+(i-1)*(nrow(X)+1)+2])
+	rownames(D)<-colnames(D)<-rownames(X)
+	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
+	else cleanup<-TRUE
+	if(cleanup){
+		files<-c("infile","outfile")
+		if(!is.null(weights)) files<-c(files,"weights")
+		if(!is.null(rates)) files<-c(files,"categories")
+		cleanFiles(files)
+	}
+	return(as.dist(D))
+}
+
 ## calls protpars from PHYLIP 3.695 (Felsenstein 2013)
 ## written by Liam J. Revell 2013
 
@@ -407,7 +510,7 @@ Rdnadist<-function(X,method=c("F84","K80","JC","LogDet"),path=NULL,...){
 	if(class(X)!="DNAbin") stop("X should be an object of class 'DNAbin'")
 	if(hasArg(quiet)) quiet<-list(...)$quiet
 	else quiet<-FALSE
-	if(!quiet) if(file.warn(c("infile","outfile","outtree","weights"))==0) return(NULL)
+	if(!quiet) if(file.warn(c("infile","outfile","weights"))==0) return(NULL)
 	oo<-c("r"); ee<-vector()
 	if(method!="F84") oo<-c("r",rep("d",which(c("K80","JC","LogDet","similarity")==method)))
 	if(hasArg(gamma)){

@@ -12,7 +12,9 @@ Rprotpars(X, path=NULL, ...)
 \details{
 	Optional arguments include the following: \code{quiet} suppress some output to R console (defaults to \code{quiet = FALSE}); \code{tree} object of class \code{"phylo"} - if supplied, then the parsimony score will be computed on a fixed input topology; \code{random.order} add taxa to tree in random order (defaults to \code{random.order = TRUE}); \code{random.addition} number of random addition replicates for \code{random.order = TRUE} (defaults to \code{random.addition = 10}); \code{threshold} threshold value for threshold parsimony (defaults to ordinary parsimony); \code{genetic.code}, type of genetic code to assume (options are \code{"universal"}, the default, \code{"mitochondrial"}, \code{"vertebrate.mitochondrial"}, \code{"fly.mitochondrial"}, and \code{"yeast.mitochondrial"}); \code{weights} vector of weights of length equal to the number of columns in \code{X} (defaults to unweighted); \code{outgroup} outgroup if outgroup rooting of the estimated tree is desired; and \code{cleanup} remove PHYLIP input & output files after the analysis is completed (defaults to \code{cleanup = TRUE}).
 
-	Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 1989, 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
+	More information about the protpars program in PHYLIP can be found here \url{http://evolution.genetics.washington.edu/phylip/doc/protpars.html}.
+
+	Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 1989, 2013) should first be installed. Instructions for installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
 }
 \description{
 	This function is an R interface for protpars in the PHYLIP package (Felsenstein 2013). protpars can be used for MP phylogeny estimation from protein sequences (Eck & Dayhoff 1966; Fitch 1971).

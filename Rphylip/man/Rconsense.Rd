@@ -12,7 +12,9 @@ Rconsense(trees, path=NULL, ...)
 \details{
 	Optional arguments include the following: \code{quiet} suppress some output to R console (defaults to \code{quiet = FALSE}); \code{method} which can be \code{"extended"} (extended majority rule consensus, the default), \code{"strict"} (strict consensus), or regular majority rule consensus (\code{"majority"}); \code{"outgroup"} single taxon label or vector of taxa that should be used to root all trees before analysis; \code{rooted} logical value indicated whether to treat the input trees as rooted (defaults to \code{rooted = FALSE}); and \code{cleanup} remove PHYLIP input & output files after the analysis is completed (defaults to \code{cleanup = TRUE}).
 
-	Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 1989, 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
+	More information about the consense program in PHYLIP can be found here \url{http://evolution.genetics.washington.edu/phylip/doc/consense.html}.
+
+	Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 1989, 2013) should first be installed. Instructions for installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
 }
 \description{
 	This function is an R interface for consense in the PHYLIP package (Felsenstein 2013). consense can be used to compute the consensus tree from a set of phylogenies. 

@@ -25,7 +25,7 @@ Rthreshml(tree, X, types=NULL, path=NULL, ...)
 \references{
 	Felsenstein, J. (1989) PHYLIP--Phylogeny Inference Package (Version 3.2). \emph{Cladistics}, 5, 164-166.
 
-	Felsenstein, J. (2005) Using the quantitative genetic threshold model for inferences between and within species. \emph{Philosophical Transactions of the Royal Society London B}, 360, 1427–1434.
+	Felsenstein, J. (2005) Using the quantitative genetic threshold model for inferences between and within species \emph{Philosophical Transactions of the Royal Society London B}, 360, 1427-1434.
 
 	Felsenstein, J. (2012) A comparative method for both discrete and continuous characters using the threshold model. \emph{American Naturalist}, 179, 145-156.
 

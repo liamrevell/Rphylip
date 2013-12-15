@@ -14,7 +14,7 @@ flush(stderr()); flush(stdout())
 ### Name: Rconsense
 ### Title: R interface for consense
 ### Aliases: Rconsense
-### Keywords: phylogenetics
+### Keywords: phylogenetics consensus
 
 ### ** Examples
 
@@ -137,13 +137,54 @@ flush(stderr()); flush(stdout())
 ### Name: Rproml
 ### Title: R interfaces for proml and promlk
 ### Aliases: Rproml Rpromlk
-### Keywords: phylogenetics inference maximum likelihood
+### Keywords: phylogenetics inference maximum likelihood amino acid
 
 ### ** Examples
 
 ## Not run: 
 ##D data(chloroplast)
 ##D tree<-Rproml(chloroplast)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("Rprotdist")
+### * Rprotdist
+
+flush(stderr()); flush(stdout())
+
+### Name: Rprotdist
+### Title: R interfaces for protdist
+### Aliases: Rprotdist
+### Keywords: phylogenetics maximum likelihood distance method amino acid
+
+### ** Examples
+
+## Not run: 
+##D data(chloroplast)
+##D D<-Rprotdist(chloroplast,model="PAM")
+##D tree<-Rneighbor(D)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("Rprotpars")
+### * Rprotpars
+
+flush(stderr()); flush(stdout())
+
+### Name: Rprotpars
+### Title: R interface for protpars
+### Aliases: Rprotpars
+### Keywords: phylogenetics inference parsimony amino acid
+
+### ** Examples
+
+## Not run: 
+##D data(chloroplast)
+##D tree<-Rprotpars(chloroplast)
 ## End(Not run)
 
 
@@ -177,7 +218,7 @@ flush(stderr()); flush(stdout())
 ### Name: opt.Rdnaml
 ### Title: Parameter optimizer for Rdnaml
 ### Aliases: opt.Rdnaml
-### Keywords: phylogenetics inference maximum likelihood
+### Keywords: phylogenetics inference maximum likelihood DNA
 
 ### ** Examples
 

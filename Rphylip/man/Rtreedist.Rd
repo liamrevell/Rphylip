@@ -13,7 +13,9 @@ Rtreedist(trees, method=c("branch.score","symmetric"), path=NULL, ...)
 \details{
 	Optional arguments include the following: \code{quiet} suppress some output to R console (defaults to \code{quiet = FALSE}); \code{trees2} object of class \code{"multiPhylo"} or \code{"phylo"} - if two sets of trees are to be compared; \code{rooted} logical value indicating whether trees should be treated as rooted (defaults to \code{rooted = FALSE}); \code{distances} argument telling treedist which distances to compute - could be \code{"all"} (all pairwise in \code{trees}), \code{"all.1to2"} (all in \code{trees} by all in \code{trees2}), \code{"adjacent"} (adjacent species in \code{trees} only), and \code{"corresponding"} (all corresponding trees in \code{trees} and \code{trees2}); and \code{cleanup} remove PHYLIP input & output files after the analysis is completed (defaults to \code{cleanup = TRUE}).
 
-	Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 1989, 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
+	More information about the treedist program in PHYLIP can be found here \url{http://evolution.genetics.washington.edu/phylip/doc/treedist.html}.
+
+	Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 1989, 2013) should first be installed. Instructions for installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
 }
 \description{
 	This function is an R interface for treedist in the PHYLIP package (Felsenstein 2013). treedist can be used to compute the distance between trees by two different methods.
