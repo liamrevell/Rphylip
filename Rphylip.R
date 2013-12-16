@@ -405,16 +405,17 @@ Rconsense<-function(trees,path=NULL,...){
 	if(rooted) oo<-c(oo,"r")
 	if(quiet) oo<-c(oo,"2")
 	oo<-c(oo,"y","r")
-	write.tree(trees)
+	write.tree(trees,file="intree")
 	system("touch outtree")
 	system("touch outfile")
 	system(paste(path,"/consense",sep=""),input=oo)
 	tree<-read.tree("outtree")
 	temp<-readLines("outfile")
 	if(!is.null(tree$edge.length)){
-		tree$node.label<-tree$edge.length[sapply(2:tree$Nnode+length(tree$tip.label),function(x,y) which(y==x),y=tree$edge[,2])]/length(trees)
+		tree$node.label<-c(NA,tree$edge.length[sapply(2:tree$Nnode+length(tree$tip.label),function(x,y) which(y==x),y=tree$edge[,2])]/length(trees))
 		tree$edge.length<-NULL
 	}
+	if(!rooted) tree<-unroot(tree)
 	if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
 	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
 	else cleanup<-TRUE
