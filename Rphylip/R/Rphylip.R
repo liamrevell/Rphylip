@@ -1,3 +1,77 @@
+## call dnacomp from PHYLIP 3.695 (Felsenstein 2013)
+## written by Liam J. Revell 2013
+
+Rdnacomp<-function(X,path=NULL,...){
+	if(is.null(path)) path<-findPath("dnacomp")
+	if(is.null(path)) stop("No path provided and was not able to find path to dnacomp")
+	if(class(X)!="DNAbin") stop("X should be an object of class 'DNAbin'")
+	if(hasArg(quiet)) quiet<-list(...)$quiet
+	else quiet<-FALSE
+	if(!quiet) if(file.warn(c("infile","intree","outfile","outtree","weights"))==0) return(NULL)
+	oo<-c("r")
+	if(hasArg(tree)){
+		oo<-c(oo,"u")
+		tree<-list(...)$tree
+		tree$tip.label<-sapply(tree$tip.label,function(x,y) which(x==y),y=rownames(X))
+		write.tree(tree,"intree")
+		intree<-TRUE
+	} else intree<-FALSE
+	if(hasArg(random.order)) random.order<-list(...)$random.order
+	else random.order<-TRUE
+	if(random.order){
+		if(hasArg(random.addition)) random.addition<-list(...)$random.addition
+		else random.addition<-10
+		oo<-c(oo,"j",sample(seq(1,99999,by=2),1),random.addition)
+	}
+	if(hasArg(weights)){
+		oo<-c(oo,"w")
+		write(paste(weights,collapse=""),file="weights")
+	} else weights<-NULL
+	if(quiet) oo<-c(oo,2)
+	oo<-c(oo,"y","r")
+	write.dna(X)
+	system("touch outtree")
+	system("touch outfile")
+	system(paste(path,"/dnacomp",sep=""),input=oo)
+	tree<-read.tree("outtree")
+	temp<-readLines("outfile")
+	ii<-grep("total number of compatible sites is",temp)
+	for(i in 1:length(ii)){
+		xx<-strsplit(temp[ii[i]],"  ")[[1]]
+		if(length(ii)>1) tree[[i]]$compatible.sites<-as.numeric(xx[length(xx)])
+		else tree$compatible.sites<-as.numeric(xx[length(xx)])
+	}
+	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet){
+		cat("Translation table\n")
+		cat("-----------------\n")
+		temp<-lapply(1:nrow(X),function(x,y) cat(paste("\t",paste(x,y[x],sep="\t"),"\n",sep="")),y=rownames(X))
+		cat("\n")
+	}
+	if(class(tree)=="phylo") tree$tip.label<-rownames(X)[as.numeric(tree$tip.label)]
+	else if(class(tree)=="multiPhylo"){
+		foo<-function(x,y){
+			x$tip.label<-y[as.numeric(x$tip.label)]
+			x
+		}
+		tree<-lapply(tree,foo,y=rownames(X))
+		class(tree)<-"multiPhylo"
+	}	
+	if(hasArg(outgroup)){ 
+		outgroup<-list(...)$outgroup
+		tree<-outgroup.root(tree,outgroup,quiet)
+	}
+	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
+	else cleanup<-TRUE
+	if(cleanup){
+		files<-c("infile","outfile","outtree")
+		if(!is.null(weights)) files<-c(files,"weights")
+		if(intree) files<-c(files,"intree")
+		cleanFiles(files)
+	}
+	return(tree)
+}
+
 ## call protdist from PHYLIP 3.695 (Felsenstein 2013)
 ## written by Liam J. Revell 2013
 
@@ -960,6 +1034,17 @@ findPath<-function(string){
 		ii<-grep("phylip",ll)
 		if(length(ii)>0){
 			dd<-paste("/Applications/",ll[ii],"/exe",sep="")
+			ll<-list.files(dd)
+			ii<-grep(string,ll)
+			if(length(ii)>0) 
+				if(any(ll[ii]==string)||any(ll[ii]==paste(string,".exe",sep=""))) 
+					return(dd)
+		}
+		## check /usr/local/Cellar
+		ll<-list.files("/usr/local/Cellar/")
+		ii<-grep("phylip",ll)
+		if(length(ii)>0){
+			dd<-paste("/usr/local/Cellar/",ll[ii],"/3.695/bin",sep="")
 			ll<-list.files(dd)
 			ii<-grep(string,ll)
 			if(length(ii)>0) 

@@ -46,6 +46,26 @@ Loading required package: ape
 > 
 > 
 > cleanEx()
+> nameEx("Rdnacomp")
+> ### * Rdnacomp
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Rdnacomp
+> ### Title: R interface for dnacomp
+> ### Aliases: Rdnacomp
+> ### Keywords: phylogenetics inference parsimony
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D data(primates)
+> ##D tree<-Rdnacomp(primates)
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
 > nameEx("Rdnadist")
 > ### * Rdnadist
 > 
@@ -273,7 +293,7 @@ Loading required package: ape
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  0.23 0 0.24 NA NA 
+Time elapsed:  0.96 0.06 1.06 NA NA 
 > grDevices::dev.off()
 null device 
           1 

@@ -26,6 +26,26 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
+nameEx("Rdnacomp")
+### * Rdnacomp
+
+flush(stderr()); flush(stdout())
+
+### Name: Rdnacomp
+### Title: R interface for dnacomp
+### Aliases: Rdnacomp
+### Keywords: phylogenetics inference parsimony
+
+### ** Examples
+
+## Not run: 
+##D data(primates)
+##D tree<-Rdnacomp(primates)
+## End(Not run)
+
+
+
+cleanEx()
 nameEx("Rdnadist")
 ### * Rdnadist
 

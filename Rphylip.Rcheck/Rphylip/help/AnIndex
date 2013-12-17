@@ -7,6 +7,7 @@ print.proseq	print.proseq
 Rconsense	Rconsense
 Rcontml	Rcontml
 Rcontrast	Rcontrast
+Rdnacomp	Rdnacomp
 Rdnadist	Rdnadist
 Rdnaml	Rdnaml
 Rdnamlk	Rdnaml

@@ -1,6 +1,7 @@
 Rconsense               R interface for consense
 Rcontml                 R interface for contml
 Rcontrast               R interface for contrast
+Rdnacomp                R interface for dnacomp
 Rdnadist                R interfaces for dnadist
 Rdnaml                  R interfaces for dnaml and dnamlk
 Rdnapars                R interface for dnapars
