@@ -21,12 +21,12 @@ Rdnainvar<-function(X,path=NULL,...){
 	system("touch outfile")
 	system(paste(path,"/dnainvar",sep=""),input=oo)
 	temp<-readLines("outfile")
-	ii<-grep("total number of compatible sites is",temp)
-	for(i in 1:length(ii)){
-		xx<-strsplit(temp[ii[i]],"  ")[[1]]
-		if(length(ii)>1) tree[[i]]$compatible.sites<-as.numeric(xx[length(xx)])
-		else tree$compatible.sites<-as.numeric(xx[length(xx)])
-	}
+#	ii<-grep("total number of compatible sites is",temp)
+#	for(i in 1:length(ii)){
+#		xx<-strsplit(temp[ii[i]],"  ")[[1]]
+#		if(length(ii)>1) tree[[i]]$compatible.sites<-as.numeric(xx[length(xx)])
+#		else tree$compatible.sites<-as.numeric(xx[length(xx)])
+#	}
 	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
 	if(!quiet){
 		cat("Translation table\n")
@@ -34,28 +34,27 @@ Rdnainvar<-function(X,path=NULL,...){
 		temp<-lapply(1:nrow(X),function(x,y) cat(paste("\t",paste(x,y[x],sep="\t"),"\n",sep="")),y=rownames(X))
 		cat("\n")
 	}
-	if(class(tree)=="phylo") tree$tip.label<-rownames(X)[as.numeric(tree$tip.label)]
-	else if(class(tree)=="multiPhylo"){
-		foo<-function(x,y){
-			x$tip.label<-y[as.numeric(x$tip.label)]
-			x
-		}
-		tree<-lapply(tree,foo,y=rownames(X))
-		class(tree)<-"multiPhylo"
-	}	
-	if(hasArg(outgroup)){ 
-		outgroup<-list(...)$outgroup
-		tree<-outgroup.root(tree,outgroup,quiet)
-	}
+#	if(class(tree)=="phylo") tree$tip.label<-rownames(X)[as.numeric(tree$tip.label)]
+#	else if(class(tree)=="multiPhylo"){
+#		foo<-function(x,y){
+#			x$tip.label<-y[as.numeric(x$tip.label)]
+#			x
+#		}
+#		tree<-lapply(tree,foo,y=rownames(X))
+#		class(tree)<-"multiPhylo"
+#	}	
+#	if(hasArg(outgroup)){ 
+#		outgroup<-list(...)$outgroup
+#		tree<-outgroup.root(tree,outgroup,quiet)
+#	}
 	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
 	else cleanup<-TRUE
 	if(cleanup){
-		files<-c("infile","outfile","outtree")
+		files<-c("infile","outfile")
 		if(!is.null(weights)) files<-c(files,"weights")
-		if(intree) files<-c(files,"intree")
 		cleanFiles(files)
 	}
-	return(tree)
+#	return(tree)
 }
 
 ## call dnacomp from PHYLIP 3.695 (Felsenstein 2013)
