@@ -67,6 +67,27 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
+nameEx("Rdnainvar")
+### * Rdnainvar
+
+flush(stderr()); flush(stdout())
+
+### Name: Rdnainvar
+### Title: R interface for dnainvar
+### Aliases: Rdnainvar
+### Keywords: phylogenetics inference
+
+### ** Examples
+
+## Not run: 
+##D data(primates)
+##D primates<-primates[sample(nrow(primates),4),]
+##D tree<-Rdnainvar(primates)
+## End(Not run)
+
+
+
+cleanEx()
 nameEx("Rdnaml")
 ### * Rdnaml
 
@@ -123,6 +144,27 @@ flush(stderr()); flush(stdout())
 ## Not run: 
 ##D data(primates)
 ##D tree<-Rdnapenny(primates)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("Rfitch")
+### * Rfitch
+
+flush(stderr()); flush(stdout())
+
+### Name: Rfitch
+### Title: R interface for fitch
+### Aliases: Rfitch
+### Keywords: phylogenetics inference distance method
+
+### ** Examples
+
+## Not run: 
+##D data(primates)
+##D D<-dist.dna(data(primates),model="JC")
+##D tree<-Rfitch(D)
 ## End(Not run)
 
 

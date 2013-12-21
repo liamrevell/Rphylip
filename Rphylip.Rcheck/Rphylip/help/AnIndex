@@ -9,11 +9,13 @@ Rcontml	Rcontml
 Rcontrast	Rcontrast
 Rdnacomp	Rdnacomp
 Rdnadist	Rdnadist
+Rdnainvar	Rdnainvar
 Rdnaml	Rdnaml
 Rdnamlk	Rdnaml
 Rdnapars	Rdnapars
 Rdnapenny	Rdnapenny
 read.protein	read.protein
+Rfitch	Rfitch
 Rneighbor	Rneighbor
 Rphylip	Rphylip-package
 Rproml	Rproml

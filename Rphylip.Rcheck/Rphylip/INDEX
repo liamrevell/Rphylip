@@ -3,9 +3,11 @@ Rcontml                 R interface for contml
 Rcontrast               R interface for contrast
 Rdnacomp                R interface for dnacomp
 Rdnadist                R interfaces for dnadist
+Rdnainvar               R interface for dnainvar
 Rdnaml                  R interfaces for dnaml and dnamlk
 Rdnapars                R interface for dnapars
 Rdnapenny               R interface for dnapenny
+Rfitch                  R interface for fitch
 Rneighbor               R interface for neighbor
 Rphylip-package         Rphylip: An R interface for PHYLIP
 Rproml                  R interfaces for proml and promlk

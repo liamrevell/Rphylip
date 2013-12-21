@@ -1,3 +1,139 @@
+## calls fitch from PHYLIP 3.695 (Felsenstein 2013)
+## written by Liam J. Revell 2013
+
+Rfitch<-function(D,path=NULL,...){
+	if(class(D)=="dist"||class(D)=="data.frame") D<-as.matrix(D)
+	D<-D[rownames(D),rownames(D)]
+	if(is.null(path)) path<-findPath("fitch")
+	if(is.null(path)) stop("No path provided and was not able to find path to fitch")
+	if(hasArg(quiet)) quiet<-list(...)$quiet
+	else quiet<-FALSE
+	if(!quiet) if(file.warn(c("infile","intree","outfile","outtree"))==0) return(NULL)
+	oo<-c("r")
+	if(hasArg(method)) method<-list(...)$method
+	else method<-"fm"
+	if(method=="FM"||method=="fm") method<-"fm"
+	else if(method=="ME"||method=="me"){
+		method<-"me"
+		oo<-c(oo,"d")
+	} else if(method=="LS"||method=="ls") method<-"ls"
+	else {
+		cat("\nWarning:\n  method not recognized - using method=\"FM\"\n")
+		method="fm"
+	}
+	if(hasArg(tree)){
+		oo<-c(oo,"u")
+		tree<-list(...)$tree
+		tree$tip.label<-sapply(tree$tip.label,function(x,y) which(x==y),y=rownames(D))
+		write.tree(tree,"intree")
+		intree<-TRUE
+	} else intree<-FALSE
+	if(hasArg(power)){
+		power<-list(...)$power
+		oo<-c(oo,"p",power)
+	} else if(method=="ls") oo<-c(oo,"p",0)
+	if(hasArg(negative)) negative<-list(...)$negative
+	else negative<-TRUE
+	if(!negative) oo<-c(oo,"-")
+	if(hasArg(global)) global<-list(...)$global
+	else global<-TRUE
+	if(global) oo<-c(oo,"g")
+	if(hasArg(random.order)) random.order<-list(...)$random.order
+	else random.order<-TRUE
+	if(random.order){
+		if(hasArg(random.addition)) random.addition<-list(...)$random.addition
+		else random.addition<-10
+		oo<-c(oo,"j",sample(seq(1,99999,by=2),1),random.addition)
+	}
+	if(quiet) oo<-c(oo,2)
+	oo<-c(oo,"y","r")
+	write.distances(D)
+	system("touch outtree")
+	system("touch outfile")
+	system(paste(path,"/fitch",sep=""),input=oo)
+	tree<-read.tree("outtree")
+	temp<-readLines("outfile")
+	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet){
+		cat("Translation table\n")
+		cat("-----------------\n")
+		temp<-lapply(1:nrow(D),function(x,y) cat(paste("\t",paste(x,y[x],sep="\t"),"\n",sep="")),y=rownames(D))
+		cat("\n")
+	}
+	tree$tip.label<-rownames(D)[as.numeric(tree$tip.label)]	
+	if(hasArg(outgroup)){
+		outgroup<-list(...)$outgroup
+		tree<-outgroup.root(tree,outgroup,quiet)
+	}
+	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
+	else cleanup<-TRUE
+	if(cleanup){
+		files<-c("infile","outfile","outtree")
+		if(intree) files<-c(files,"intree")
+		cleanFiles(files)
+	}
+	return(tree)
+}
+
+## call dnainvar from PHYLIP 3.695 (Felsenstein 2013)
+## written by Liam J. Revell 2013
+
+Rdnainvar<-function(X,path=NULL,...){
+	if(is.null(path)) path<-findPath("dnainvar")
+	if(is.null(path)) stop("No path provided and was not able to find path to dnainvar")
+	if(class(X)!="DNAbin") stop("X should be an object of class 'DNAbin'")
+	if(nrow(X)>4) stop("X should contain no more than 4 aligned sequences.")
+	if(hasArg(quiet)) quiet<-list(...)$quiet
+	else quiet<-FALSE
+	if(!quiet) if(file.warn(c("infile","outfile","weights"))==0) return(NULL)
+	oo<-c("r")
+	if(hasArg(weights)){
+		oo<-c(oo,"w")
+		write(paste(weights,collapse=""),file="weights")
+	} else weights<-NULL
+	if(quiet) oo<-c(oo,2,3,4)
+	oo<-c(oo,"y","r")
+	write.dna(X)
+	system("touch outtree")
+	system("touch outfile")
+	system(paste(path,"/dnainvar",sep=""),input=oo)
+	temp<-readLines("outfile")
+#	ii<-grep("total number of compatible sites is",temp)
+#	for(i in 1:length(ii)){
+#		xx<-strsplit(temp[ii[i]],"  ")[[1]]
+#		if(length(ii)>1) tree[[i]]$compatible.sites<-as.numeric(xx[length(xx)])
+#		else tree$compatible.sites<-as.numeric(xx[length(xx)])
+#	}
+	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet){
+		cat("Translation table\n")
+		cat("-----------------\n")
+		temp<-lapply(1:nrow(X),function(x,y) cat(paste("\t",paste(x,y[x],sep="\t"),"\n",sep="")),y=rownames(X))
+		cat("\n")
+	}
+#	if(class(tree)=="phylo") tree$tip.label<-rownames(X)[as.numeric(tree$tip.label)]
+#	else if(class(tree)=="multiPhylo"){
+#		foo<-function(x,y){
+#			x$tip.label<-y[as.numeric(x$tip.label)]
+#			x
+#		}
+#		tree<-lapply(tree,foo,y=rownames(X))
+#		class(tree)<-"multiPhylo"
+#	}	
+#	if(hasArg(outgroup)){ 
+#		outgroup<-list(...)$outgroup
+#		tree<-outgroup.root(tree,outgroup,quiet)
+#	}
+	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
+	else cleanup<-TRUE
+	if(cleanup){
+		files<-c("infile","outfile")
+		if(!is.null(weights)) files<-c(files,"weights")
+		cleanFiles(files)
+	}
+#	return(tree)
+}
+
 ## call dnacomp from PHYLIP 3.695 (Felsenstein 2013)
 ## written by Liam J. Revell 2013
 

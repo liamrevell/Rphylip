@@ -13,8 +13,8 @@
 \end{center}
 \begin{description}
 \raggedright{}
-\item[Version]\AsIs{0.1-11}
-\item[Date]\AsIs{2013-12-16}
+\item[Version]\AsIs{0.1-12}
+\item[Date]\AsIs{2013-12-20}
 \item[Title]\AsIs{Rphylip: An R interface for PHYLIP}
 \item[Author]\AsIs{Liam J. Revell}
 \item[Maintainer]\AsIs{Liam J. Revell }\email{liam.revell@umb.edu}\AsIs{}
@@ -28,7 +28,7 @@ about installing PHYLIP.}
 \item[License]\AsIs{GPL (>= 2)}
 \item[URL]\AsIs{}\url{http://www.phytools.org/Rphylip}\AsIs{}
 \item[Repository]\AsIs{}
-\item[Date/Publication]\AsIs{2013-12-16 12:00:00 EDT}
+\item[Date/Publication]\AsIs{2013-12-20 12:00:00 EDT}
 \end{description}
 \Rdcontents{\R{} topics documented:}
 \inputencoding{utf8}
@@ -526,6 +526,69 @@ tree<-Rneighbor(D)
 \end{ExampleCode}
 \end{Examples}
 \inputencoding{utf8}
+\HeaderA{Rdnainvar}{R interface for dnainvar}{Rdnainvar}
+\keyword{phylogenetics}{Rdnainvar}
+\keyword{inference}{Rdnainvar}
+%
+\begin{Description}\relax
+This function is an R interface for dnainvar in the PHYLIP package (Felsenstein 2013). dnainvar reads DNA sequences and computest Lake's invariants (Cavender \& Felsenstein 1987; Lake 1987).
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+Rdnainvar(X, path=NULL, ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{X}] an object of class \code{"DNAbin"}. \code{X} cannot contain more than four species.
+\item[\code{path}] path to the executable containing dnainvar. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file.
+\item[\code{...}] optional arguments to be passed to dnainvar. See details for more information.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+Optional arguments include the following: \code{quiet} suppress some output to R console (defaults to \code{quiet = FALSE}); \code{weights} vector of weights of length equal to the number of columns in \code{X} (defaults to unweighted); and \code{cleanup} remove PHYLIP input \& output files after the analysis is completed (defaults to \code{cleanup = TRUE}).
+
+More information about the dnainvar program in PHYLIP can be found here \url{http://evolution.genetics.washington.edu/phylip/doc/dnainvar.html}.
+
+Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 1989, 2013) should first be installed. Instructions for installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
+\end{Details}
+%
+\begin{Value}
+At present, this function merely prints the results of dnainvar to screen.
+\end{Value}
+%
+\begin{Author}\relax
+Liam Revell \email{liam.revell@umb.edu}
+\end{Author}
+%
+\begin{References}\relax
+Cavender, J.A., Felsenstein, J. (1987) Invariants of phylogenies in a simple case with discrete states. \emph{Journal of Classification}, 4, 57-71. 
+
+Felsenstein, J. (1989) PHYLIP--Phylogeny Inference Package (Version 3.2). \emph{Cladistics}, 5, 164-166.
+
+Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
+
+Lake, J.A. (1987) A rate-independent technique for analysis of nucleic acid sequences: evolutionary parsimony. \emph{Molecular Biology and Evolution}, 4, 167-191. 
+\end{References}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{Rdnapars}{Rdnapars}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+## Not run: 
+data(primates)
+primates<-primates[sample(nrow(primates),4),]
+tree<-Rdnainvar(primates)
+
+## End(Not run)
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
 \HeaderA{Rdnaml}{R interfaces for dnaml and dnamlk}{Rdnaml}
 \aliasA{Rdnamlk}{Rdnaml}{Rdnamlk}
 \keyword{phylogenetics}{Rdnaml}
@@ -754,6 +817,72 @@ Liam Revell \email{liam.revell@umb.edu}
 \begin{SeeAlso}\relax
 \code{\LinkA{as.proseq}{as.proseq}}, \code{\LinkA{print.proseq}{print.proseq}}, \code{\LinkA{Rproml}{Rproml}}
 \end{SeeAlso}
+\inputencoding{utf8}
+\HeaderA{Rfitch}{R interface for fitch}{Rfitch}
+\keyword{phylogenetics}{Rfitch}
+\keyword{inference}{Rfitch}
+\keyword{distance method}{Rfitch}
+%
+\begin{Description}\relax
+This function is an R interface for fitch in the PHYLIP package (Felsenstein 2013). fitch can be used for tree inference using the Fitch-Margoliash method (Fitch \& Margoliash 1967), the Cavalli-Sforza \& Edwards leasts-squares method (Cavalli-Sforza \& Edwards 1967), and the minimum evolution criterion (Kidd \& Sgaramella-Zonta 1971; Nei \& Rzhetsky 1993).
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+Rfitch(D, path=NULL , ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{D}] a distance matrix as an object of class \code{"matrix"} or \code{"dist"}. If a matrix, then \code{D} should be symmetrical with a diagonal of zeros.
+\item[\code{path}] path to the executable containing fitch. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file.
+\item[\code{...}] optional arguments to be passed to fitch. See details for more information.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+Optional arguments include the following: \code{quiet} suppress some output to R console (defaults to \code{quiet = FALSE}); \code{method} - can be \code{"FM"} or \code{"fm"} (for the Fitch-Margoliash criterion; Fitch \& Margoliash 1967), \code{"LS"} or \code{"ls"} for the Cavalli-Sforza \& Edwards (1967) least-squares criterion, or \code{"ME"} or \code{"me"} (for Minimum Evolution); \code{tree} object of class \code{"phylo"} - if supplied, then branch lengths are optimized \& the optimality criterion is computed on the input tree; \code{negative} a logical value indicating whether negative branch lengths should be permitted (defaults to \code{negative = TRUE}; \code{global} perform global search (defaults to \code{global = TRUE}); \code{random.order} add taxa to tree in random order (defaults to \code{random.order = TRUE}); \code{random.addition} number of random addition replicates for \code{random.order = TRUE} (defaults to \code{random.addition = 10}); \code{outgroup} outgroup if outgroup rooting of the estimated tree is desired; and \code{cleanup} remove PHYLIP input \& output files after the analysis is completed (defaults to \code{cleanup = TRUE}).
+
+More information about the fitch program in PHYLIP can be found here \url{http://evolution.genetics.washington.edu/phylip/doc/fitch.html}.
+
+Obviously, use of any of the functions of this package requires that PHYLIP (Felsenstein 1989, 2013) should first be installed. More information about installing PHYLIP can be found on the PHYLIP webpage: \url{http://evolution.genetics.washington.edu/phylip.html}.
+\end{Details}
+%
+\begin{Value}
+This function returns an object of class \code{"phylo"} that is the NJ or UPGMA tree.
+\end{Value}
+%
+\begin{Author}\relax
+Liam Revell \email{liam.revell@umb.edu}
+\end{Author}
+%
+\begin{References}\relax
+Cavalli-Sforza, L.L., Edwards, A.W.F. (1967) Phylogenetic analysis: models and estimation procedures. \emph{Evolution}, 32, 550-570. 
+
+Fitch, W.M., Margoliash, E. (1967) Construction of phylogenetic trees. \emph{Science}, 155, 279-284.
+
+Kidd, K.K., Sgaramella-Zonta, L.A. (1971) Phylogenetic analysis: concepts and methods. \emph{American Journal of Human Genetics}, 23, 235-252. 	
+
+Felsenstein, J. (1989) PHYLIP--Phylogeny Inference Package (Version 3.2). \emph{Cladistics}, 5, 164-166.
+
+Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
+\end{References}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{Rdnadist}{Rdnadist}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+## Not run: 
+data(primates)
+D<-dist.dna(data(primates),model="JC")
+tree<-Rfitch(D)
+
+## End(Not run)
+\end{ExampleCode}
+\end{Examples}
 \inputencoding{utf8}
 \HeaderA{Rneighbor}{R interface for neighbor}{Rneighbor}
 \keyword{phylogenetics}{Rneighbor}

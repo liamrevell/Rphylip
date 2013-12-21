@@ -16,7 +16,8 @@ Rfitch<-function(D,path=NULL,...){
 	else if(method=="ME"||method=="me"){
 		method<-"me"
 		oo<-c(oo,"d")
-	} else {
+	} else if(method=="LS"||method=="ls") method<-"ls"
+	else {
 		cat("\nWarning:\n  method not recognized - using method=\"FM\"\n")
 		method="fm"
 	}
@@ -30,7 +31,7 @@ Rfitch<-function(D,path=NULL,...){
 	if(hasArg(power)){
 		power<-list(...)$power
 		oo<-c(oo,"p",power)
-	}
+	} else if(method=="ls") oo<-c(oo,"p",0)
 	if(hasArg(negative)) negative<-list(...)$negative
 	else negative<-TRUE
 	if(!negative) oo<-c(oo,"-")
