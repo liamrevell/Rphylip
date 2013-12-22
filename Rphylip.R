@@ -1,3 +1,9 @@
+## setPath & clearPath
+## written by Liam J. Revell 2013
+.RphylipEnv<-new.env()
+setPath<-function(path) assign("phylip.path",path,envir=.RphylipEnv)
+clearPath<-function() if(exists("phylip.path",envir=.RphylipEnv)) rm(phylip.path,envir=.RphylipEnv)
+
 ## calls fitch from PHYLIP 3.695 (Felsenstein 2013)
 ## written by Liam J. Revell 2013
 
@@ -1102,6 +1108,7 @@ write.distances<-function(D){
 ## written by Liam J. Revell 2013
 
 findPath<-function(string){
+	if(exists("phylip.path",envir=.RphylipEnv)) return(get("phylip.path",envir=.RphylipEnv))
 	if(.Platform$OS.type=="windows"){
 		## first, check current directory
 		ll<-list.files()

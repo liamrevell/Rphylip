@@ -1,6 +1,7 @@
 Rphylip-package	Rphylip-package
 as.proseq	as.proseq
 chloroplast	primates
+clearPath	setPath
 opt.Rdnaml	opt.Rdnaml
 primates	primates
 print.proseq	print.proseq
@@ -24,4 +25,5 @@ Rprotdist	Rprotdist
 Rprotpars	Rprotpars
 Rthreshml	Rthreshml
 Rtreedist	Rtreedist
+setPath	setPath
 setupOSX	setupOSX

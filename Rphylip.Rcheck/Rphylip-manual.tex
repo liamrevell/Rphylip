@@ -13,8 +13,8 @@
 \end{center}
 \begin{description}
 \raggedright{}
-\item[Version]\AsIs{0.1-12}
-\item[Date]\AsIs{2013-12-20}
+\item[Version]\AsIs{0.1-13}
+\item[Date]\AsIs{2013-12-21}
 \item[Title]\AsIs{Rphylip: An R interface for PHYLIP}
 \item[Author]\AsIs{Liam J. Revell}
 \item[Maintainer]\AsIs{Liam J. Revell }\email{liam.revell@umb.edu}\AsIs{}
@@ -28,7 +28,7 @@ about installing PHYLIP.}
 \item[License]\AsIs{GPL (>= 2)}
 \item[URL]\AsIs{}\url{http://www.phytools.org/Rphylip}\AsIs{}
 \item[Repository]\AsIs{}
-\item[Date/Publication]\AsIs{2013-12-20 12:00:00 EDT}
+\item[Date/Publication]\AsIs{2013-12-21 12:00:00 EDT}
 \end{description}
 \Rdcontents{\R{} topics documented:}
 \inputencoding{utf8}
@@ -1274,6 +1274,33 @@ D<-Rtreedist(trees,method="symmetric")
 ## End(Not run)
 \end{ExampleCode}
 \end{Examples}
+\inputencoding{utf8}
+\HeaderA{setPath}{Set path to the folder containing PHYLIP executables for the current R session}{setPath}
+\aliasA{clearPath}{setPath}{clearPath}
+\keyword{utilities}{setPath}
+%
+\begin{Description}\relax
+Sets the path to the folder containing PHYLIP executables for the current R session. Once \code{setPath} has been used, Rphylip functions will no longer search for the path to the PHYLIP executable, using \code{path} instead.
+
+\code{clearPath} clears the path.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+setPath(path)
+clearPath()
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{path}] path to the folder contains PHYLIP executables.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Author}\relax
+Liam Revell \email{liam.revell@umb.edu}
+\end{Author}
 \inputencoding{utf8}
 \HeaderA{setupOSX}{Help set up PHYLIP in Mac OS X}{setupOSX}
 \keyword{phylogenetics}{setupOSX}

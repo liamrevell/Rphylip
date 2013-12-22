@@ -21,4 +21,6 @@ primates                Example datasets
 print.proseq            Print method protein sequences
 read.protein            Reads protein sequences from file in multiple
                         formats
+setPath                 Set path to the folder containing PHYLIP
+                        executables for the current R session
 setupOSX                Help set up PHYLIP in Mac OS X

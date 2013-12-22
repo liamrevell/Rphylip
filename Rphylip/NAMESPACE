@@ -1,7 +1,7 @@
-export(as.proseq, opt.Rdnaml, print.proseq, Rcontml, Rconsense, Rcontrast)
-export(Rdnacomp, Rdnadist, Rdnaml, Rdnamlk, Rdnapars, Rdnapenny, Rdnainvar)
-export(read.protein, Rfitch, Rneighbor,Rproml, Rpromlk, Rprotdist, Rprotpars)
-export(Rthreshml, Rtreedist, setupOSX)
+export(as.proseq, clearPath, opt.Rdnaml, print.proseq, Rcontml, Rconsense)
+export(Rcontrast, Rdnacomp, Rdnadist, Rdnaml, Rdnamlk, Rdnapars, Rdnapenny)
+export(Rdnainvar, read.protein, Rfitch, Rneighbor,Rproml, Rpromlk, Rprotdist)
+export(Rprotpars, Rthreshml, Rtreedist, setPath, setupOSX)
 
 S3method(print, proseq)
 
