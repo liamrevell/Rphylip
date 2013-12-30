@@ -1,9 +1,12 @@
 Rphylip-package	Rphylip-package
+as.phylip.data	as.proseq
 as.proseq	as.proseq
 chloroplast	primates
 clearPath	setPath
 opt.Rdnaml	opt.Rdnaml
 primates	primates
+primates.bin	primates
+print.phylip.data	print.proseq
 print.proseq	print.proseq
 Rconsense	Rconsense
 Rcontml	Rcontml
@@ -17,7 +20,10 @@ Rdnapars	Rdnapars
 Rdnapenny	Rdnapenny
 read.protein	read.protein
 Rfitch	Rfitch
+Rmix	Rmix
 Rneighbor	Rneighbor
+Rpars	Rpars
+Rpenny	Rpenny
 Rphylip	Rphylip-package
 Rproml	Rproml
 Rpromlk	Rproml

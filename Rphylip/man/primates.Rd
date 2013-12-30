@@ -9,7 +9,7 @@
 \usage{
 data(primates)
 data(chloroplast)
-data{primates.bin}
+data(primates.bin)
 }
 \format{
 	The data are stored as an object of class \code{"DNAbin"}, \code{"proseq"}, or \code{"phylip.data"}.

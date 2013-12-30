@@ -1,17 +1,18 @@
 \name{print.proseq}
 \alias{print.proseq}
-\title{Print method protein sequences}
+\alias{print.phylip.data}
+\title{Print method protein sequences or phylip.data object}
 \usage{
 \method{print}{proseq}(x, printlen=6, digits=3, ...)
 }
 \arguments{
-	\item{x}{an object of class \code{"proseq"}.}
+	\item{x}{an object of class \code{"proseq"} or an object of class \code{"phylip.data"}.}
 	\item{printlen}{number of sequence names to print.}
 	\item{digits}{number of digits to print.}
 	\item{...}{optional arguments.}
 }
 \description{
-	Print method for an object of class \code{"proseq"}.
+	Print method for an objects of class \code{"proseq"} or class \code{"phylip.data"}.
 }
 \value{
 	Prints to screen.
@@ -22,4 +23,5 @@
 }
 \keyword{utilities}
 \keyword{amino acid}
+\keyword{binary character}
 

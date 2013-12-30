@@ -170,6 +170,26 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
+nameEx("Rmix")
+### * Rmix
+
+flush(stderr()); flush(stdout())
+
+### Name: Rmix
+### Title: R interface for mix
+### Aliases: Rmix
+### Keywords: phylogenetics inference parsimony
+
+### ** Examples
+
+## Not run: 
+##D data(primates.bin)
+##D tree<-Rmix(primates.bin)
+## End(Not run)
+
+
+
+cleanEx()
 nameEx("Rneighbor")
 ### * Rneighbor
 
@@ -186,6 +206,46 @@ flush(stderr()); flush(stdout())
 ##D data(primates)
 ##D D<-dist.dna(data(primates),model="JC")
 ##D tree<-Rneighbor(D)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("Rpars")
+### * Rpars
+
+flush(stderr()); flush(stdout())
+
+### Name: Rpars
+### Title: R interface for pars
+### Aliases: Rpars
+### Keywords: phylogenetics inference parsimony
+
+### ** Examples
+
+## Not run: 
+##D data(primates.bin)
+##D tree<-Rpars(primates.bin)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("Rpenny")
+### * Rpenny
+
+flush(stderr()); flush(stdout())
+
+### Name: Rpenny
+### Title: R interface for penny
+### Aliases: Rpenny
+### Keywords: phylogenetics inference parsimony
+
+### ** Examples
+
+## Not run: 
+##D data(primates.bin)
+##D tree<-Rpenny(primates.bin)
 ## End(Not run)
 
 
