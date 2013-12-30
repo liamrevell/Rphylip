@@ -1,3 +1,258 @@
+## calls penny from PHYLIP 3.695 (Felsenstein 2013)
+## written by Liam J. Revell 2013
+
+Rpenny<-function(X,path=NULL,...){
+	if(is.vector(X)&&!is.list(X)) X<-t(sapply(X,function(x) strsplit(x,split="")[[1]]))
+	if(is.list(X)){
+		if(all(sapply(X,length)!=1)) X<-t(sapply(X,function(x) x))
+		else X<-t(sapply(X,function(x) strsplit(x,split="")[[1]]))
+	}
+	if(is.data.frame(X)) X<-as.matrix(X)
+	if(is.null(path)) path<-findPath("penny")
+	if(is.null(path)) stop("No path provided and was not able to find path to penny")
+	if(hasArg(quiet)) quiet<-list(...)$quiet
+	else quiet<-FALSE
+	if(!quiet) if(file.warn(c("ancestors","infile","mixture","outfile","outtree","weights"))==0) return(NULL)
+	oo<-c("r")
+	if(hasArg(mixture)){
+		oo<-c(oo,"x")
+		mixture<-toupper(mixture)
+		write(paste(mixture,collapse=""),file="mixture")
+	} else mixture<-NULL
+	if(hasArg(method)) method<-list(...)$method
+	else {
+		if(!is.null(mixture)) method<-"wagner"
+		else method<-"mixed"
+	}
+	method<-tolower(method)
+	if((method=="camin-sokal"||method=="wagner")&&!is.null(mixture)){
+		cat("Warning: mixture provided for mixed method.\n")
+		cat("         using method=\"mixed\"\n\n")
+		method<-"mixed"
+	}
+	if(method=="camin-sokal") oo<-c(oo,"p")
+	if(hasArg(groups)){
+		groups<-list(...)$groups
+		oo<-c(oo,"h",groups)
+	}
+	if(hasArg(report)){
+		report<-list(...)$report
+		oo<-c(oo,"f",report)
+	}
+	if(hasArg(simple)) simple<-list(...)$simple
+	else simple<-TRUE
+	if(!simple) oo<-c(oo,"s")
+	if(hasArg(threshold)) threshold<-list(...)$threshold
+	else threshold<-0
+	if(threshold!=0) oo<-c(oo,"t",threshold)
+	if(hasArg(ancestral)){
+		oo<-c(oo,"a")
+		ancestral<-toupper(ancestral)
+		write(paste(ancestral,collapse=""),file="ancestors")
+	} else ancestral<-NULL
+	if(hasArg(weights)){
+		weights<-list(...)$weights
+		if(!any(sapply(weights,"%in%",c(0,1)))){
+			cat("\n\nWarning:\n  only weights of 0 & 1 are permitted\n\n")
+			weights<-NULL
+		} else {
+			oo<-c(oo,"w")
+			write(paste(weights,collapse=""),file="weights")
+		}
+	} else weights<-NULL
+	if(quiet) oo<-c(oo,2)
+	oo<-c(oo,"y","r")
+	write.dna(X)
+	system("touch outtree")
+	system("touch outfile")
+	system(paste(path,"/penny",sep=""),input=oo)
+	tree<-read.tree("outtree")
+	temp<-readLines("outfile")
+	ii<-grep("requires a total of",temp)
+	xx<-strsplit(temp[ii],"  ")[[1]]
+	if(class(tree)=="multiPhylo") for(i in 1:length(tree)) tree[[i]]$pscore<-as.numeric(xx[length(xx)])
+	else tree$pscore<-as.numeric(xx[length(xx)])
+	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet){
+		cat("Translation table\n")
+		cat("-----------------\n")
+		temp<-lapply(1:nrow(X),function(x,y) cat(paste("\t",paste(x,y[x],sep="\t"),"\n",sep="")),y=rownames(X))
+		cat("\n")
+	}
+	if(class(tree)=="phylo") tree$tip.label<-rownames(X)[as.numeric(tree$tip.label)]
+	else if(class(tree)=="multiPhylo"){
+		foo<-function(x,y){
+			x$tip.label<-y[as.numeric(x$tip.label)]
+			x
+		}
+		tree<-lapply(tree,foo,y=rownames(X))
+		class(tree)<-"multiPhylo"
+	}	
+	if(hasArg(outgroup)){ 
+		outgroup<-list(...)$outgroup
+		tree<-outgroup.root(tree,outgroup,quiet)
+	}
+	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
+	else cleanup<-TRUE
+	if(cleanup){
+		files<-c("infile","outfile","outtree")
+		if(!is.null(weights)) files<-c(files,"weights")
+		if(!is.null(ancestral)) files<-c(files,"ancestors")
+		if(!is.null(mixture)) files<-c(files,"mixture")
+		cleanFiles(files)
+	}
+	return(tree)
+}
+
+## calls mix from PHYLIP 3.695 (Felsenstein 2013)
+## written by Liam J. Revell 2013
+
+Rmix<-function(X,path=NULL,...){
+	if(is.vector(X)&&!is.list(X)) X<-t(sapply(X,function(x) strsplit(x,split="")[[1]]))
+	if(is.list(X)){
+		if(all(sapply(X,length)!=1)) X<-t(sapply(X,function(x) x))
+		else X<-t(sapply(X,function(x) strsplit(x,split="")[[1]]))
+	}
+	if(is.data.frame(X)) X<-as.matrix(X)
+	if(is.null(path)) path<-findPath("mix")
+	if(is.null(path)) stop("No path provided and was not able to find path to mix")
+	if(hasArg(quiet)) quiet<-list(...)$quiet
+	else quiet<-FALSE
+	if(!quiet) if(file.warn(c("ancestors","infile","intree","mixture","outfile","outtree","weights"))==0) return(NULL)
+	oo<-c("r")
+	if(hasArg(tree)){
+		oo<-c(oo,"u")
+		tree<-list(...)$tree
+		tree$tip.label<-sapply(tree$tip.label,function(x,y) which(x==y),y=rownames(X))
+		write.tree(tree,"intree")
+		intree<-TRUE
+	} else intree<-FALSE
+	if(hasArg(mixture)){
+		oo<-c(oo,"x")
+		mixture<-toupper(mixture)
+		write(paste(mixture,collapse=""),file="mixture")
+	} else mixture<-NULL
+	if(hasArg(method)) method<-list(...)$method
+	else {
+		if(!is.null(mixture)) method<-"wagner"
+		else method<-"mixed"
+	}
+	method<-tolower(method)
+	if((method=="camin-sokal"||method=="wagner")&&!is.null(mixture)){
+		cat("Warning: mixture provided for mixed method.\n")
+		cat("         using method=\"mixed\"\n\n")
+		method<-"mixed"
+	}
+	if(method=="camin-sokal") oo<-c(oo,"p")
+	if(hasArg(random.order)) random.order<-list(...)$random.order
+	else random.order<-TRUE
+	if(random.order){
+		if(hasArg(random.addition)) random.addition<-list(...)$random.addition
+		else random.addition<-10
+		oo<-c(oo,"j",sample(seq(1,99999,by=2),1),random.addition)
+	}
+	if(hasArg(threshold)) threshold<-list(...)$threshold
+	else threshold<-0
+	if(threshold!=0) oo<-c(oo,"t",threshold)
+	if(hasArg(ancestral)){
+		oo<-c(oo,"a")
+		ancestral<-toupper(ancestral)
+		write(paste(ancestral,collapse=""),file="ancestors")
+	} else ancestral<-NULL
+	if(hasArg(weights)){
+		oo<-c(oo,"w")
+		write(paste(weights,collapse=""),file="weights")
+	} else weights<-NULL
+	if(quiet) oo<-c(oo,2)
+	oo<-c(oo,"y","r")
+	write.dna(X)
+	system("touch outtree")
+	system("touch outfile")
+	system(paste(path,"/mix",sep=""),input=oo)
+	tree<-read.tree("outtree")
+	temp<-readLines("outfile")
+	ii<-grep("requires a total of",temp)
+	for(i in 1:length(ii)){
+		xx<-strsplit(temp[ii[i]],"  ")[[1]]
+		if(length(ii)>1) tree[[i]]$pscore<-as.numeric(xx[length(xx)])
+		else tree$pscore<-as.numeric(xx[length(xx)])
+	}
+	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet){
+		cat("Translation table\n")
+		cat("-----------------\n")
+		temp<-lapply(1:nrow(X),function(x,y) cat(paste("\t",paste(x,y[x],sep="\t"),"\n",sep="")),y=rownames(X))
+		cat("\n")
+	}
+	if(class(tree)=="phylo") tree$tip.label<-rownames(X)[as.numeric(tree$tip.label)]
+	else if(class(tree)=="multiPhylo"){
+		foo<-function(x,y){
+			x$tip.label<-y[as.numeric(x$tip.label)]
+			x
+		}
+		tree<-lapply(tree,foo,y=rownames(X))
+		class(tree)<-"multiPhylo"
+	}	
+	if(hasArg(outgroup)){ 
+		outgroup<-list(...)$outgroup
+		tree<-outgroup.root(tree,outgroup,quiet)
+	}
+	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
+	else cleanup<-TRUE
+	if(cleanup){
+		files<-c("infile","outfile","outtree")
+		if(!is.null(weights)) files<-c(files,"weights")
+		if(intree) files<-c(files,"intree")
+		if(!is.null(ancestral)) files<-c(files,"ancestors")
+		if(!is.null(mixture)) files<-c(files,"mixture")
+		cleanFiles(files)
+	}
+	return(tree)
+}
+
+## convert phangorn phyDat to phylip.data
+## written by Liam J. Revell 2013
+
+as.phylip.data<-function(x,...){
+	if(class(x)=="phyDat"&&attr(x,"type")=="USER"){
+		X<-matrix(NA,length(x),length(attr(x,"index")))
+		rownames(X)<-names(x)
+		for(i in 1:ncol(X)){
+			ii<-sapply(x,function(x,y,i) x[y[i]],y=attr(x,"index"),i=i)
+			X[,i]<-attr(x,"levels")[ii]
+		}
+		X<-toupper(X)
+		class(X)<-"phylip.data"
+		return(X)
+	} else {
+		cat("Warning:\n  cannot convert object x to object of class 'phylip.data'.\n")
+		cat("  returning NULL. Sorry!\n\n")
+		return(NULL)
+	}
+}
+
+## S3 print method for "phylip.data"
+## written by Liam J. Revell 2013
+
+print.phylip.data<-function(x,printlen=6,digits=3,...){
+	type<-if(is.list(x)) "list" else "matrix"
+	N<-if(type=="list") length(x) else nrow(x)
+	cat(paste(N," character value sequences stored in a ",type,".\n\n",sep=""))
+	l<-if(type=="list") sapply(x,length) else ncol(x)
+	if(type=="list"){
+		cat(paste("Mean sequence length:",round(mean(l),digits),"\n"))
+		cat(paste("   Shortest sequence:",min(l),"\n"))
+		cat(paste("    Longest sequence:",max(l),"\n\n"))
+		cat(paste("Labels:",paste(names(x)[1:min(printlen,N)],collapse=" "),"...\n\n"))
+	} else { 
+		cat(paste("All sequences of same length:",l,"\n\n"))
+		cat(paste("Labels:",paste(rownames(x)[1:min(printlen,N)],collapse=" "),"...\n\n"))
+	}
+	cat("Trait value composition:\n")
+	ff<-summary(as.factor(x))
+	print(round(ff/sum(ff),digits))
+}
+
 ## calls pars from PHYLIP 3.695 (Felsenstein 2013)
 ## written by Liam J. Revell 2013
 
