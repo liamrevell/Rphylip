@@ -149,6 +149,26 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
+nameEx("Rdollop")
+### * Rdollop
+
+flush(stderr()); flush(stdout())
+
+### Name: Rdollop
+### Title: R interface for dollop
+### Aliases: Rdollop
+### Keywords: phylogenetics inference parsimony
+
+### ** Examples
+
+## Not run: 
+##D data(primates.bin)
+##D tree<-Rdollop(primates.bin)
+## End(Not run)
+
+
+
+cleanEx()
 nameEx("Rfitch")
 ### * Rfitch
 

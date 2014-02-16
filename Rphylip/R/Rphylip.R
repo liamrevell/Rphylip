@@ -1,3 +1,93 @@
+## calls dollop from PHYLIP 3.695 (Felsenstein 2013)
+## written by Liam J. Revell 2013
+
+Rdollop<-function(X,path=NULL,...){
+	if(is.vector(X)&&!is.list(X)) X<-t(sapply(X,function(x) strsplit(x,split="")[[1]]))
+	if(is.list(X)){
+		if(all(sapply(X,length)!=1)) X<-t(sapply(X,function(x) x))
+		else X<-t(sapply(X,function(x) strsplit(x,split="")[[1]]))
+	}
+	if(is.data.frame(X)) X<-as.matrix(X)
+	if(is.null(path)) path<-findPath("dollop")
+	if(is.null(path)) stop("No path provided and was not able to find path to dollop")
+	if(hasArg(quiet)) quiet<-list(...)$quiet
+	else quiet<-FALSE
+	if(!quiet) if(file.warn(c("ancestors","infile","intree","outfile","outtree","weights"))==0) return(NULL)
+	oo<-c("r")
+	if(hasArg(tree)){
+		oo<-c(oo,"u")
+		tree<-list(...)$tree
+		tree$tip.label<-sapply(tree$tip.label,function(x,y) which(x==y),y=rownames(X))
+		write.tree(tree,"intree")
+		intree<-TRUE
+	} else intree<-FALSE
+	if(hasArg(method)) method<-list(...)$method
+	else method<-"dollo"
+	method<-tolower(method)
+	if(method=="polymorphism") oo<-c(oo,"p")
+	if(hasArg(random.order)) random.order<-list(...)$random.order
+	else random.order<-TRUE
+	if(random.order){
+		if(hasArg(random.addition)) random.addition<-list(...)$random.addition
+		else random.addition<-10
+		oo<-c(oo,"j",sample(seq(1,99999,by=2),1),random.addition)
+	}
+	if(hasArg(threshold)) threshold<-list(...)$threshold
+	else threshold<-0
+	if(threshold!=0) oo<-c(oo,"t",threshold)
+	if(hasArg(ancestral)){
+		oo<-c(oo,"a")
+		ancestral<-toupper(ancestral)
+		write(paste(ancestral,collapse=""),file="ancestors")
+	} else ancestral<-NULL
+	if(hasArg(weights)){
+		oo<-c(oo,"w")
+		write(paste(weights,collapse=""),file="weights")
+	} else weights<-NULL
+	if(quiet) oo<-c(oo,2)
+	oo<-c(oo,"y","r")
+	write.dna(X)
+	system("touch outtree")
+	system("touch outfile")
+	system(paste(path,"/dollop",sep=""),input=oo)
+	tree<-read.tree("outtree")
+	temp<-readLines("outfile")
+	ii<-grep("requires a total of",temp)
+	xx<-strsplit(temp[ii],"  ")[[1]]
+	if(class(tree)=="multiPhylo") for(i in 1:length(tree)) tree[[i]]$pscore<-as.numeric(xx[length(xx)])
+	else tree$pscore<-as.numeric(xx[length(xx)])
+	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet){
+		cat("Translation table\n")
+		cat("-----------------\n")
+		temp<-lapply(1:nrow(X),function(x,y) cat(paste("\t",paste(x,y[x],sep="\t"),"\n",sep="")),y=rownames(X))
+		cat("\n")
+	}
+	if(class(tree)=="phylo") tree$tip.label<-rownames(X)[as.numeric(tree$tip.label)]
+	else if(class(tree)=="multiPhylo"){
+		foo<-function(x,y){
+			x$tip.label<-y[as.numeric(x$tip.label)]
+			x
+		}
+		tree<-lapply(tree,foo,y=rownames(X))
+		class(tree)<-"multiPhylo"
+	}	
+	if(hasArg(outgroup)){ 
+		outgroup<-list(...)$outgroup
+		tree<-outgroup.root(tree,outgroup,quiet)
+	}
+	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
+	else cleanup<-TRUE
+	if(cleanup){
+		files<-c("infile","outfile","outtree")
+		if(!is.null(intree)) files<-c(files,"intree")
+		if(!is.null(weights)) files<-c(files,"weights")
+		if(!is.null(ancestral)) files<-c(files,"ancestors")
+		cleanFiles(files)
+	}
+	return(tree)
+}
+
 ## calls penny from PHYLIP 3.695 (Felsenstein 2013)
 ## written by Liam J. Revell 2013
 

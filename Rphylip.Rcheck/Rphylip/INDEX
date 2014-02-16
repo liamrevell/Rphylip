@@ -7,6 +7,7 @@ Rdnainvar               R interface for dnainvar
 Rdnaml                  R interfaces for dnaml and dnamlk
 Rdnapars                R interface for dnapars
 Rdnapenny               R interface for dnapenny
+Rdollop                 R interface for dollop
 Rfitch                  R interface for fitch
 Rmix                    R interface for mix
 Rneighbor               R interface for neighbor
