@@ -189,6 +189,26 @@ Loading required package: ape
 > 
 > 
 > cleanEx()
+> nameEx("Rdolpenny")
+> ### * Rdolpenny
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Rdolpenny
+> ### Title: R interface for dolpenny
+> ### Aliases: Rdolpenny
+> ### Keywords: phylogenetics inference parsimony
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D data(primates.bin)
+> ##D tree<-Rdolpenny(primates.bin)
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
 > nameEx("Rfitch")
 > ### * Rfitch
 > 
@@ -415,7 +435,7 @@ Loading required package: ape
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  0.26 0.03 0.3 NA NA 
+Time elapsed:  0.29 0.02 0.3 NA NA 
 > grDevices::dev.off()
 null device 
           1 
