@@ -1,5 +1,78 @@
+## calls gendist from PHYLIP 3.695 (Felsenstein 2013)
+## written by Liam J. Revell 2014
+
+Rgendist<-function(X,path=NULL,...){
+	if(is.null(path)) path<-findPath("gendist")
+	if(is.null(path)) stop("No path provided and was not able to find path to gendist")
+	if(hasArg(quiet)) quiet<-list(...)$quiet
+	else quiet<-FALSE
+	if(!quiet) if(file.warn(c("infile","outfile"))==0) return(NULL)
+	if(is.matrix(X)){
+		## assumes X is a matrix of continuous character data
+		N<-nrow(X)
+		tips<-rownames(X)
+		if(hasArg(nalleles)) nalleles<-list(...)$nalleles
+		else nalleles<-rep(2,ncol(X))
+		write(paste("    ",nrow(X),"   ",ncol(X),sep=""),file="infile")
+		write(paste(nalleles,collapse=" "),file="infile",append=TRUE)
+		for(i in 1:nrow(X)){
+			sp<-as.character(i)
+			sp<-paste(sp,paste(rep(" ",11-nchar(sp)),collapse=""),collapse="")
+			tt<-paste(sp,paste(X[i,],collapse=" "),collapse=" ")
+			write(tt,append=TRUE,file="infile")
+		}
+	} else if(is.list(X)){
+		## assumes X is a list of matrices containing gene frequency data
+		N<-nrow(X[[1]])
+		tips<-rownames(X[[1]])
+		X<-lapply(X,function(x,tips) x[tips,],tips=tips)
+		write(paste("    ",nrow(X[[1]]),"   ",length(X),sep=""),file="infile")
+		nalleles<-sapply(X,ncol)
+		write(paste(nalleles,collapse=" "),file="infile",append=TRUE)
+		## verify that all rows of all X sum to 1.0
+		temp<-sapply(X,rowSums)
+		if(!all(round(temp,2)==1)) stop("Some of the rows of X do not sum to 1.0")
+		for(i in 1:length(tips)){
+			sp<-as.character(i)
+			sp<-paste(sp,paste(rep(" ",11-nchar(sp)),collapse=""),collapse="")
+			dd<-vector()
+			for(j in 1:length(X)) dd<-c(dd,X[[j]][i,])
+			tt<-paste(sp,paste(dd,collapse=" "),collapse=" ")
+			write(tt,append=TRUE,file="infile")
+		}
+	} else stop("X should be a matrix (for continuous characters) or a list (for gene frequencies)")
+	oo<-c("r"); ee<-vector()
+	if(hasArg(method)) method<-list(...)$method
+	else method<-"nei"
+	method<-tolower(method)
+	if(method=="nei") oo<-c(oo,"n")
+	else if(method=="cavalli-sforza") oo<-c(oo,"c")
+	else if(method=="reynolds") oo<-c(oo,"r")
+	else {
+		cat(paste("Warning:\n  don't recognize method of type",method,".\n"))
+		cat("   setting method to default type.\n\n")
+		oo<-c(oo,"n")
+	}
+	oo<-c(oo,"y")
+	system("touch outfile")
+	system(paste(path,"/gendist",sep=""),input=oo)
+	temp<-readLines("outfile")
+	xx<-strsplit(paste(temp,collapse=" ")," ")[[1]]
+	xx<-xx[xx!=""]
+	D<-matrix(NA,N,N)
+	for(i in 1:N) D[i,]<-as.numeric(xx[1:N+(i-1)*(N+1)+2])
+	rownames(D)<-colnames(D)<-tips
+	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
+	else cleanup<-TRUE
+	if(cleanup){
+		files<-c("infile","outfile")
+		cleanFiles(files)	
+	}
+	return(as.dist(D))
+}
+
 ## calls dolpenny from PHYLIP 3.695 (Felsenstein 2013)
-## written by Liam J. Revell 2013
+## written by Liam J. Revell 2014
 
 Rdolpenny<-function(X,path=NULL,...){
 	if(is.vector(X)&&!is.list(X)) X<-t(sapply(X,function(x) strsplit(x,split="")[[1]]))
@@ -91,7 +164,7 @@ Rdolpenny<-function(X,path=NULL,...){
 }
 
 ## calls dollop from PHYLIP 3.695 (Felsenstein 2013)
-## written by Liam J. Revell 2013
+## written by Liam J. Revell 2014
 
 Rdollop<-function(X,path=NULL,...){
 	if(is.vector(X)&&!is.list(X)) X<-t(sapply(X,function(x) strsplit(x,split="")[[1]]))
