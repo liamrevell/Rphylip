@@ -230,6 +230,27 @@ Loading required package: ape
 > 
 > 
 > cleanEx()
+> nameEx("Rkitsch")
+> ### * Rkitsch
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Rkitsch
+> ### Title: R interface for kitsch
+> ### Aliases: Rkitsch
+> ### Keywords: phylogenetics inference distance method
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D data(primates)
+> ##D D<-dist.dna(data(primates),model="JC")
+> ##D tree<-Rkitsch(D)
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
 > nameEx("Rmix")
 > ### * Rmix
 > 
@@ -435,7 +456,7 @@ Loading required package: ape
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  0.3 0.02 0.31 NA NA 
+Time elapsed:  0.25 0.05 0.3 NA NA 
 > grDevices::dev.off()
 null device 
           1 

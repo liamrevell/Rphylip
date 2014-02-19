@@ -11,6 +11,7 @@ Rdollop                 R interface for dollop
 Rdolpenny               R interface for dolpenny
 Rfitch                  R interface for fitch
 Rgendist                R interface for gendist
+Rkitsch                 R interface for kitsch
 Rmix                    R interface for mix
 Rneighbor               R interface for neighbor
 Rpars                   R interface for pars

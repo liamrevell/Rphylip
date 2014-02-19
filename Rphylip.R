@@ -1,3 +1,76 @@
+## calls kitsch from PHYLIP 3.695 (Felsenstein 2013)
+## written by Liam J. Revell 2014
+
+Rkitsch<-function(D,path=NULL,...){
+	if(class(D)=="dist"||class(D)=="data.frame") D<-as.matrix(D)
+	D<-D[rownames(D),rownames(D)]
+	if(is.null(path)) path<-findPath("kitsch")
+	if(is.null(path)) stop("No path provided and was not able to find path to kitsch")
+	if(hasArg(quiet)) quiet<-list(...)$quiet
+	else quiet<-FALSE
+	if(!quiet) if(file.warn(c("infile","intree","outfile","outtree"))==0) return(NULL)
+	oo<-c("r")
+	if(hasArg(method)) method<-list(...)$method
+	else method<-"fm"
+	if(method=="FM"||method=="fm") method<-"fm"
+	else if(method=="ME"||method=="me"){
+		method<-"me"
+		oo<-c(oo,"d")
+	} else if(method=="LS"||method=="ls") method<-"ls"
+	else {
+		cat("\nWarning:\n  method not recognized - using method=\"FM\"\n")
+		method="fm"
+	}
+	if(hasArg(tree)){
+		oo<-c(oo,"u")
+		tree<-list(...)$tree
+		tree$tip.label<-sapply(tree$tip.label,function(x,y) which(x==y),y=rownames(D))
+		write.tree(tree,"intree")
+		intree<-TRUE
+	} else intree<-FALSE
+	if(hasArg(power)){
+		power<-list(...)$power
+		oo<-c(oo,"p",power)
+	} else if(method=="ls") oo<-c(oo,"p",0)
+	if(hasArg(negative)) negative<-list(...)$negative
+	else negative<-FALSE
+	if(!negative) oo<-c(oo,"-")
+	if(hasArg(random.order)) random.order<-list(...)$random.order
+	else random.order<-TRUE
+	if(random.order){
+		if(hasArg(random.addition)) random.addition<-list(...)$random.addition
+		else random.addition<-10
+		oo<-c(oo,"j",sample(seq(1,99999,by=2),1),random.addition)
+	}
+	if(hasArg(subreplicate)) subreplicate<-list(...)$subreplicate
+	else subreplicate<-FALSE
+	if(subreplicate) oo<-c(oo,"s")
+	if(quiet) oo<-c(oo,2)
+	oo<-c(oo,"y","r")
+	write.distances(D)
+	system("touch outtree")
+	system("touch outfile")
+	system(paste(path,"/kitsch",sep=""),input=oo)
+	tree<-read.tree("outtree")
+	temp<-readLines("outfile")
+	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet){
+		cat("Translation table\n")
+		cat("-----------------\n")
+		temp<-lapply(1:nrow(D),function(x,y) cat(paste("\t",paste(x,y[x],sep="\t"),"\n",sep="")),y=rownames(D))
+		cat("\n")
+	}
+	tree$tip.label<-rownames(D)[as.numeric(tree$tip.label)]	
+	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
+	else cleanup<-TRUE
+	if(cleanup){
+		files<-c("infile","outfile","outtree")
+		if(intree) files<-c(files,"intree")
+		cleanFiles(files)
+	}
+	return(tree)
+}
+
 ## calls gendist from PHYLIP 3.695 (Felsenstein 2013)
 ## written by Liam J. Revell 2014
 
