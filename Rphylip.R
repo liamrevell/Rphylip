@@ -1,3 +1,126 @@
+## function converts string or matrix to object of class "rest.data"
+## written by Liam J. Revell 2014
+
+as.rest.data<-function(x,...){
+	if(is.vector(x)){
+		X<-sapply(x,strsplit,split="")
+		X<-as.data.frame(X)
+		class(X)<-"rest.data"
+	}
+	if(is.matrix(x)){
+		X<-as.data.frame(apply(x,1,factor))
+		class(X)<-"rest.data"
+	}
+	attr(X,"row.names")<-NULL
+	if(hasArg(nenzymes)) nenzymes<-list(...)$nenzymes
+	else nenzymes<-1
+	attr(X,"nenzymes")<-nenzymes
+	nsites<-sapply(X,length)
+	if(any(nsites!=max(nsites))) stop("All species should have the same number of sites scored.")
+	attr(X,"nsites")<-min(nsites)
+	return(X)
+}
+
+## S3 print method for "rest.data"
+## written by Liam J. Revell 2014
+
+print.rest.data<-function(x,printlen=6,digits=3,...){
+	cat(paste(attr(x,"nsites")," restriction site scores for ",length(x)," species stored in a object of class \"rest.data\".\n\n",sep=""))
+	cat(paste("All sequences of same length:",attr(x,"nsites"),"\n\n"))
+	cat(paste("Labels:",paste(names(x)[1:min(printlen,length(x))],collapse=" "),"...\n\n"))
+}
+
+## function writes rest.data to file in PHYLIP format with numbers as labels
+## written by Liam J. Revell 2014
+
+write.rest.data<-function(X,append=FALSE){
+	write(paste("    ",length(X),"   ",attr(X,"nsites"),sep=""),file="infile",append=append)
+	for(i in 1:length(X)){
+		sp<-as.character(i)
+		sp<-paste(sp,paste(rep(" ",11-nchar(sp)),collapse=""),collapse="")
+		tt<-paste(sp,paste(X[[i]],collapse=""),collapse=" ")
+		write(tt,append=TRUE,file="infile")
+	}
+}
+
+## calls restdist from PHYLIP 3.695 (Felsenstein 2013)
+## written by Liam J. Revell 2014
+
+Rrestdist<-function(X,path=NULL,...){
+	if(is.null(path)) path<-findPath("restdist")
+	if(is.null(path)) stop("No path provided and was not able to find path to restdist")
+	if(hasArg(quiet)) quiet<-list(...)$quiet
+	else quiet<-FALSE
+	if(!quiet) if(file.warn(c("infile","outfile"))==0) return(NULL)
+	
+
+
+
+
+	if(is.matrix(X)){
+		## assumes X is a matrix of continuous character data
+		N<-nrow(X)
+		tips<-rownames(X)
+		if(hasArg(nalleles)) nalleles<-list(...)$nalleles
+		else nalleles<-rep(2,ncol(X))
+		write(paste("    ",nrow(X),"   ",ncol(X),sep=""),file="infile")
+		write(paste(nalleles,collapse=" "),file="infile",append=TRUE)
+		for(i in 1:nrow(X)){
+			sp<-as.character(i)
+			sp<-paste(sp,paste(rep(" ",11-nchar(sp)),collapse=""),collapse="")
+			tt<-paste(sp,paste(X[i,],collapse=" "),collapse=" ")
+			write(tt,append=TRUE,file="infile")
+		}
+	} else if(is.list(X)){
+		## assumes X is a list of matrices containing gene frequency data
+		N<-nrow(X[[1]])
+		tips<-rownames(X[[1]])
+		X<-lapply(X,function(x,tips) x[tips,],tips=tips)
+		write(paste("    ",nrow(X[[1]]),"   ",length(X),sep=""),file="infile")
+		nalleles<-sapply(X,ncol)
+		write(paste(nalleles,collapse=" "),file="infile",append=TRUE)
+		## verify that all rows of all X sum to 1.0
+		temp<-sapply(X,rowSums)
+		if(!all(round(temp,2)==1)) stop("Some of the rows of X do not sum to 1.0")
+		for(i in 1:length(tips)){
+			sp<-as.character(i)
+			sp<-paste(sp,paste(rep(" ",11-nchar(sp)),collapse=""),collapse="")
+			dd<-vector()
+			for(j in 1:length(X)) dd<-c(dd,X[[j]][i,])
+			tt<-paste(sp,paste(dd,collapse=" "),collapse=" ")
+			write(tt,append=TRUE,file="infile")
+		}
+	} else stop("X should be a matrix (for continuous characters) or a list (for gene frequencies)")
+	oo<-c("r"); ee<-vector()
+	if(hasArg(method)) method<-list(...)$method
+	else method<-"nei"
+	method<-tolower(method)
+	if(method=="nei") oo<-c(oo,"n")
+	else if(method=="cavalli-sforza") oo<-c(oo,"c")
+	else if(method=="reynolds") oo<-c(oo,"r")
+	else {
+		cat(paste("Warning:\n  don't recognize method of type",method,".\n"))
+		cat("   setting method to default type.\n\n")
+		oo<-c(oo,"n")
+	}
+	oo<-c(oo,"y")
+	system("touch outfile")
+	system(paste(path,"/restdist",sep=""),input=oo)
+	temp<-readLines("outfile")
+	xx<-strsplit(paste(temp,collapse=" ")," ")[[1]]
+	xx<-xx[xx!=""]
+	D<-matrix(NA,N,N)
+	for(i in 1:N) D[i,]<-as.numeric(xx[1:N+(i-1)*(N+1)+2])
+	rownames(D)<-colnames(D)<-tips
+	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
+	else cleanup<-TRUE
+	if(cleanup){
+		files<-c("infile","outfile")
+		cleanFiles(files)	
+	}
+	return(as.dist(D))
+}
+
 ## calls kitsch from PHYLIP 3.695 (Felsenstein 2013)
 ## written by Liam J. Revell 2014
 
@@ -971,6 +1094,7 @@ Rprotdist<-function(X,path=NULL,...){
 	if(hasArg(weights)){
 		oo<-c(oo,"w")
 		write(paste(weights,collapse=""),file="weights")
+
 	} else weights<-NULL
 	oo<-c(oo,ee,"y")
 	system("touch outfile")
