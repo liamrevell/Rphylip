@@ -149,6 +149,46 @@ flush(stderr()); flush(stdout())
 
 
 cleanEx()
+nameEx("Rdollop")
+### * Rdollop
+
+flush(stderr()); flush(stdout())
+
+### Name: Rdollop
+### Title: R interface for dollop
+### Aliases: Rdollop
+### Keywords: phylogenetics inference parsimony
+
+### ** Examples
+
+## Not run: 
+##D data(primates.bin)
+##D tree<-Rdollop(primates.bin)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("Rdolpenny")
+### * Rdolpenny
+
+flush(stderr()); flush(stdout())
+
+### Name: Rdolpenny
+### Title: R interface for dolpenny
+### Aliases: Rdolpenny
+### Keywords: phylogenetics inference parsimony
+
+### ** Examples
+
+## Not run: 
+##D data(primates.bin)
+##D tree<-Rdolpenny(primates.bin)
+## End(Not run)
+
+
+
+cleanEx()
 nameEx("Rfitch")
 ### * Rfitch
 
@@ -165,6 +205,27 @@ flush(stderr()); flush(stdout())
 ##D data(primates)
 ##D D<-dist.dna(data(primates),model="JC")
 ##D tree<-Rfitch(D)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("Rkitsch")
+### * Rkitsch
+
+flush(stderr()); flush(stdout())
+
+### Name: Rkitsch
+### Title: R interface for kitsch
+### Aliases: Rkitsch
+### Keywords: phylogenetics inference distance method
+
+### ** Examples
+
+## Not run: 
+##D data(primates)
+##D D<-dist.dna(data(primates),model="JC")
+##D tree<-Rkitsch(D)
 ## End(Not run)
 
 

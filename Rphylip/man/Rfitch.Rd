@@ -20,7 +20,7 @@ Rfitch(D, path=NULL , ...)
 	This function is an R interface for fitch in the PHYLIP package (Felsenstein 2013). fitch can be used for tree inference using the Fitch-Margoliash method (Fitch & Margoliash 1967), the Cavalli-Sforza & Edwards leasts-squares method (Cavalli-Sforza & Edwards 1967), and the minimum evolution criterion (Kidd & Sgaramella-Zonta 1971; Nei & Rzhetsky 1993).
 }
 \value{
-	This function returns an object of class \code{"phylo"} that is the NJ or UPGMA tree.
+	This function returns an object of class \code{"phylo"} that is the Fitch-Margoliash, LS, or ME tree.
 }
 \references{
 	 Cavalli-Sforza, L.L., Edwards, A.W.F. (1967) Phylogenetic analysis: models and estimation procedures. \emph{Evolution}, 32, 550-570. 
