@@ -20,14 +20,15 @@ Rphylip-package         Rphylip: An R interface for PHYLIP
 Rproml                  R interfaces for proml and promlk
 Rprotdist               R interfaces for protdist
 Rprotpars               R interface for protpars
+Rrestdist               R interface for restdist
 Rthreshml               R interface for threshml
 Rtreedist               R interface for treedist
-as.proseq               Converts objects to protein sequences or
-                        phylip.data object
+as.proseq               Converts objects to protein sequences,
+                        phylip.data, or rest.data object
 opt.Rdnaml              Parameter optimizer for Rdnaml
 primates                Example datasets
-print.proseq            Print method protein sequences or phylip.data
-                        object
+print.proseq            Print method protein sequences, phylip.data, or
+                        rest.data object
 read.protein            Reads protein sequences from file in multiple
                         formats
 setPath                 Set path to the folder containing PHYLIP

@@ -1,3 +1,105 @@
+## function converts string or matrix to object of class "rest.data"
+## written by Liam J. Revell 2014
+
+as.rest.data<-function(x,...){
+	if(is.data.frame(x)){
+		if(ncol(x)==1) x<-setNames(as.vector(t(X)),rownames(X))
+		else {
+			X<-as.data.frame(t(x))
+			class(X)<-"rest.data"
+		}	
+	}
+	if(is.vector(x)){
+		X<-sapply(x,strsplit,split="")
+		X<-as.data.frame(X)
+		class(X)<-"rest.data"
+	}
+	if(is.matrix(x)){
+		X<-as.data.frame(apply(x,1,factor))
+		class(X)<-"rest.data"
+	}
+	attr(X,"row.names")<-NULL
+	if(hasArg(nenzymes)) nenzymes<-list(...)$nenzymes
+	else nenzymes<-1
+	attr(X,"nenzymes")<-nenzymes
+	nsites<-sapply(X,length)
+	if(any(nsites!=max(nsites))) stop("All species should have the same number of sites scored.")
+	attr(X,"nsites")<-min(nsites)
+	return(X)
+}
+
+## S3 print method for "rest.data"
+## written by Liam J. Revell 2014
+
+print.rest.data<-function(x,printlen=6,digits=3,...){
+	cat(paste(attr(x,"nsites")," restriction site scores for ",length(x)," species stored in a object of class \"rest.data\".\n\n",sep=""))
+	cat(paste("All sequences of same length:",attr(x,"nsites"),"\n\n"))
+	cat(paste("Labels:",paste(names(x)[1:min(printlen,length(x))],collapse=" "),"...\n\n"))
+}
+
+## function writes rest.data to file in PHYLIP format with numbers as labels
+## written by Liam J. Revell 2014
+
+write.rest.data<-function(X,append=FALSE){
+	write(paste("    ",length(X),"   ",attr(X,"nsites"),sep=""),file="infile",append=append)
+	for(i in 1:length(X)){
+		sp<-as.character(i)
+		sp<-paste(sp,paste(rep(" ",11-nchar(sp)),collapse=""),collapse="")
+		tt<-paste(sp,paste(X[[i]],collapse=""),collapse=" ")
+		write(tt,append=TRUE,file="infile")
+	}
+}
+
+## calls restdist from PHYLIP 3.695 (Felsenstein 2013)
+## written by Liam J. Revell 2014
+
+Rrestdist<-function(X,path=NULL,...){
+	if(is.null(path)) path<-findPath("restdist")
+	if(is.null(path)) stop("No path provided and was not able to find path to restdist")
+	if(hasArg(quiet)) quiet<-list(...)$quiet
+	else quiet<-FALSE
+	if(!quiet) if(file.warn(c("infile","outfile"))==0) return(NULL)
+	oo<-c("r"); ee<-vector()
+	if(hasArg(data)) data<-list(...)$data
+	else data<-"sites"
+	data<-tolower(data)
+	if(data=="fragments") oo<-c(oo,"r")
+	if(hasArg(method)) method<-list(...)$method
+	else method<-"modified"
+	method<-tolower(method)
+	if(method=="nei/li") oo<-c(oo,"n")
+	if(hasArg(gamma)){
+		gamma<-list(...)$gamma
+		oo<-c(oo,"g")
+		ee<-c(ee,1/sqrt(gamma))
+	}
+	if(hasArg(kappa)){
+		kappa<-list(...)$kappa
+		oo<-c(oo,"t",kappa)
+	}
+	if(hasArg(site.length)) site.length<-list(...)$site.length
+	else site.length<-6
+	if(site.length!=6) oo<-c(oo,site.length)
+	oo<-c(oo,ee,"y")
+	write.rest.data(X)
+	system("touch outfile")
+	system(paste(path,"/restdist",sep=""),input=oo,show.output.on.console=(!quiet))
+	temp<-readLines("outfile")
+	xx<-strsplit(paste(temp,collapse=" ")," ")[[1]]
+	xx<-xx[xx!=""]
+	N<-length(X)
+	D<-matrix(NA,N,N)
+	for(i in 1:N) D[i,]<-as.numeric(xx[1:N+(i-1)*(N+1)+2])
+	rownames(D)<-colnames(D)<-names(X)
+	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
+	else cleanup<-TRUE
+	if(cleanup){
+		files<-c("infile","outfile")
+		cleanFiles(files)	
+	}
+	return(as.dist(D))
+}
+
 ## calls kitsch from PHYLIP 3.695 (Felsenstein 2013)
 ## written by Liam J. Revell 2014
 
@@ -50,7 +152,7 @@ Rkitsch<-function(D,path=NULL,...){
 	write.distances(D)
 	system("touch outtree")
 	system("touch outfile")
-	system(paste(path,"/kitsch",sep=""),input=oo)
+	system(paste(path,"/kitsch",sep=""),input=oo,show.output.on.console=(!quiet))
 	tree<-read.tree("outtree")
 	temp<-readLines("outfile")
 	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
@@ -128,7 +230,7 @@ Rgendist<-function(X,path=NULL,...){
 	}
 	oo<-c(oo,"y")
 	system("touch outfile")
-	system(paste(path,"/gendist",sep=""),input=oo)
+	system(paste(path,"/gendist",sep=""),input=oo,show.output.on.console=(!quiet))
 	temp<-readLines("outfile")
 	xx<-strsplit(paste(temp,collapse=" ")," ")[[1]]
 	xx<-xx[xx!=""]
@@ -198,7 +300,7 @@ Rdolpenny<-function(X,path=NULL,...){
 	write.dna(X)
 	system("touch outtree")
 	system("touch outfile")
-	system(paste(path,"/dolpenny",sep=""),input=oo)
+	system(paste(path,"/dolpenny",sep=""),input=oo,show.output.on.console=(!quiet))
 	tree<-read.tree("outtree")
 	temp<-readLines("outfile")
 	ii<-grep("requires a total of",temp)
@@ -287,7 +389,7 @@ Rdollop<-function(X,path=NULL,...){
 	write.dna(X)
 	system("touch outtree")
 	system("touch outfile")
-	system(paste(path,"/dollop",sep=""),input=oo)
+	system(paste(path,"/dollop",sep=""),input=oo,show.output.on.console=(!quiet))
 	tree<-read.tree("outtree")
 	temp<-readLines("outfile")
 	ii<-grep("requires a total of",temp)
@@ -393,7 +495,7 @@ Rpenny<-function(X,path=NULL,...){
 	write.dna(X)
 	system("touch outtree")
 	system("touch outfile")
-	system(paste(path,"/penny",sep=""),input=oo)
+	system(paste(path,"/penny",sep=""),input=oo,show.output.on.console=(!quiet))
 	tree<-read.tree("outtree")
 	temp<-readLines("outfile")
 	ii<-grep("requires a total of",temp)
@@ -496,7 +598,7 @@ Rmix<-function(X,path=NULL,...){
 	write.dna(X)
 	system("touch outtree")
 	system("touch outfile")
-	system(paste(path,"/mix",sep=""),input=oo)
+	system(paste(path,"/mix",sep=""),input=oo,show.output.on.console=(!quiet))
 	tree<-read.tree("outtree")
 	temp<-readLines("outfile")
 	ii<-grep("requires a total of",temp)
@@ -633,7 +735,7 @@ Rpars<-function(X,path=NULL,...){
 	write.dna(X)
 	system("touch outtree")
 	system("touch outfile")
-	system(paste(path,"/pars",sep=""),input=oo)
+	system(paste(path,"/pars",sep=""),input=oo,show.output.on.console=(!quiet))
 	tree<-read.tree("outtree")
 	temp<-readLines("outfile")
 	ii<-grep("requires a total of",temp)
@@ -732,7 +834,7 @@ Rfitch<-function(D,path=NULL,...){
 	write.distances(D)
 	system("touch outtree")
 	system("touch outfile")
-	system(paste(path,"/fitch",sep=""),input=oo)
+	system(paste(path,"/fitch",sep=""),input=oo,show.output.on.console=(!quiet))
 	tree<-read.tree("outtree")
 	temp<-readLines("outfile")
 	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
@@ -778,7 +880,7 @@ Rdnainvar<-function(X,path=NULL,...){
 	write.dna(X)
 	system("touch outtree")
 	system("touch outfile")
-	system(paste(path,"/dnainvar",sep=""),input=oo)
+	system(paste(path,"/dnainvar",sep=""),input=oo,show.output.on.console=(!quiet))
 	temp<-readLines("outfile")
 #	ii<-grep("total number of compatible sites is",temp)
 #	for(i in 1:length(ii)){
@@ -850,7 +952,7 @@ Rdnacomp<-function(X,path=NULL,...){
 	write.dna(X)
 	system("touch outtree")
 	system("touch outfile")
-	system(paste(path,"/dnacomp",sep=""),input=oo)
+	system(paste(path,"/dnacomp",sep=""),input=oo,show.output.on.console=(!quiet))
 	tree<-read.tree("outtree")
 	temp<-readLines("outfile")
 	ii<-grep("total number of compatible sites is",temp)
@@ -971,11 +1073,12 @@ Rprotdist<-function(X,path=NULL,...){
 	if(hasArg(weights)){
 		oo<-c(oo,"w")
 		write(paste(weights,collapse=""),file="weights")
+
 	} else weights<-NULL
 	oo<-c(oo,ee,"y")
 	system("touch outfile")
 	write.dna(X)
-	system(paste(path,"/protdist",sep=""),input=oo)
+	system(paste(path,"/protdist",sep=""),input=oo,show.output.on.console=(!quiet))
 	temp<-readLines("outfile")
 	xx<-strsplit(paste(temp,collapse=" ")," ")[[1]]
 	xx<-xx[xx!=""]
@@ -1045,7 +1148,7 @@ Rprotpars<-function(X,path=NULL,...){
 	write.dna(X)
 	system("touch outtree")
 	system("touch outfile")
-	system(paste(path,"/protpars",sep=""),input=oo)
+	system(paste(path,"/protpars",sep=""),input=oo,show.output.on.console=(!quiet))
 	tree<-read.tree("outtree")
 	temp<-readLines("outfile")
 	ii<-grep("requires a total of",temp)
@@ -1300,7 +1403,7 @@ Rconsense<-function(trees,path=NULL,...){
 	write.tree(trees,file="intree")
 	system("touch outtree")
 	system("touch outfile")
-	system(paste(path,"/consense",sep=""),input=oo)
+	system(paste(path,"/consense",sep=""),input=oo,show.output.on.console=(!quiet))
 	tree<-read.tree("outtree")
 	temp<-readLines("outfile")
 	if(!is.null(tree$edge.length)){
@@ -1355,7 +1458,7 @@ Rdnapenny<-function(X,path=NULL,...){
 	write.dna(X)
 	system("touch outtree")
 	system("touch outfile")
-	system(paste(path,"/dnapenny",sep=""),input=oo)
+	system(paste(path,"/dnapenny",sep=""),input=oo,show.output.on.console=(!quiet))
 	tree<-read.tree("outtree")
 	temp<-readLines("outfile")
 	ii<-grep("requires a total of",temp)
@@ -1442,7 +1545,7 @@ Rdnadist<-function(X,method=c("F84","K80","JC","LogDet"),path=NULL,...){
 	oo<-c(oo,ee,"y")
 	system("touch outfile")
 	write.dna(X)
-	system(paste(path,"/dnadist",sep=""),input=oo)
+	system(paste(path,"/dnadist",sep=""),input=oo,show.output.on.console=(!quiet))
 	temp<-readLines("outfile")
 	xx<-strsplit(paste(temp,collapse=" ")," ")[[1]]
 	xx<-xx[xx!=""]
@@ -1509,7 +1612,7 @@ Rtreedist<-function(trees,method=c("branch.score","symmetric"),path=NULL,...){
 	}
 	oo<-c(oo,"y")
 	system("touch outfile")
-	system(paste(path,"/treedist",sep=""),input=oo)
+	system(paste(path,"/treedist",sep=""),input=oo,show.output.on.console=(!quiet))
 	temp<-readLines("outfile")
 	if(distances=="all"||distances=="all.1to2"){
 		cc<-if(method=="symmetric") 10 else 7
@@ -1610,7 +1713,7 @@ Rthreshml<-function(tree,X,types=NULL,path=NULL,...){
 	if(quiet) oo<-c(oo,2)
 	oo<-c(oo,"y",sample(seq(1,99999,by=2),1))
 	system("touch outfile")
-	system(paste(path,"/threshml",sep=""),input=oo)
+	system(paste(path,"/threshml",sep=""),input=oo,show.output.on.console=(!quiet))
 	temp<-readLines("outfile")
 	cc<-which(types=="c")
 	dd<-which(types=="d")
@@ -1741,7 +1844,7 @@ Rneighbor<-function(D,path=NULL,...){
 	write.distances(D)
 	system("touch outtree")
 	system("touch outfile")
-	system(paste(path,"/neighbor",sep=""),input=oo)
+	system(paste(path,"/neighbor",sep=""),input=oo,show.output.on.console=(!quiet))
 	tree<-read.tree("outtree")
 	temp<-readLines("outfile")
 	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
@@ -1966,7 +2069,7 @@ Rdnapars<-function(X,path=NULL,...){
 	write.dna(X)
 	system("touch outtree")
 	system("touch outfile")
-	system(paste(path,"/dnapars",sep=""),input=oo)
+	system(paste(path,"/dnapars",sep=""),input=oo,show.output.on.console=(!quiet))
 	tree<-read.tree("outtree")
 	temp<-readLines("outfile")
 	ii<-grep("requires a total of",temp)
@@ -2046,7 +2149,7 @@ Rcontml<-function(X,path=NULL,...){
 		if(quiet) oo<-c(oo,2)
 		oo<-c(oo,"y","r")
 		system("touch outfile")
-		system(paste(path,"/contml",sep=""),input=oo)
+		system(paste(path,"/contml",sep=""),input=oo,show.output.on.console=(!quiet))
 		tree<-read.tree("outtree")
 		temp<-readLines("outfile")
 		logLik<-as.numeric(strsplit(temp[grep("Ln Likelihood",temp)],"=")[[1]][2])
@@ -2098,7 +2201,7 @@ Rcontml<-function(X,path=NULL,...){
 		if(quiet) oo<-c(oo,2)
 		oo<-c(oo,"y","r")
 		system("touch outfile")
-		system(paste(path,"/contml",sep=""),input=oo)
+		system(paste(path,"/contml",sep=""),input=oo,show.output.on.console=(!quiet))
 		tree<-read.tree("outtree")
 		temp<-readLines("outfile")
 		logLik<-as.numeric(strsplit(temp[grep("Ln Likelihood",temp)],"=")[[1]][2])
@@ -2299,7 +2402,7 @@ Rcontrast<-function(tree,X,path=NULL,...){
 		if(quiet) oo<-c(oo,2)
 		oo<-c(oo,"y","r")
 		system("touch outfile")
-		system(paste(path,"/contrast",sep=""),input=oo)
+		system(paste(path,"/contrast",sep=""),input=oo,show.output.on.console=(!quiet))
 		temp<-readLines("outfile")
 		ii<-grep("Contrasts",temp)
 		Contrasts<-matrix(NA,tree$Nnode,ncol(X))
@@ -2348,7 +2451,7 @@ Rcontrast<-function(tree,X,path=NULL,...){
 		if(quiet) oo<-c(oo,2)
 		oo<-c(oo,"y","r")
 		system("touch outfile")
-		system(paste(path,"/contrast",sep=""),input=oo)
+		system(paste(path,"/contrast",sep=""),input=oo,show.output.on.console=(!quiet))
 		temp<-readLines("outfile")
 		ii<-grep("Estimate of VarA",temp)
 		VarA<-matrix(NA,ncol(X),ncol(X))

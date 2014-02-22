@@ -1,13 +1,16 @@
 Rphylip-package	Rphylip-package
 as.phylip.data	as.proseq
 as.proseq	as.proseq
+as.rest.data	as.proseq
 chloroplast	primates
 clearPath	setPath
+cotton	primates
 opt.Rdnaml	opt.Rdnaml
 primates	primates
 primates.bin	primates
 print.phylip.data	print.proseq
 print.proseq	print.proseq
+print.rest.data	print.proseq
 Rconsense	Rconsense
 Rcontml	Rcontml
 Rcontrast	Rcontrast
@@ -33,6 +36,7 @@ Rproml	Rproml
 Rpromlk	Rproml
 Rprotdist	Rprotdist
 Rprotpars	Rprotpars
+Rrestdist	Rrestdist
 Rthreshml	Rthreshml
 Rtreedist	Rtreedist
 setPath	setPath
