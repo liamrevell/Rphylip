@@ -11,6 +11,7 @@ primates.bin	primates
 print.phylip.data	print.proseq
 print.proseq	print.proseq
 print.rest.data	print.proseq
+Rclique	Rclique
 Rconsense	Rconsense
 Rcontml	Rcontml
 Rcontrast	Rcontrast
@@ -38,6 +39,7 @@ Rpromlk	Rproml
 Rprotdist	Rprotdist
 Rprotpars	Rprotpars
 Rrestdist	Rrestdist
+Rrestml	Rrestml
 Rthreshml	Rthreshml
 Rtreedist	Rtreedist
 setPath	setPath

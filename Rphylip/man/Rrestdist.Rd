@@ -5,7 +5,7 @@
 Rrestdist(X, path=NULL, ...)
 }
 \arguments{
-	\item{X}{an object }
+	\item{X}{an object of class \code{"rest.data"} containing data for restriction sites.}
 	\item{path}{path to the executable containing restdist. If \code{path = NULL}, the R will search several paths for restdist. See details for more information.}
 	\item{...}{optional arguments to be passed to restdist. See details for more information.}
 }
@@ -34,7 +34,10 @@ Rrestdist(X, path=NULL, ...)
 	\code{\link{Rdnadist}}, \code{\link{Rgendist}}, \code{\link{Rprotdist}}
 }
 \examples{
-
+\dontrun{
+data(restriction.data)
+D<-Rrestdist(restriction.data)
+}
 }
 \keyword{phylogenetics}
 \keyword{distance method}

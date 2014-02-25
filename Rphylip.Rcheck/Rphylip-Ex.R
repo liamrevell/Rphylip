@@ -6,6 +6,26 @@ library('Rphylip')
 
 base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
 cleanEx()
+nameEx("Rclique")
+### * Rclique
+
+flush(stderr()); flush(stdout())
+
+### Name: Rclique
+### Title: R interface for clique
+### Aliases: Rclique
+### Keywords: phylogenetics inference parsimony
+
+### ** Examples
+
+## Not run: 
+##D data(primates.bin)
+##D tree<-Rclique(primates.bin)
+## End(Not run)
+
+
+
+cleanEx()
 nameEx("Rconsense")
 ### * Rconsense
 
@@ -368,6 +388,46 @@ flush(stderr()); flush(stdout())
 ## Not run: 
 ##D data(chloroplast)
 ##D tree<-Rprotpars(chloroplast)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("Rrestdist")
+### * Rrestdist
+
+flush(stderr()); flush(stdout())
+
+### Name: Rrestdist
+### Title: R interface for restdist
+### Aliases: Rrestdist
+### Keywords: phylogenetics distance method
+
+### ** Examples
+
+## Not run: 
+##D data(restriction.data)
+##D D<-Rrestdist(restriction.data)
+## End(Not run)
+
+
+
+cleanEx()
+nameEx("Rrestml")
+### * Rrestml
+
+flush(stderr()); flush(stdout())
+
+### Name: Rrestml
+### Title: R interface for restml
+### Aliases: Rrestml
+### Keywords: phylogenetics distance method
+
+### ** Examples
+
+## Not run: 
+##D data(restriction.data)
+##D tree<-Rrestml(restriction.data)
 ## End(Not run)
 
 

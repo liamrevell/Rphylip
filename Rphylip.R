@@ -1,3 +1,70 @@
+## calls clique from PHYLIP 3.695 (Felsenstein 2013)
+## written by Liam J. Revell 2014
+
+Rclique<-function(X,path=NULL,...){
+	if(class(X)=="DNAbin") stop("you should be using Rdnacomp for DNA data.\n\n")
+	if(is.vector(X)&&!is.list(X)) X<-t(sapply(X,function(x) strsplit(x,split="")[[1]]))
+	if(is.list(X)){
+		if(all(sapply(X,length)!=1)) X<-t(sapply(X,function(x) x))
+		else X<-t(sapply(X,function(x) strsplit(x,split="")[[1]]))
+	}
+	if(is.data.frame(X)) X<-as.matrix(X)
+	if(is.null(path)) path<-findPath("clique")
+	if(is.null(path)) stop("No path provided and was not able to find path to clique")
+	if(hasArg(quiet)) quiet<-list(...)$quiet
+	else quiet<-FALSE
+	if(!quiet) if(file.warn(c("ancestors","infile","outfile","outtree","weights"))==0) return(NULL)
+	oo<-c("r","r")
+	if(hasArg(ancestral)){
+		oo<-c(oo,"a")
+		write(paste(ancestral,collapse=""),file="ancestors")
+	} else ancestral<-NULL
+	if(hasArg(weights)){
+		oo<-c(oo,"w")
+		write(paste(weights,collapse=""),file="weights")
+	} else weights<-NULL
+	if(hasArg(minimum.clique)) minimum.clique<-list(...)$minimum.clique
+	else minimum.clique<-NULL
+	if(!is.null(minimum.clique)) oo<-c(oo,"c",minimum.clique)	
+	if(quiet) oo<-c(oo,2)
+	oo<-c(oo,"y")
+	write.dna(X)
+	system("touch outtree")
+	system("touch outfile")
+	system(paste(path,"/clique",sep=""),input=oo,show.output.on.console=(!quiet))
+	tree<-read.tree("outtree")
+	temp<-readLines("outfile")
+	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet){
+		cat("Translation table\n")
+		cat("-----------------\n")
+		temp<-lapply(1:nrow(X),function(x,y) cat(paste("\t",paste(x,y[x],sep="\t"),"\n",sep="")),y=rownames(X))
+		cat("\n")
+	}
+	if(class(tree)=="phylo") tree$tip.label<-rownames(X)[as.numeric(tree$tip.label)]
+	else if(class(tree)=="multiPhylo"){
+		foo<-function(x,y){
+			x$tip.label<-y[as.numeric(x$tip.label)]
+			x
+		}
+		tree<-lapply(tree,foo,y=rownames(X))
+		class(tree)<-"multiPhylo"
+	}	
+	if(hasArg(outgroup)){ 
+		outgroup<-list(...)$outgroup
+		tree<-outgroup.root(tree,outgroup,quiet)
+	}
+	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
+	else cleanup<-TRUE
+	if(cleanup){
+		files<-c("infile","outfile","outtree")
+		if(!is.null(ancestral)) files<-c(files,"ancestors")
+		if(!is.null(weights)) files<-c(files,"weights")
+		cleanFiles(files)
+	}
+	return(tree)
+}
+
 ## calls restml from PHYLIP 3.695 (Felsenstein 2013)
 ## written by Liam J. Revell 2014
 
@@ -8,7 +75,7 @@ Rrestml<-function(X,path=NULL,...){
 	if(hasArg(quiet)) quiet<-list(...)$quiet
 	else quiet<-FALSE
 	if(!quiet) if(file.warn(c("infile","intree","outfile","outtree"))==0) return(NULL)
-	oo<-c("r"); ee<-vector()
+	oo<-c("r")
 	if(hasArg(tree)){
 		oo<-c(oo,"u")
 		tree<-list(...)$tree
@@ -34,9 +101,9 @@ Rrestml<-function(X,path=NULL,...){
 	}
 	if(hasArg(site.length)) site.length<-list(...)$site.length
 	else site.length<-6
-	if(site.length!=6) oo<-c(oo,,"l",site.length)
+	if(site.length!=6) oo<-c(oo,"l",site.length)
 	if(quiet) oo<-c(oo,2)
-	oo<-c(oo,"y",ee,"r")
+	oo<-c(oo,"y","r")
 	write.rest.data(X)
 	system("touch outtree")
 	system("touch outfile")
@@ -54,8 +121,7 @@ Rrestml<-function(X,path=NULL,...){
 	tree$tip.label<-names(X)[as.numeric(tree$tip.label)]
 	if(hasArg(outgroup)){ 
 		outgroup<-list(...)$outgroup
-		if(!clock) tree<-outgroup.root(tree,outgroup,quiet)
-		else cat("\nMolecular clock trees are already rooted!\n\nIgnoring argument outgroup.\n\n")
+		tree<-outgroup.root(tree,outgroup,quiet)
 	}
 	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
 	else cleanup<-TRUE
@@ -153,7 +219,7 @@ Rrestdist<-function(X,path=NULL,...){
 	}
 	if(hasArg(site.length)) site.length<-list(...)$site.length
 	else site.length<-6
-	if(site.length!=6) oo<-c(oo,,"l",site.length)
+	if(site.length!=6) oo<-c(oo,"l",site.length)
 	oo<-c(oo,ee,"y")
 	write.rest.data(X)
 	system("touch outfile")

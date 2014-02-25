@@ -1,3 +1,4 @@
+Rclique                 R interface for clique
 Rconsense               R interface for consense
 Rcontml                 R interface for contml
 Rcontrast               R interface for contrast
@@ -21,6 +22,7 @@ Rproml                  R interfaces for proml and promlk
 Rprotdist               R interfaces for protdist
 Rprotpars               R interface for protpars
 Rrestdist               R interface for restdist
+Rrestml                 R interface for restml
 Rthreshml               R interface for threshml
 Rtreedist               R interface for treedist
 as.proseq               Converts objects to protein sequences,

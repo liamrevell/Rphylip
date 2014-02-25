@@ -5,7 +5,7 @@
 Rpars(X, path=NULL, ...)
 }
 \arguments{
-	\item{X}{an object of class \code{"phylip.data"} with a binary character or multistate character; or a matrix.}
+	\item{X}{an object of class \code{"phylip.data"} with a set of binary or multistate characters; or a matrix.}
 	\item{path}{path to the executable containing pars. If \code{path = NULL}, the R will search several commonly used directories for the correct executable file.}
 	\item{...}{optional arguments to be passed to pars. See details for more information.}
 }
