@@ -1,3 +1,73 @@
+## calls restml from PHYLIP 3.695 (Felsenstein 2013)
+## written by Liam J. Revell 2014
+
+Rrestml<-function(X,path=NULL,...){
+	if(is.null(path)) path<-findPath("restml")
+	if(is.null(path)) stop(paste("No path provided and was not able to find path to restml"))
+	if(class(X)!="rest.data") stop("X should be an object of class 'rest.data'")
+	if(hasArg(quiet)) quiet<-list(...)$quiet
+	else quiet<-FALSE
+	if(!quiet) if(file.warn(c("infile","intree","outfile","outtree"))==0) return(NULL)
+	oo<-c("r"); ee<-vector()
+	if(hasArg(tree)){
+		oo<-c(oo,"u")
+		tree<-list(...)$tree
+		tree$tip.label<-sapply(tree$tip.label,function(x,y) which(x==y),y=rownames(X))
+		write.tree(tree,"intree")
+		intree<-TRUE
+	} else intree<-FALSE
+	if(hasArg(all.sites)) all.sites<-list(...)$all.sites
+	else all.sites<-FALSE
+	if(all.sites) oo<-c(oo,"a")
+	if(hasArg(speedier)) speedier<-list(...)$speedier
+	else speedier<-FALSE
+	if((!speedier)) oo<-c(oo,"s")
+	if(hasArg(global)) global<-list(...)$global
+	else global<-TRUE
+	if(global) oo<-c(oo,"g")
+	if(hasArg(random.order)) random.order<-list(...)$random.order
+	else random.order<-TRUE
+	if(random.order){
+		if(hasArg(random.addition)) random.addition<-list(...)$random.addition
+		else random.addition<-10
+		oo<-c(oo,"j",sample(seq(1,99999,by=2),1),random.addition)
+	}
+	if(hasArg(site.length)) site.length<-list(...)$site.length
+	else site.length<-6
+	if(site.length!=6) oo<-c(oo,,"l",site.length)
+	if(quiet) oo<-c(oo,2)
+	oo<-c(oo,"y",ee,"r")
+	write.rest.data(X)
+	system("touch outtree")
+	system("touch outfile")
+	temp<-system(paste(path,"/restml",sep=""),input=oo,show.output.on.console=(!quiet))
+	tree<-read.tree("outtree")
+	temp<-readLines("outfile")
+	logLik<-as.numeric(strsplit(temp[grep("Ln Likelihood",temp)],"=")[[1]][2])
+	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet){
+		cat("Translation table\n")
+		cat("-----------------\n")
+		temp<-lapply(1:length(X),function(x,y) cat(paste("\t",paste(x,y[x],sep="\t"),"\n",sep="")),y=names(X))
+		cat("\n")
+	}
+	tree$tip.label<-names(X)[as.numeric(tree$tip.label)]
+	if(hasArg(outgroup)){ 
+		outgroup<-list(...)$outgroup
+		if(!clock) tree<-outgroup.root(tree,outgroup,quiet)
+		else cat("\nMolecular clock trees are already rooted!\n\nIgnoring argument outgroup.\n\n")
+	}
+	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
+	else cleanup<-TRUE
+	if(cleanup){
+		files<-c("infile","outfile","outtree")
+		if(intree) files<-c(files,"intree")
+		cleanFiles(files)
+	}
+	tree$logLik<-logLik
+	return(tree)
+}
+
 ## function converts string or matrix to object of class "rest.data"
 ## written by Liam J. Revell 2014
 
@@ -34,14 +104,18 @@ as.rest.data<-function(x,...){
 print.rest.data<-function(x,printlen=6,digits=3,...){
 	cat(paste(attr(x,"nsites")," restriction site scores for ",length(x)," species stored in a object of class \"rest.data\".\n\n",sep=""))
 	cat(paste("All sequences of same length:",attr(x,"nsites"),"\n\n"))
-	cat(paste("Labels:",paste(names(x)[1:min(printlen,length(x))],collapse=" "),"...\n\n"))
+	cat(paste("Number of restriction enzymes used to generate the data:",attr(x,"nenzymes"),"\n\n"))
+	if(printlen<length(x))
+		cat(paste("Labels:",paste(names(x)[1:min(printlen,length(x))],collapse=" "),"...\n\n"))
+	else
+		cat(paste("Labels:",paste(names(x)[1:min(printlen,length(x))],collapse=" "),"\n\n"))
 }
 
 ## function writes rest.data to file in PHYLIP format with numbers as labels
 ## written by Liam J. Revell 2014
 
 write.rest.data<-function(X,append=FALSE){
-	write(paste("    ",length(X),"   ",attr(X,"nsites"),sep=""),file="infile",append=append)
+	write(paste("    ",length(X),"   ",attr(X,"nsites"),"   ",attr(X,"nenzymes"),sep=""),file="infile",append=append)
 	for(i in 1:length(X)){
 		sp<-as.character(i)
 		sp<-paste(sp,paste(rep(" ",11-nchar(sp)),collapse=""),collapse="")
@@ -79,7 +153,7 @@ Rrestdist<-function(X,path=NULL,...){
 	}
 	if(hasArg(site.length)) site.length<-list(...)$site.length
 	else site.length<-6
-	if(site.length!=6) oo<-c(oo,site.length)
+	if(site.length!=6) oo<-c(oo,,"l",site.length)
 	oo<-c(oo,ee,"y")
 	write.rest.data(X)
 	system("touch outfile")
@@ -673,10 +747,16 @@ print.phylip.data<-function(x,printlen=6,digits=3,...){
 		cat(paste("Mean sequence length:",round(mean(l),digits),"\n"))
 		cat(paste("   Shortest sequence:",min(l),"\n"))
 		cat(paste("    Longest sequence:",max(l),"\n\n"))
-		cat(paste("Labels:",paste(names(x)[1:min(printlen,N)],collapse=" "),"...\n\n"))
+		if(N>printlen)
+			cat(paste("Labels:",paste(names(x)[1:min(printlen,N)],collapse=" "),"...\n\n"))
+		else
+			cat(paste("Labels:",paste(names(x)[1:min(printlen,N)],collapse=" "),"\n\n"))
 	} else { 
 		cat(paste("All sequences of same length:",l,"\n\n"))
-		cat(paste("Labels:",paste(rownames(x)[1:min(printlen,N)],collapse=" "),"...\n\n"))
+		if(N>printlen)
+			cat(paste("Labels:",paste(rownames(x)[1:min(printlen,N)],collapse=" "),"...\n\n"))
+		else
+			cat(paste("Labels:",paste(rownames(x)[1:min(printlen,N)],collapse=" "),"\n\n"))
 	}
 	cat("Trait value composition:\n")
 	ff<-summary(as.factor(x))
@@ -1255,10 +1335,16 @@ print.proseq<-function(x,printlen=6,digits=3,...){
 		cat(paste("Mean sequence length:",round(mean(l),digits),"\n"))
 		cat(paste("   Shortest sequence:",min(l),"\n"))
 		cat(paste("    Longest sequence:",max(l),"\n\n"))
-		cat(paste("Labels:",paste(names(x)[1:min(printlen,N)],collapse=" "),"...\n\n"))
+		if(N>printlen)
+			cat(paste("Labels:",paste(names(x)[1:min(printlen,N)],collapse=" "),"...\n\n"))
+		else
+			cat(paste("Labels:",paste(names(x)[1:min(printlen,N)],collapse=" "),"\n\n"))
 	} else { 
 		cat(paste("All sequences of same length:",l,"\n\n"))
-		cat(paste("Labels:",paste(rownames(x)[1:min(printlen,N)],collapse=" "),"...\n\n"))
+		if(N>printlen)
+			cat(paste("Labels:",paste(rownames(x)[1:min(printlen,N)],collapse=" "),"...\n\n"))
+		else
+			cat(paste("Labels:",paste(rownames(x)[1:min(printlen,N)],collapse=" "),"\n\n"))
 	}
 	cat("Amino acid composition:\n")
 	ff<-summary(as.factor(x))
@@ -1680,6 +1766,7 @@ Rthreshml<-function(tree,X,types=NULL,path=NULL,...){
 	## this is for the current idiosyncratic tree input file requirement of threshml
 	text<-write.tree(tree)
 	text<-strsplit(text,"")[[1]]
+
 	text<-paste(paste(text[1:(length(text)-1)],collapse=""),"0.00000000;\n",sep="")
 	write(text,file="intree")
 	if(any(types=="c")) write.continuous(X[,types=="c"])
