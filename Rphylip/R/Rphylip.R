@@ -924,6 +924,7 @@ Rpars<-function(X,path=NULL,...){
 ## setPath & clearPath
 ## written by Liam J. Revell 2013
 
+phylip.path = NULL
 .RphylipEnv<-new.env()
 setPath<-function(path) assign("phylip.path",path,envir=.RphylipEnv)
 clearPath<-function() if(exists("phylip.path",envir=.RphylipEnv)) rm(phylip.path,envir=.RphylipEnv)
