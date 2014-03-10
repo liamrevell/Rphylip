@@ -9,3 +9,4 @@ S3method(print, proseq)
 S3method(print, phylip.data)
 S3method(print, rest.data)
 
+import(ape)
