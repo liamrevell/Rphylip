@@ -18,7 +18,11 @@ as.rest.data(x, ...)
 \value{
 	An object of class \code{"proseq"} containing protein sequences; an object of class \code{"phylip.data"}; or an object of class \code{"rest.data"}.
 }
-\author{Liam Revell \email{liam.revell@umb.edu}}
+\author{	
+	Liam J. Revell, Scott A. Chamberlain
+
+	Maintainer: Liam J. Revell <liam.revell@umb.edu>
+}
 \seealso{
 	\code{\link{print.proseq}}, \code{\link{Rproml}}
 }

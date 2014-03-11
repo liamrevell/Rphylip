@@ -33,12 +33,13 @@ Rgendist(X, path=NULL, ...)
 
 	Reynolds, J.B., Weir, B.S., Cockerham, C.C. (1983) Estimation of the coancestry coefficient: basis for a short-term genetic distance. \emph{Genetics}, 105, 767-779. 
 }
-\author{Liam Revell \email{liam.revell@umb.edu}}
+\author{	
+	Liam J. Revell, Scott A. Chamberlain
+
+	Maintainer: Liam J. Revell <liam.revell@umb.edu>
+}
 \seealso{
 	\code{\link{Rdnadist}}, \code{\link{Rprotdist}}
-}
-\examples{
-
 }
 \keyword{phylogenetics}
 \keyword{distance method}

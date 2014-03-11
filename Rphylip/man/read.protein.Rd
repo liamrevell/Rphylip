@@ -15,7 +15,11 @@ read.protein(file, format="fasta", ...)
 \value{
 	An object of class \code{"proseq"} containing protein sequences.
 }
-\author{Liam Revell \email{liam.revell@umb.edu}}
+\author{	
+	Liam J. Revell, Scott A. Chamberlain
+
+	Maintainer: Liam J. Revell <liam.revell@umb.edu>
+}
 \seealso{
 	\code{\link{as.proseq}}, \code{\link{print.proseq}}, \code{\link{Rproml}}
 }

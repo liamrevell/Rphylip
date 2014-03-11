@@ -39,7 +39,11 @@ Rdollop(X, path=NULL, ...)
 
 	Le Quesne, W.J. (1974) The uniquely evolved character concept and its cladistic application. \emph{Systematic Zoology}, 23, 513-517. 
 }
-\author{Liam Revell \email{liam.revell@umb.edu}}
+\author{	
+	Liam J. Revell, Scott A. Chamberlain
+
+	Maintainer: Liam J. Revell <liam.revell@umb.edu>
+}
 \seealso{
 	\code{\link{Rpars}}, \code{\link{Rdnapars}}
 }

@@ -43,7 +43,11 @@ Rprotdist(X, path=NULL, ...)
 
 	Veerassamy, S., Smith, A., Tillier, E.R. (2003) A transition probability model for amino acid substitutions from blocks. \emph{Journal of Computational Biology}, 10, 997-1010.
 }
-\author{Liam Revell \email{liam.revell@umb.edu}}
+\author{	
+	Liam J. Revell, Scott A. Chamberlain
+
+	Maintainer: Liam J. Revell <liam.revell@umb.edu>
+}
 \seealso{
 	\code{\link{Rneighbor}}
 }

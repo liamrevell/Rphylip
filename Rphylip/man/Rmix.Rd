@@ -35,7 +35,11 @@ Rmix(X, path=NULL, ...)
 
 	Hendy, M.D., Penny, D. (1982) Branch and bound algorithms to determine minimal evolutionary trees. \emph{Mathematical Biosciences}, 60, 133-142.
 }
-\author{Liam Revell \email{liam.revell@umb.edu}}
+\author{	
+	Liam J. Revell, Scott A. Chamberlain
+
+	Maintainer: Liam J. Revell <liam.revell@umb.edu>
+}
 \seealso{
 	\code{\link{Rdnapars}}
 }

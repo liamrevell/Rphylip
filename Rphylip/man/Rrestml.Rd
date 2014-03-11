@@ -33,7 +33,11 @@ Rrestml(X, path=NULL, ...)
 
 	Smouse, P. E., Li, W.-H. (1987) Likelihood analysis of mitochondrial restriction-cleavage patterns for the human-chimpanzee-gorilla trichotomy. \emph{Evolution}, 41, 1162-1176.  
 }
-\author{Liam Revell \email{liam.revell@umb.edu}}
+\author{	
+	Liam J. Revell, Scott A. Chamberlain
+
+	Maintainer: Liam J. Revell <liam.revell@umb.edu>
+}
 \seealso{
 	\code{\link{Rrestdist}}
 }

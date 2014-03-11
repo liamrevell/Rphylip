@@ -14,6 +14,10 @@ clearPath()
 
 	\code{clearPath} clears the path.
 }
-\author{Liam Revell \email{liam.revell@umb.edu}}
+\author{	
+	Liam J. Revell, Scott A. Chamberlain
+
+	Maintainer: Liam J. Revell <liam.revell@umb.edu>
+}
 \keyword{utilities}
 

@@ -31,11 +31,13 @@ Rthreshml(tree, X, types=NULL, path=NULL, ...)
 
 	Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.
 }
-\author{Liam Revell \email{liam.revell@umb.edu}}
+\author{	
+	Liam J. Revell, Scott A. Chamberlain
+
+	Maintainer: Liam J. Revell <liam.revell@umb.edu>
+}
 \seealso{
 	\code{\link{Rcontrast}}
-}
-\examples{
 }
 \keyword{phylogenetics}
 \keyword{comparative method}

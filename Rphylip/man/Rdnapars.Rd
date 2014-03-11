@@ -33,7 +33,11 @@ Rdnapars(X, path=NULL, ...)
 
 	Kluge, A.G., Farris, J.S. (1969) Quantitative phyletics and the evolution of anurans. \emph{Systematic Zoology}, 18, 1-32.
 }
-\author{Liam Revell \email{liam.revell@umb.edu}}
+\author{	
+	Liam J. Revell, Scott A. Chamberlain
+
+	Maintainer: Liam J. Revell <liam.revell@umb.edu>
+}
 \seealso{
 	\code{\link{Rdnaml}}, \code{\link{Rdnapenny}}
 }

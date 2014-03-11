@@ -31,7 +31,11 @@ Rdnacomp(X, path=NULL, ...)
 
 	Le Quesne, W.J. (1969) A method of selection of characters in numerical taxonomy. \emph{Systematic Zoology}, 18, 201-205. 
 }
-\author{Liam Revell \email{liam.revell@umb.edu}}
+\author{	
+	Liam J. Revell, Scott A. Chamberlain
+
+	Maintainer: Liam J. Revell <liam.revell@umb.edu>
+}
 \seealso{
 	\code{\link{Rdnapars}}, \code{\link{Rdnapenny}}
 }

@@ -924,8 +924,8 @@ Rpars<-function(X,path=NULL,...){
 ## setPath & clearPath
 ## written by Liam J. Revell 2013
 
-phylip.path = NULL
 .RphylipEnv<-new.env()
+phylip.path<-NULL
 setPath<-function(path) assign("phylip.path",path,envir=.RphylipEnv)
 clearPath<-function() if(exists("phylip.path",envir=.RphylipEnv)) rm(phylip.path,envir=.RphylipEnv)
 
@@ -1696,6 +1696,8 @@ Rdnadist<-function(X,method=c("F84","K80","JC","LogDet"),path=NULL,...){
 		oo<-c(oo,"f",bf)
 	}
 	oo<-c(oo,ee,"y")
+
+
 	system("touch outfile")
 	write.dna(X)
 	system(paste(path,"/dnadist",sep=""),input=oo,show.output.on.console=(!quiet))
@@ -2041,7 +2043,10 @@ write.distances<-function(D){
 ## written by Liam J. Revell 2013
 
 findPath<-function(string){
-	if(exists("phylip.path",envir=.RphylipEnv)) return(get("phylip.path",envir=.RphylipEnv))
+	if(exists("phylip.path",envir=.RphylipEnv)){ 
+		path<-get("phylip.path",envir=.RphylipEnv)
+		if(!is.null(path)) return(path)
+	}
 	if(.Platform$OS.type=="windows"){
 		## first, check current directory
 		ll<-list.files()

@@ -9,4 +9,4 @@ S3method(print, proseq)
 S3method(print, phylip.data)
 S3method(print, rest.data)
 
-import(ape)
+importFrom(ape, is.binary.tree, multi2di, read.tree, root, unroot, write.tree)

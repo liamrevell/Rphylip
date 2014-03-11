@@ -66,6 +66,27 @@ Loading required package: ape
 > 
 > 
 > cleanEx()
+> nameEx("Rcontrast")
+> ### * Rcontrast
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: Rcontrast
+> ### Title: R interface for contrast
+> ### Aliases: Rcontrast
+> ### Keywords: phylogenetics comparative method continuous characters
+> ###   maximum likelihood
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D data(cotton)
+> ##D contrasts<-Rcontrast(tree = cotton$tree, X = cotton$data)
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
 > nameEx("Rdnacomp")
 > ### * Rdnacomp
 > 
@@ -516,7 +537,7 @@ Loading required package: ape
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  0.29 0.02 0.32 NA NA 
+Time elapsed:  0.94 0.12 1.07 NA NA 
 > grDevices::dev.off()
 null device 
           1 

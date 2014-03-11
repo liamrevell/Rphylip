@@ -18,7 +18,11 @@
 \value{
 	Prints to screen.
 }
-\author{Liam Revell \email{liam.revell@umb.edu}}
+\author{	
+	Liam J. Revell, Scott A. Chamberlain
+
+	Maintainer: Liam J. Revell <liam.revell@umb.edu>
+}
 \seealso{
 	\code{\link{as.proseq}}, \code{\link{print.DNAbin}}, \code{\link{Rproml}}
 }

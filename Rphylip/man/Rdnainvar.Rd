@@ -31,7 +31,11 @@ Rdnainvar(X, path=NULL, ...)
 
 	 Lake, J.A. (1987) A rate-independent technique for analysis of nucleic acid sequences: evolutionary parsimony. \emph{Molecular Biology and Evolution}, 4, 167-191. 
 }
-\author{Liam Revell \email{liam.revell@umb.edu}}
+\author{	
+	Liam J. Revell, Scott A. Chamberlain
+
+	Maintainer: Liam J. Revell <liam.revell@umb.edu>
+}
 \seealso{
 	\code{\link{Rdnapars}}
 }

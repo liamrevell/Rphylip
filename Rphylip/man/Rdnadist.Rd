@@ -43,7 +43,11 @@ Rdnadist(X, method=c("F84","K80","JC","LogDet"), path=NULL, ...)
 
 	Steel, M.A. (1994) Recovering a tree from the Markov leaf colourations it generates under a Markov model. \emph{Applied Mathematics Letters}, 7, 19-23.
 }
-\author{Liam Revell \email{liam.revell@umb.edu}}
+\author{	
+	Liam J. Revell, Scott A. Chamberlain
+
+	Maintainer: Liam J. Revell <liam.revell@umb.edu>
+}
 \seealso{
 	\code{\link{Rneighbor}}
 }

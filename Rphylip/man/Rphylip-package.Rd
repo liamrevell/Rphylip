@@ -16,7 +16,7 @@
 	More information on \pkg{Rphylip} can be found at \url{http://www.phytools.org/Rphylip/} or \url{http://blog.phytools.org}. The latest code for the development version of Rphylip can also be found on github at the following URL: \url{http://github.com/liamrevell/Rphylip}.
 }
 \author{
-	Liam J. Revell
+	Liam J. Revell, Scott A. Chamberlain
 
 	Maintainer: Liam J. Revell <liam.revell@umb.edu>
 }

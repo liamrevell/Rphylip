@@ -20,4 +20,9 @@ data(cotton)
 \source{
 	Chamberlain, S.A., & J.A. Rudgers. 2012. How do plants balance multiple mutualists? Correlations among traits for attracting protective bodyguards and pollinators in cotton (Gossypium). Evolutionary Ecology 26:65-77. DOI: 10.1007/s10682-011-9497-3.
 }
+\author{	
+	Liam J. Revell, Scott A. Chamberlain
+
+	Maintainer: Liam J. Revell <liam.revell@umb.edu>
+}
 \keyword{datasets}

@@ -31,7 +31,11 @@ Rprotpars(X, path=NULL, ...)
 
 	Fitch, W.M. (1971) Toward defining the course of evolution: Minimu change for a specified tree topology. \emph{Systematic Zoology}, 20, 406-416.
 }
-\author{Liam Revell \email{liam.revell@umb.edu}}
+\author{	
+	Liam J. Revell, Scott A. Chamberlain
+
+	Maintainer: Liam J. Revell <liam.revell@umb.edu>
+}
 \seealso{
 	\code{\link{as.proseq}}, \code{\link{Rdnapars}}, \code{\link{read.protein}}
 }

@@ -29,7 +29,11 @@ Rrestdist(X, path=NULL, ...)
 
 	Nei, M., Li, W.-H. (1979) Mathematical model for studying genetic variation in terms of restriction endonucleases. \emph{Proceedings of the National Academy of Sciences}, 76, 5269-5273. 
 }
-\author{Liam Revell \email{liam.revell@umb.edu}}
+\author{	
+	Liam J. Revell, Scott A. Chamberlain
+
+	Maintainer: Liam J. Revell <liam.revell@umb.edu>
+}
 \seealso{
 	\code{\link{Rdnadist}}, \code{\link{Rgendist}}, \code{\link{Rprotdist}}
 }

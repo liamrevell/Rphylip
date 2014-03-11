@@ -34,7 +34,11 @@ Rtreedist(trees, method=c("branch.score","symmetric"), path=NULL, ...)
 
 	Robinson, D.F., Foulds, L.R. (1981) Comparison of phylogenetic trees. \emph{Mathematical Biosciences}, 53, 131-147.
 }
-\author{Liam Revell \email{liam.revell@umb.edu}}
+\author{	
+	Liam J. Revell, Scott A. Chamberlain
+
+	Maintainer: Liam J. Revell <liam.revell@umb.edu>
+}
 \examples{
 \dontrun{
 trees<-rmtree(n=10,N=10)

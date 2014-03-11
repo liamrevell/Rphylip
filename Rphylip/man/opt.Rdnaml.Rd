@@ -31,7 +31,11 @@ opt.Rdnaml(X, path=NULL, ...)
 
 	Felsenstein, J., Churchill, G. A. (1996) A Hidden Markov Model approach to variation among sites in rate of evolution. \emph{Molecular Biology and Evolution}, 13, 93-104.
 }
-\author{Liam Revell \email{liam.revell@umb.edu}}
+\author{	
+	Liam J. Revell, Scott A. Chamberlain
+
+	Maintainer: Liam J. Revell <liam.revell@umb.edu>
+}
 \seealso{
 	\code{\link{Rdnaml}}
 }
