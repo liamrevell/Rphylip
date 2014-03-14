@@ -3,11 +3,14 @@ citHeader("To cite Rphylip in publication use:")
 citEntry(
 	entry="Manual",
 	title="Rphylip: An R interface for PHYLIP.",
-	author="Liam J. Revell",
+	author="Liam J. Revell & Scott A. Chamberlain",
 	year=2013,
 	url="http://www.phytools.org/Rphylip",
-	textVersion=paste("Revell, L. J.","Rphylip: An R interface for PHYLIP","R package.")	   
+	textVersion=paste("Revell, L. J., & Chamberlain, S. A.","Rphylip: An R interface for PHYLIP","R package.")	   
 )
 
 citFooter("As Rphylip is an R interface for PHYLIP, all Rphylip users should cite PHYLIP in published work:\n\n")
 citFooter("   Felsenstein, J. (2013) PHYLIP (Phylogeny Inference Package) version 3.695. Distributed by the author. Department of Genome Sciences, University of Washington, Seattle.\n\n")
+
+citFooter("We also have an article in review describing this package:\n\n")
+citFooter("   Revell, L. J., & Chamberlain, S. A. In review. Rphylip: An R interface for PHYLIP. In review at Methods Ecol. Evol.\n\n")

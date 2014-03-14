@@ -1529,7 +1529,7 @@ Rproml<-function(X,path=NULL,...){
 }
 
 ## call consense from PHYLIP 3.695 (Felsenstein 2013)
-## written by Liam J. Revell 2013
+## written by Liam J. Revell 2013, 2014
 
 Rconsense<-function(trees,path=NULL,...){
 	if(is.null(path)) path<-findPath("consense")
@@ -1553,11 +1553,15 @@ Rconsense<-function(trees,path=NULL,...){
 	if(rooted) oo<-c(oo,"r")
 	if(quiet) oo<-c(oo,"2")
 	oo<-c(oo,"y","r")
+	tip.label<-sort(trees[[1]]$tip.label)
+	trees<-lapply(trees,function(x,y){ x$tip.label<-sapply(x$tip.label,function(y,z) which(z==y),z=y,USE.NAMES=FALSE); x },y=tip.label)
+	class(trees)<-"multiPhylo"
 	write.tree(trees,file="intree")
 	system("touch outtree")
 	system("touch outfile")
 	system(paste(path,"/consense",sep=""),input=oo,show.output.on.console=(!quiet))
 	tree<-read.tree("outtree")
+	tree$tip.label<-tip.label[as.numeric(tree$tip.label)]
 	temp<-readLines("outfile")
 	if(!is.null(tree$edge.length)){
 		tree$node.label<-c(NA,tree$edge.length[sapply(2:tree$Nnode+length(tree$tip.label),function(x,y) which(y==x),y=tree$edge[,2])]/length(trees))
@@ -1565,6 +1569,12 @@ Rconsense<-function(trees,path=NULL,...){
 	}
 	if(!rooted) tree<-unroot(tree)
 	if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet){
+		cat("Translation table\n")
+		cat("-----------------\n")
+		temp<-lapply(1:length(tip.label),function(x,y) cat(paste("\t",paste(x,y[x],sep="\t"),"\n",sep="")),y=tip.label)
+		cat("\n")
+	}
 	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
 	else cleanup<-TRUE
 	if(cleanup) cleanFiles(c("intree","outfile","outtree"))
