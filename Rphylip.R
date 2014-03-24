@@ -1724,7 +1724,7 @@ Rdnadist<-function(X,method=c("F84","K80","JC","LogDet"),path=NULL,...){
 }
 
 ## call treedist from PHYLIP 3.695 (Felsenstein 2013)
-## written by Liam J. Revell 2013
+## written by Liam J. Revell 2013, 2014
 
 Rtreedist<-function(trees,method=c("branch.score","symmetric"),path=NULL,...){
 	method<-method[1]
@@ -1742,8 +1742,22 @@ Rtreedist<-function(trees,method=c("branch.score","symmetric"),path=NULL,...){
 	if(hasArg(quiet)) quiet<-list(...)$quiet
 	else quiet<-FALSE
 	if(!quiet) if(file.warn(c("intree","intree2","outfile"))==0) return(NULL)
+	if(class(trees)=="multiPhylo"){
+		tip.label<-sort(trees[[1]]$tip.label)
+		trees<-lapply(trees,function(x,y){ x$tip.label<-sapply(x$tip.label,function(y,z) which(z==y),z=y,USE.NAMES=FALSE); x },y=tip.label)
+		class(trees)<-"multiPhylo"
+	} else if(class(trees)=="phylo"){
+		tip.label<-sort(trees$tip.label)
+		trees$tip.label<-sapply(trees$tip.label,function(x,y) which(y==x),y=tip.label,USE.NAMES=FALSE)
+	}
 	write.tree(trees,file="intree")
-	if(!is.null(trees2)) write.tree(trees2,file="intree2")
+	if(!is.null(trees2)){
+		if(class(trees2)=="multiPhylo"){
+			trees2<-lapply(trees2,function(x,y){ x$tip.label<-sapply(x$tip.label,function(y,z) which(z==y),z=y,USE.NAMES=FALSE); x },y=tip.label)
+			class(trees2)<-"multiPhylo"
+		} else if(class(trees2)=="phylo") trees2$tip.label<-sapply(trees2$tip.label,function(x,y) which(y==x),y=tip.label,USE.NAMES=FALSE)
+		write.tree(trees2,file="intree2")
+	}
 	oo<-c("r")
 	if(method=="symmetric") oo<-c(oo,"d")
 	if(hasArg(rooted)) rooted<-list(...)$rooted
@@ -1802,6 +1816,12 @@ Rtreedist<-function(trees,method=c("branch.score","symmetric"),path=NULL,...){
 		else if(distances=="corresponding") D<-setNames(X[,2],X[,1])
 	}
 	if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet){
+		cat("Translation table\n")
+		cat("-----------------\n")
+		temp<-lapply(1:length(tip.label),function(x,y) cat(paste("\t",paste(x,y[x],sep="\t"),"\n",sep="")),y=tip.label)
+		cat("\n")
+	}
 	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
 	else cleanup<-TRUE
 	if(cleanup){ 
