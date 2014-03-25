@@ -40,6 +40,7 @@ Rprotdist	Rprotdist
 Rprotpars	Rprotpars
 Rrestdist	Rrestdist
 Rrestml	Rrestml
+Rseqboot	Rseqboot
 Rthreshml	Rthreshml
 Rtreedist	Rtreedist
 setPath	setPath

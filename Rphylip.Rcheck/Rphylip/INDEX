@@ -23,6 +23,7 @@ Rprotdist               R interfaces for protdist
 Rprotpars               R interface for protpars
 Rrestdist               R interface for restdist
 Rrestml                 R interface for restml
+Rseqboot                R interface for seqboot
 Rthreshml               R interface for threshml
 Rtreedist               R interface for treedist
 as.proseq               Converts objects to protein sequences,

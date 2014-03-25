@@ -13,6 +13,7 @@ data(primates)
 data(chloroplast)
 data(primates.bin)
 data(cotton)
+data(restriction.data)
 }
 \format{
 	The data are stored as an object of class \code{"DNAbin"}, \code{"proseq"}, \code{"phylip.data"}, or \code{"rest.data"}. \code{cotton} is a list containing an object \code{"phylo"} and a matrix of continuous trait data.

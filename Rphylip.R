@@ -18,12 +18,41 @@ read.multi.phylip.data<-function(file,N,n){
 	return(X)
 }
 
+## internal function read.multi.rest.data
+## written by Liam J. Revell 2014
+
+read.multi.rest.data<-function(file,N,n){
+	FF<-readLines(file)
+	skip<-grep(pattern=paste("   ",n,sep=""),FF)-1
+	X<-lapply(skip,read.rest.data,file=file)
+	return(X)
+}
+
 ## read.phylip.data
 ## written by Liam J. Revell 2014
 
 read.phylip.data<-function(file,format="interleaved",skip=0,nlines=0,comment.char="#",as.character=FALSE){
 	X<-read.dna(file,format,skip,nlines,comment.char,as.character=TRUE)
 	class(X)<-"phylip.data"
+	X
+}
+
+## read.rest.data
+## written by Liam J. Revell 2014
+
+read.rest.data<-function(file,skip=0){
+	X<-readLines(file)
+	nn<-strsplit(X[skip+1]," ")[[1]]
+	nn<-as.numeric(nn[nn!=""])
+	X<-X[1:(nn[1]*ceiling(nn[2]/50))+1]
+	X<-sapply(1:nn[1],function(i,x,nn) paste(x[1:ceiling(nn[2]/50)+(i-1)*ceiling(nn[2]/50)],collapse=""),x=X,nn=nn)
+	X<-strsplit(X,"")
+	labels<-sapply(lapply(X,function(x) x[1:10]),function(x) x[1:max(setdiff(1:10,which(x==" ")))])
+	X<-lapply(lapply(X,function(x) x[11:length(x)]),function(x) x<-x[x!=" "])
+	names(X)<-labels
+	attr(X,"nenzymes")<-nn[3]
+	attr(X,"nsites")<-nn[2]
+	class(X)<-"rest.data"
 	X
 }
 
@@ -35,25 +64,24 @@ Rseqboot<-function(X,path=NULL,...){
 	if(is.null(path)) stop("No path provided and was not able to find path to seqboot")
 	if(hasArg(quiet)) quiet<-list(...)$quiet
 	else quiet<-FALSE
-	if(!quiet) if(file.warn(c("infile","outfile","weights"))==0) return(NULL)
+	if(!quiet){
+		files<-c("ancestors","categories","infile","mixture","outancestors","outcategories","outfile",
+			"outmixture","weights")
+		if(file.warn(files)==0) return(NULL)
+	}
 	oo<-vector()
 	if(hasArg(type)){ 
 		type<-list(...)$type
 		type<-tolower(type)
 	} else {
-		if(class(X)=="DNAbin"||class(X)=="proseq"){ 
-			type<-"sequence"
-		} else if(class(X)=="phylip.data"){ 
-			type<-"morph"
-			oo<-c(oo,"d")
-		} else if(class(X)=="rest.data"){
-			type="rest"
-			oo<-c(oo,rep("d",2))
-		} else if(class(X)=="matrix"){
-			type="gene.freq"
-			oo<-c(oo,rep("d",3))
-		}
+		if(class(X)=="DNAbin"||class(X)=="proseq") type<-"sequence"
+		else if(class(X)=="phylip.data") type<-"morph"
+		else if(class(X)=="rest.data") type="rest"
+		else if(class(X)=="matrix") type="gene.freq"
 	}
+	if(type=="morph") oo<-c(oo,"d")
+	else if(type=="rest") oo<-c(oo,rep("d",2),"e")
+	else if(type=="gene.freq") oo<-c(oo,rep("d",3))
 	if(hasArg(method)) method<-list(...)$method
 	else method<-"bootstrap"
 	method<-tolower(method)
@@ -69,6 +97,7 @@ Rseqboot<-function(X,path=NULL,...){
 	else replicates<-100
 	if(replicates!=100) oo<-c(oo,"r",replicates)
 	if(hasArg(weights)){
+		weights<-list(...)$weights
 		oo<-c(oo,"w")
 		write(paste(weights,collapse=""),file="weights")
 	} else weights<-NULL
@@ -76,35 +105,78 @@ Rseqboot<-function(X,path=NULL,...){
 		rate.categories<-list(...)$rate.categories
 		write(paste(rate.categories,collapse=""),file="categories")
 		oo<-c(oo,"c")
-	}
+	} else rate.categories<-NULL
 	if(hasArg(mixture)&&type=="morph"){
+		mixture<-list(...)$mixture
 		oo<-c(oo,"x")
 		mixture<-toupper(mixture)
 		write(paste(mixture,collapse=""),file="mixture")
 	} else mixture<-NULL
 	if(hasArg(ancestors)&&type=="morph"){
+		ancestors<-list(...)$ancestors
 		oo<-c(oo,"n")
 		ancestors<-toupper(ancestors)
 		write(paste(ancestors,collapse=""),file="ancestors")
-	}
+	} else ancestors<-NULL
 	if(quiet) oo<-c(oo,2)
 	oo<-c(oo,"i","y",sample(seq(1,99999,by=2),1),"r")
 	if(type=="sequence"||type=="morph") write.dna(X)
-	else if(type=="rest.data") write.rest.data(X)
+	else if(type=="rest") write.rest.data(X)
 	else if(type=="gene.freq") write.continuous(X)
 	system("touch outfile")
+	if(!is.null(ancestors)){ 
+		system("touch outancestors")
+		oo<-c(oo,"r")
+	}
+	if(!is.null(mixture)){ 
+		system("touch outmixture")
+		oo<-c(oo,"r")
+	}
+	if(!is.null(rate.categories)){
+		system("touch outcategories")
+		oo<-c(oo,"r")
+	}
 	system(paste(path,"/seqboot",sep=""),input=oo,show.output.on.console=(!quiet))
 	if(type=="sequence") XX<-read.multi.dna(file="outfile",N=replicates,n=nrow(X))
 	if(type=="morph") XX<-read.multi.phylip.data(file="outfile",N=replicates,n=nrow(X))
-	X<-lapply(XX,function(x,y){ rownames(x)<-y; x },y=rownames(X))
-	## if(!is.null(ancestors))
-
-
+	if(type=="rest") XX<-read.multi.rest.data(file="outfile",N=replicates,n=length(X))
+	if(class(X)=="proseq") XX<-lapply(XX,function(x){ class(x)<-"proseq"; x })
+	if(type=="sequence"||type=="morph") X<-lapply(XX,function(x,y){ rownames(x)<-y; x },y=rownames(X))
+	else if(type=="rest") X<-lapply(XX,function(x,y){ names(x)<-y; x },y=names(X))
+	if(!is.null(ancestors)){
+		A<-readLines("outancestors")
+		A<-strsplit(paste(A,collapse=""),"")[[1]]
+		A<-A[A!=" "]
+		m<-length(A)/replicates
+		A<-lapply(1:replicates,function(i,m,x) x[1:m+(i-1)*m],m=m,x=A)
+	}
+	if(!is.null(mixture)){
+		M<-readLines("outmixture")
+		M<-strsplit(paste(M,collapse=""),"")[[1]]
+		M<-M[M!=" "]
+		m<-length(M)/replicates
+		M<-lapply(1:replicates,function(i,m,x) x[1:m+(i-1)*m],m=m,x=M)
+	}
+	if(!is.null(rate.categories)){
+		R<-readLines("outcategories")
+		R<-strsplit(paste(R,collapse=""),"")[[1]]
+		R<-R[R!=" "]
+		m<-length(R)/replicates
+		R<-lapply(1:replicates,function(i,m,x) as.numeric(x[1:m+(i-1)*m]),m=m,x=R)
+	}
+	if(!is.null(ancestors)){
+		if(is.null(mixture)) X<-mapply(function(x,y) list(data=x,ancestors=y),x=X,y=A,SIMPLIFY=FALSE)
+		else X<-mapply(function(x,y,z) list(data=x,ancestors=y,mixture=z),x=X,y=A,z=M,SIMPLIFY=FALSE)
+	} else if(!is.null(mixture)) X<-mapply(function(x,y) list(data=x,mixture=y),x=X,y=M,SIMPLIFY=FALSE)
+	if(!is.null(rate.categories)) X<-mapply(function(x,y) list(data=x,categories=y),x=X,y=R,SIMPLIFY=FALSE)
 	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
 	else cleanup<-TRUE
 	if(cleanup){
 		files<-c("infile","outfile")
 		if(!is.null(weights)) files<-c(files,"weights")
+		if(!is.null(ancestors)) files<-c(files,"ancestors","outancestors")
+		if(!is.null(rate.categories)) files<-c(files,"categories","outcategories")
+		if(!is.null(mixture)) files<-c(files,"mixture","outmixture")
 		cleanFiles(files)
 	}
 	return(X)
@@ -1146,6 +1218,7 @@ Rfitch<-function(D,path=NULL,...){
 	if(hasArg(power)){
 		power<-list(...)$power
 		oo<-c(oo,"p",power)
+
 	} else if(method=="ls") oo<-c(oo,"p",0)
 	if(hasArg(negative)) negative<-list(...)$negative
 	else negative<-TRUE
