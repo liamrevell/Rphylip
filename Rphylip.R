@@ -1,3 +1,115 @@
+## internal function read.multi.dna
+## written by Liam J. Revell 2014
+
+read.multi.dna<-function(file,N,n){
+	FF<-readLines(file)
+	skip<-grep(pattern=paste("   ",n,sep=""),FF)-1
+	X<-lapply(skip,read.dna,file=file,format="sequential")
+	return(X)
+}
+
+## internal function read.multi.phylip.data
+## written by Liam J. Revell 2014
+
+read.multi.phylip.data<-function(file,N,n){
+	FF<-readLines(file)
+	skip<-grep(pattern=paste("   ",n,sep=""),FF)-1
+	X<-lapply(skip,read.phylip.data,file=file,format="sequential")
+	return(X)
+}
+
+## read.phylip.data
+## written by Liam J. Revell 2014
+
+read.phylip.data<-function(file,format="interleaved",skip=0,nlines=0,comment.char="#",as.character=FALSE){
+	X<-read.dna(file,format,skip,nlines,comment.char,as.character=TRUE)
+	class(X)<-"phylip.data"
+	X
+}
+
+## calls seqboot from PHYLIP 3.695 (Felsenstein 2013)
+## written by Liam J. Revell 2014
+
+Rseqboot<-function(X,path=NULL,...){
+	if(is.null(path)) path<-findPath("seqboot")
+	if(is.null(path)) stop("No path provided and was not able to find path to seqboot")
+	if(hasArg(quiet)) quiet<-list(...)$quiet
+	else quiet<-FALSE
+	if(!quiet) if(file.warn(c("infile","outfile","weights"))==0) return(NULL)
+	oo<-vector()
+	if(hasArg(type)){ 
+		type<-list(...)$type
+		type<-tolower(type)
+	} else {
+		if(class(X)=="DNAbin"||class(X)=="proseq"){ 
+			type<-"sequence"
+		} else if(class(X)=="phylip.data"){ 
+			type<-"morph"
+			oo<-c(oo,"d")
+		} else if(class(X)=="rest.data"){
+			type="rest"
+			oo<-c(oo,rep("d",2))
+		} else if(class(X)=="matrix"){
+			type="gene.freq"
+			oo<-c(oo,rep("d",3))
+		}
+	}
+	if(hasArg(method)) method<-list(...)$method
+	else method<-"bootstrap"
+	method<-tolower(method)
+	if(method=="jacknife") oo<-c(oo,"j")
+	else if(method=="permute") oo<-c(oo,rep("j",2))
+	if(hasArg(percentage)) percentage<-list(...)$percentage
+	else percentage<-100
+	if(percentage!=100) oo<-c(oo,"%",percentage)
+	if(hasArg(block.size)) block.size<-list(...)$block.size
+	else block.size<-1
+	if(block.size!=1) oo<-c(oo,"b",block.size)
+	if(hasArg(replicates)) replicates<-list(...)$replicates
+	else replicates<-100
+	if(replicates!=100) oo<-c(oo,"r",replicates)
+	if(hasArg(weights)){
+		oo<-c(oo,"w")
+		write(paste(weights,collapse=""),file="weights")
+	} else weights<-NULL
+	if(hasArg(rate.categories)&&type=="sequence"){
+		rate.categories<-list(...)$rate.categories
+		write(paste(rate.categories,collapse=""),file="categories")
+		oo<-c(oo,"c")
+	}
+	if(hasArg(mixture)&&type=="morph"){
+		oo<-c(oo,"x")
+		mixture<-toupper(mixture)
+		write(paste(mixture,collapse=""),file="mixture")
+	} else mixture<-NULL
+	if(hasArg(ancestors)&&type=="morph"){
+		oo<-c(oo,"n")
+		ancestors<-toupper(ancestors)
+		write(paste(ancestors,collapse=""),file="ancestors")
+	}
+	if(quiet) oo<-c(oo,2)
+	oo<-c(oo,"i","y",sample(seq(1,99999,by=2),1),"r")
+	if(type=="sequence"||type=="morph") write.dna(X)
+	else if(type=="rest.data") write.rest.data(X)
+	else if(type=="gene.freq") write.continuous(X)
+	system("touch outfile")
+	system(paste(path,"/seqboot",sep=""),input=oo,show.output.on.console=(!quiet))
+	if(type=="sequence") XX<-read.multi.dna(file="outfile",N=replicates,n=nrow(X))
+	if(type=="morph") XX<-read.multi.phylip.data(file="outfile",N=replicates,n=nrow(X))
+	X<-lapply(XX,function(x,y){ rownames(x)<-y; x },y=rownames(X))
+	## if(!is.null(ancestors))
+
+
+	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
+	else cleanup<-TRUE
+	if(cleanup){
+		files<-c("infile","outfile")
+		if(!is.null(weights)) files<-c(files,"weights")
+		cleanFiles(files)
+	}
+	return(X)
+}
+
 ## calls clique from PHYLIP 3.695 (Felsenstein 2013)
 ## written by Liam J. Revell 2014
 
@@ -216,7 +328,79 @@ Rrestdist<-function(X,path=NULL,...){
 	if(hasArg(kappa)){
 		kappa<-list(...)$kappa
 		oo<-c(oo,"t",kappa)
+	}## calls gendist from PHYLIP 3.695 (Felsenstein 2013)
+## written by Liam J. Revell 2014
+
+Rgendist<-function(X,path=NULL,...){
+	if(is.null(path)) path<-findPath("gendist")
+	if(is.null(path)) stop("No path provided and was not able to find path to gendist")
+	if(hasArg(quiet)) quiet<-list(...)$quiet
+	else quiet<-FALSE
+	if(!quiet) if(file.warn(c("infile","outfile"))==0) return(NULL)
+	if(is.matrix(X)){
+		## assumes X is a matrix of continuous character data
+		N<-nrow(X)
+		tips<-rownames(X)
+		if(hasArg(nalleles)) nalleles<-list(...)$nalleles
+		else nalleles<-rep(2,ncol(X))
+		write(paste("    ",nrow(X),"   ",ncol(X),sep=""),file="infile")
+		write(paste(nalleles,collapse=" "),file="infile",append=TRUE)
+		for(i in 1:nrow(X)){
+			sp<-as.character(i)
+			sp<-paste(sp,paste(rep(" ",11-nchar(sp)),collapse=""),collapse="")
+			tt<-paste(sp,paste(X[i,],collapse=" "),collapse=" ")
+			write(tt,append=TRUE,file="infile")
+		}
+	} else if(is.list(X)){
+		## assumes X is a list of matrices containing gene frequency data
+		N<-nrow(X[[1]])
+		tips<-rownames(X[[1]])
+		X<-lapply(X,function(x,tips) x[tips,],tips=tips)
+		write(paste("    ",nrow(X[[1]]),"   ",length(X),sep=""),file="infile")
+		nalleles<-sapply(X,ncol)
+		write(paste(nalleles,collapse=" "),file="infile",append=TRUE)
+		## verify that all rows of all X sum to 1.0
+		temp<-sapply(X,rowSums)
+		if(!all(round(temp,2)==1)) stop("Some of the rows of X do not sum to 1.0")
+		for(i in 1:length(tips)){
+			sp<-as.character(i)
+			sp<-paste(sp,paste(rep(" ",11-nchar(sp)),collapse=""),collapse="")
+			dd<-vector()
+			for(j in 1:length(X)) dd<-c(dd,X[[j]][i,])
+			tt<-paste(sp,paste(dd,collapse=" "),collapse=" ")
+			write(tt,append=TRUE,file="infile")
+		}
+	} else stop("X should be a matrix (for continuous characters) or a list (for gene frequencies)")
+	oo<-c("r"); ee<-vector()
+	if(hasArg(method)) method<-list(...)$method
+	else method<-"nei"
+	method<-tolower(method)
+	if(method=="nei") oo<-c(oo,"n")
+	else if(method=="cavalli-sforza") oo<-c(oo,"c")
+	else if(method=="reynolds") oo<-c(oo,"r")
+	else {
+		cat(paste("Warning:\n  don't recognize method of type",method,".\n"))
+		cat("   setting method to default type.\n\n")
+		oo<-c(oo,"n")
 	}
+	oo<-c(oo,"y")
+	system("touch outfile")
+	system(paste(path,"/gendist",sep=""),input=oo,show.output.on.console=(!quiet))
+	temp<-readLines("outfile")
+	xx<-strsplit(paste(temp,collapse=" ")," ")[[1]]
+	xx<-xx[xx!=""]
+	D<-matrix(NA,N,N)
+	for(i in 1:N) D[i,]<-as.numeric(xx[1:N+(i-1)*(N+1)+2])
+	rownames(D)<-colnames(D)<-tips
+	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
+	else cleanup<-TRUE
+	if(cleanup){
+		files<-c("infile","outfile")
+		cleanFiles(files)	
+	}
+	return(as.dist(D))
+}
+
 	if(hasArg(site.length)) site.length<-list(...)$site.length
 	else site.length<-6
 	if(site.length!=6) oo<-c(oo,"l",site.length)
