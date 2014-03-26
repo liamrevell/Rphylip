@@ -537,7 +537,7 @@ Loading required package: ape
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  0.29 0.03 0.33 NA NA 
+Time elapsed:  0.28 0.03 0.32 NA NA 
 > grDevices::dev.off()
 null device 
           1 

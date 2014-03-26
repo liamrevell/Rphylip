@@ -218,7 +218,7 @@ Rclique<-function(X,path=NULL,...){
 	system(paste(path,"/clique",sep=""),input=oo,show.output.on.console=(!quiet))
 	tree<-read.tree("outtree")
 	temp<-readLines("outfile")
-	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
 	if(!quiet){
 		cat("Translation table\n")
 		cat("-----------------\n")
@@ -295,7 +295,7 @@ Rrestml<-function(X,path=NULL,...){
 	tree<-read.tree("outtree")
 	temp<-readLines("outfile")
 	logLik<-as.numeric(strsplit(temp[grep("Ln Likelihood",temp)],"=")[[1]][2])
-	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
 	if(!quiet){
 		cat("Translation table\n")
 		cat("-----------------\n")
@@ -551,7 +551,7 @@ Rkitsch<-function(D,path=NULL,...){
 	system(paste(path,"/kitsch",sep=""),input=oo,show.output.on.console=(!quiet))
 	tree<-read.tree("outtree")
 	temp<-readLines("outfile")
-	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
 	if(!quiet){
 		cat("Translation table\n")
 		cat("-----------------\n")
@@ -703,7 +703,7 @@ Rdolpenny<-function(X,path=NULL,...){
 	xx<-strsplit(temp[ii],"  ")[[1]]
 	if(class(tree)=="multiPhylo") for(i in 1:length(tree)) tree[[i]]$pscore<-as.numeric(xx[length(xx)])
 	else tree$pscore<-as.numeric(xx[length(xx)])
-	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
 	if(!quiet){
 		cat("Translation table\n")
 		cat("-----------------\n")
@@ -792,7 +792,7 @@ Rdollop<-function(X,path=NULL,...){
 	xx<-strsplit(temp[ii],"  ")[[1]]
 	if(class(tree)=="multiPhylo") for(i in 1:length(tree)) tree[[i]]$pscore<-as.numeric(xx[length(xx)])
 	else tree$pscore<-as.numeric(xx[length(xx)])
-	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
 	if(!quiet){
 		cat("Translation table\n")
 		cat("-----------------\n")
@@ -898,7 +898,7 @@ Rpenny<-function(X,path=NULL,...){
 	xx<-strsplit(temp[ii],"  ")[[1]]
 	if(class(tree)=="multiPhylo") for(i in 1:length(tree)) tree[[i]]$pscore<-as.numeric(xx[length(xx)])
 	else tree$pscore<-as.numeric(xx[length(xx)])
-	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
 	if(!quiet){
 		cat("Translation table\n")
 		cat("-----------------\n")
@@ -1003,7 +1003,7 @@ Rmix<-function(X,path=NULL,...){
 		if(length(ii)>1) tree[[i]]$pscore<-as.numeric(xx[length(xx)])
 		else tree$pscore<-as.numeric(xx[length(xx)])
 	}
-	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
 	if(!quiet){
 		cat("Translation table\n")
 		cat("-----------------\n")
@@ -1146,7 +1146,7 @@ Rpars<-function(X,path=NULL,...){
 		if(length(ii)>1) tree[[i]]$pscore<-as.numeric(xx[length(xx)])
 		else tree$pscore<-as.numeric(xx[length(xx)])
 	}
-	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
 	if(!quiet){
 		cat("Translation table\n")
 		cat("-----------------\n")
@@ -1241,7 +1241,7 @@ Rfitch<-function(D,path=NULL,...){
 	system(paste(path,"/fitch",sep=""),input=oo,show.output.on.console=(!quiet))
 	tree<-read.tree("outtree")
 	temp<-readLines("outfile")
-	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
 	if(!quiet){
 		cat("Translation table\n")
 		cat("-----------------\n")
@@ -1365,7 +1365,7 @@ Rdnacomp<-function(X,path=NULL,...){
 		if(length(ii)>1) tree[[i]]$compatible.sites<-as.numeric(xx[length(xx)])
 		else tree$compatible.sites<-as.numeric(xx[length(xx)])
 	}
-	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
 	if(!quiet){
 		cat("Translation table\n")
 		cat("-----------------\n")
@@ -1561,7 +1561,7 @@ Rprotpars<-function(X,path=NULL,...){
 		if(length(ii)>1) tree[[i]]$pscore<-as.numeric(xx[length(xx)])
 		else tree$pscore<-as.numeric(xx[length(xx)])
 	}
-	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
 	if(!quiet){
 		cat("Translation table\n")
 		cat("-----------------\n")
@@ -1759,7 +1759,7 @@ Rproml<-function(X,path=NULL,...){
 	tree<-read.tree("outtree")
 	temp<-readLines("outfile")
 	logLik<-as.numeric(strsplit(temp[grep("Ln Likelihood",temp)],"=")[[1]][2])
-	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
 	if(!quiet){
 		cat("Translation table\n")
 		cat("-----------------\n")
@@ -1887,7 +1887,7 @@ Rdnapenny<-function(X,path=NULL,...){
 		if(length(ii)>1) tree[[i]]$pscore<-as.numeric(xx[length(xx)])
 		else tree$pscore<-as.numeric(xx[length(xx)])
 	}
-	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
 	if(!quiet){
 		cat("Translation table\n")
 		cat("-----------------\n")
@@ -2290,7 +2290,7 @@ Rneighbor<-function(D,path=NULL,...){
 	system(paste(path,"/neighbor",sep=""),input=oo,show.output.on.console=(!quiet))
 	tree<-read.tree("outtree")
 	temp<-readLines("outfile")
-	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
 	if(!quiet){
 		cat("Translation table\n")
 		cat("-----------------\n")
@@ -2524,7 +2524,7 @@ Rdnapars<-function(X,path=NULL,...){
 		if(length(ii)>1) tree[[i]]$pscore<-as.numeric(xx[length(xx)])
 		else tree$pscore<-as.numeric(xx[length(xx)])
 	}
-	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
 	if(!quiet){
 		cat("Translation table\n")
 		cat("-----------------\n")
@@ -2599,7 +2599,7 @@ Rcontml<-function(X,path=NULL,...){
 		tree<-read.tree("outtree")
 		temp<-readLines("outfile")
 		logLik<-as.numeric(strsplit(temp[grep("Ln Likelihood",temp)],"=")[[1]][2])
-		temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+		if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
 		if(!quiet){
 			cat("Translation table\n")
 			cat("-----------------\n")
@@ -2651,7 +2651,7 @@ Rcontml<-function(X,path=NULL,...){
 		tree<-read.tree("outtree")
 		temp<-readLines("outfile")
 		logLik<-as.numeric(strsplit(temp[grep("Ln Likelihood",temp)],"=")[[1]][2])
-		temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+		if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
 		if(!quiet){
 			cat("Translation table\n")
 			cat("-----------------\n")
@@ -2759,7 +2759,7 @@ Rdnaml<-function(X,path=NULL,...){
 	tree<-read.tree("outtree")
 	temp<-readLines("outfile")
 	logLik<-as.numeric(strsplit(temp[grep("Ln Likelihood",temp)],"=")[[1]][2])
-	temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
 	if(!quiet){
 		cat("Translation table\n")
 		cat("-----------------\n")
