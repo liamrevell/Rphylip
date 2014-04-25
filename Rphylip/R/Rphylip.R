@@ -2161,7 +2161,10 @@ Rthreshml<-function(tree,X,types=NULL,path=NULL,...){
 	cc<-which(types=="c")
 	dd<-which(types=="d")
 	## parse covariance matrix
-	ii<-grep("Covariance matrix",temp)+5
+	ii<-grep("Covariance matrix",temp)
+	if(temp[ii]==" Covariance matrix of continuous characters"||temp[ii]==" Covariance matrix of liabilities of discrete characters")
+		ii<-ii+3
+	else ii<-ii+5
 	Covariance_matrix<-matrix(NA,ncol(X),ncol(X))
 	for(i in 1:ncol(X)){
 		x<-strsplit(temp[i+ii]," ")[[1]]
@@ -2854,6 +2857,7 @@ Rcontrast<-function(tree,X,path=NULL,...){
 		Contrasts<-matrix(NA,tree$Nnode,ncol(X))
 		for(i in 1:tree$Nnode){
 			x<-strsplit(temp[i+ii+2]," ")[[1]]
+
 			Contrasts[i,]<-as.numeric(x[x!=""])
 		}
 		ii<-grep("Covariance",temp)
