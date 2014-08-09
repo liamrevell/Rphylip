@@ -2162,9 +2162,10 @@ Rthreshml<-function(tree,X,types=NULL,path=NULL,...){
 	dd<-which(types=="d")
 	## parse covariance matrix
 	ii<-grep("Covariance matrix",temp)
-	if(temp[ii]==" Covariance matrix of continuous characters"||temp[ii]==" Covariance matrix of liabilities of discrete characters")
-		ii<-ii+3
-	else ii<-ii+5
+	if(temp[ii]==" Covariance matrix of continuous characters"||temp[ii]==" Covariance matrix of liabilities of discrete characters"){
+		if(temp[ii+1]==" and liabilities of discrete characters"||temp[ii+1]==" and liability of the discrete character") ii<-ii+5
+		else ii<-ii+3
+	} else ii<-ii+5
 	Covariance_matrix<-matrix(NA,ncol(X),ncol(X))
 	for(i in 1:ncol(X)){
 		x<-strsplit(temp[i+ii]," ")[[1]]
