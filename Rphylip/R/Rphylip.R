@@ -1821,8 +1821,12 @@ Rconsense<-function(trees,path=NULL,...){
 	tree$tip.label<-tip.label[as.numeric(tree$tip.label)]
 	temp<-readLines("outfile")
 	if(!is.null(tree$edge.length)){
-		tree$node.label<-c(NA,tree$edge.length[sapply(2:tree$Nnode+length(tree$tip.label),function(x,y) which(y==x),y=tree$edge[,2])]/length(trees))
-		tree$edge.length<-NULL
+            if(tree$Nnode > 1){
+                tree$node.label <-c(NA, tree$edge.length[sapply(2:tree$Nnode + length(tree$tip.label), function(x, y) which(y ==  x), y = tree$edge[, 2])]/length(trees))
+            }else{
+                tree$node.label <-c(NA)
+            }
+            tree$edge.length<-NULL
 	}
 	if(!rooted) tree<-unroot(tree)
 	if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
