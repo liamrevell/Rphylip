@@ -3,7 +3,8 @@
 
 read.multi.dna<-function(file,N,n){
 	FF<-readLines(file)
-	skip<-grep(pattern=paste("   ",n,sep=""),FF)-1
+	nspc<-5-nchar(n)
+	skip<-grep(pattern=paste(strrep(" ",nspc),n,sep=""),FF)-1
 	X<-lapply(skip,read.dna,file=file,format="sequential")
 	return(X)
 }
@@ -13,7 +14,8 @@ read.multi.dna<-function(file,N,n){
 
 read.multi.phylip.data<-function(file,N,n){
 	FF<-readLines(file)
-	skip<-grep(pattern=paste("   ",n,sep=""),FF)-1
+	nspc<-5-nchar(n)
+	skip<-grep(pattern=paste(strrep(" ",nspc),n,sep=""),FF)-1
 	X<-lapply(skip,read.phylip.data,file=file,format="sequential")
 	return(X)
 }
@@ -23,7 +25,8 @@ read.multi.phylip.data<-function(file,N,n){
 
 read.multi.rest.data<-function(file,N,n){
 	FF<-readLines(file)
-	skip<-grep(pattern=paste("   ",n,sep=""),FF)-1
+	nspc<-5-nchar(n)
+	skip<-grep(pattern=paste(strrep(" ",nspc),n,sep=""),FF)-1
 	X<-lapply(skip,read.rest.data,file=file)
 	return(X)
 }
@@ -365,7 +368,8 @@ print.rest.data<-function(x,printlen=6,digits=3,...){
 ## written by Liam J. Revell 2014
 
 write.rest.data<-function(X,append=FALSE){
-	write(paste("    ",length(X),"   ",attr(X,"nsites"),"   ",attr(X,"nenzymes"),sep=""),file="infile",append=append)
+	nspc<-5-nchar(nrow(X))
+	write(paste(strrep(" ",nspc),length(X),"   ",attr(X,"nsites"),"   ",attr(X,"nenzymes"),sep=""),file="infile",append=append)
 	for(i in 1:length(X)){
 		sp<-as.character(i)
 		sp<-paste(sp,paste(rep(" ",11-nchar(sp)),collapse=""),collapse="")
@@ -2220,7 +2224,8 @@ Rthreshml<-function(tree,X,types=NULL,path=NULL,...){
 
 write.continuous<-function(X,append=FALSE){
 	if(is.vector(X)) X<-as.matrix(X)
-	write(paste("    ",nrow(X),"   ",ncol(X),sep=""),file="infile",append=append)
+	nspc<-5-nchar(nrow(X))
+	write(paste(strrep(" ",nspc),nrow(X),"   ",ncol(X),sep=""),file="infile",append=append)
 	for(i in 1:nrow(X)){
 		sp<-as.character(i)
 		sp<-paste(sp,paste(rep(" ",11-nchar(sp)),collapse=""),collapse="")
@@ -2325,7 +2330,8 @@ Rneighbor<-function(D,path=NULL,...){
 ## written by Liam J. Revell 2013
 
 write.distances<-function(D){
-	write(paste("    ",nrow(D),sep=""),file="infile")
+	nspc<-5-nchar(nrow(D))
+	write(paste(strrep(" ",nspc),nrow(D),sep=""),file="infile")
 	for(i in 1:nrow(D)){
 		sp<-as.character(i)
 		sp<-paste(sp,paste(rep(" ",11-nchar(sp)),collapse=""),collapse="")
@@ -2435,7 +2441,8 @@ findPath<-function(string){
 ## written by Liam J. Revell 2013
 
 write.dna<-function(X,append=FALSE){
-	write(paste("    ",nrow(X),"   ",ncol(X),sep=""),file="infile",append=append)
+	nspc<-5-nchar(nrow(X))
+	write(paste(strrep(" ",nspc),nrow(X),"   ",ncol(X),sep=""),file="infile",append=append)
 	for(i in 1:nrow(X)){
 		sp<-as.character(i)
 		sp<-paste(sp,paste(rep(" ",11-nchar(sp)),collapse=""),collapse="")
