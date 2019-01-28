@@ -1,3 +1,113 @@
+## calls threshml from PHYLIP (Felsenstein 2013)
+## written by Liam J. Revell 2013, 2015
+
+Rthreshml<-function(tree,X,types=NULL,path=NULL,...){
+	if(is.null(path)) path<-findPath("threshml")
+	if(is.null(path)) stop("No path provided and was not able to find path to threshml")
+	if(class(tree)!="phylo") stop("tree should be an object of class 'phylo'")
+	if(is.null(types)){
+		types<-sapply(X,class)
+		types[types=="numeric"]<-"continuous"
+		types[types%in%c("factor","character")]<-"discrete"
+	}
+	types<-crop(types)
+	if(hasArg(quiet)) quiet<-list(...)$quiet
+	else quiet<-FALSE
+	if(!quiet) if(file.warn(c("infile","intree","outfile"))==0) return(NULL)
+	tree$tip.label<-sapply(tree$tip.label,function(x,y) which(x==y)[1],y=rownames(X))
+	## this is for the current idiosyncratic tree input file requirement of threshml
+	text<-write.tree(tree)
+	text<-strsplit(text,"")[[1]]
+
+	text<-paste(paste(text[1:(length(text)-1)],collapse=""),"0.00000000;\n",sep="")
+	write(text,file="intree")
+	if(any(types=="c")) write.continuous(X[,types=="c"])
+	if(any(types=="d")) write.dna(apply(as.matrix(X[,types=="d"]),2,to.integers),append=any(types=="c"))
+	## start populating arguments
+	oo<-c("r")
+	if(!any(types=="d")) oo<-c(oo,"d")
+	if(any(types=="c")) oo<-c(oo,"c")
+	if(hasArg(burnin)){
+		burnin<-list(...)$burnin
+		oo<-c(oo,"b",burnin)
+	}
+	if(hasArg(nchain)){
+		nchain<-list(...)$nchain
+		oo<-c(oo,"n",nchain)
+	}
+	if(hasArg(ngen)){
+		ngen<-list(...)$ngen
+		oo<-c(oo,"s",ngen)
+	}
+	if(hasArg(proposal)){
+		proposal<-list(...)$proposal
+		oo<-c(oo,"p",proposal)
+	}
+	if(hasArg(lrtest)) lrtest<-list(...)$lrtest
+	else lrtest<-FALSE
+	if(lrtest){
+		# oo<-c(oo,"t")
+		cat("/nLR-test does not seem to work yet: ignoring argument lrtest.\n\n")
+	}
+	if(quiet) oo<-c(oo,2)
+	oo<-c(oo,"y",sample(seq(1,99999,by=2),1))
+	system("touch outfile")
+	system(paste(path,"/threshml",sep=""),input=oo,show.output.on.console=(!quiet))
+	temp<-readLines("outfile")
+	cc<-which(types=="c")
+	dd<-which(types=="d")
+	## parse covariance matrix
+	ii<-grep("Covariance matrix",temp)
+	if(temp[ii]==" Covariance matrix of continuous characters"||temp[ii]==" Covariance matrix of liabilities of discrete characters"){
+		if(temp[ii+1]==" and liabilities of discrete characters"||temp[ii+1]==" and liability of the discrete character") ii<-ii+5
+		else ii<-ii+3
+	} else ii<-ii+5
+	Covariance_matrix<-matrix(NA,ncol(X),ncol(X))
+	for(i in 1:ncol(X)){
+		x<-strsplit(temp[i+ii]," ")[[1]]
+		Covariance_matrix[i,]<-as.numeric(x[x!=""])[1:ncol(X)+1]
+	}
+	jj<-order(c(cc,dd))
+	Covariance_matrix<-Covariance_matrix[jj,jj]
+	rownames(Covariance_matrix)<-colnames(Covariance_matrix)<-colnames(X)
+	## parse transform matrix 1
+	ii<-grep("Transform from independent variables",temp)+4
+	Transform_indepvar_liab<-matrix(NA,ncol(X),ncol(X))
+	for(i in 1:ncol(X)){
+		x<-strsplit(temp[i+ii]," ")[[1]]
+		Transform_indepvar_liab[i,]<-as.numeric(x[x!=""])[1:ncol(X)+1]
+	}
+	Transform_indepvar_liab<-Transform_indepvar_liab[jj,jj]
+	rownames(Transform_indepvar_liab)<-colnames(Transform_indepvar_liab)<-colnames(X)
+	## parse variances of change
+	ii<-grep("its change",temp)+1
+	Var_change<-vector()
+	for(i in 1:ncol(X)){
+		x<-strsplit(temp[i+ii]," ")[[1]]
+		Var_change[i]<-as.numeric(x[x!=""])[2]
+	}
+	Var_change<-Var_change[jj]
+	names(Var_change)<-colnames(X)
+	## parse transform matrix 2
+	ii<-grep("Transform from liabilities or characters",temp)+4
+	Transform_liab_cont<-matrix(NA,ncol(X),ncol(X))
+	for(i in 1:ncol(X)){
+		x<-strsplit(temp[i+ii]," ")[[1]]
+		Transform_liab_cont[i,]<-as.numeric(x[x!=""])[1:ncol(X)+1]
+	}
+	Transform_liab_cont<-Transform_liab_cont[jj,jj]
+	rownames(Transform_liab_cont)<-colnames(Transform_liab_cont)<-colnames(X)
+	## done parsing
+	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
+	else cleanup<-TRUE
+	if(cleanup) cleanFiles(c("infile","intree","outfile"))
+	if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
+	return(list(Covariance_matrix=Covariance_matrix,
+		Transform_indepvar_liab=Transform_indepvar_liab,
+		Var_change=Var_change,
+		Transform_liab_cont=Transform_liab_cont))
+}
+
 ## internal function read.multi.dna
 ## written by Liam J. Revell 2014
 
@@ -2100,115 +2210,6 @@ to.integers<-function(x){
 	types<-sort(unique(x))
 	ii<-as.integer(1:length(types)-1)
 	ii[sapply(x,function(x,y) which(y==x),y=types)]
-}
-
-## calls threshml from PHYLIP (Felsenstein 2013)
-## written by Liam J. Revell 2013
-
-Rthreshml<-function(tree,X,types=NULL,path=NULL,...){
-	if(is.null(path)) path<-findPath("threshml")
-	if(is.null(path)) stop("No path provided and was not able to find path to threshml")
-	if(class(tree)!="phylo") stop("tree should be an object of class 'phylo'")
-	if(is.null(types)){
-		types<-sapply(X,class)
-		types[types=="numeric"]<-"continuous"
-		types[types%in%c("factor","character")]<-"discrete"
-	}
-	types<-crop(types)
-	if(hasArg(quiet)) quiet<-list(...)$quiet
-	else quiet<-FALSE
-	if(!quiet) if(file.warn(c("infile","intree","outfile"))==0) return(NULL)
-	tree$tip.label<-sapply(tree$tip.label,function(x,y) which(x==y)[1],y=rownames(X))
-	## this is for the current idiosyncratic tree input file requirement of threshml
-	text<-write.tree(tree)
-	text<-strsplit(text,"")[[1]]
-
-	text<-paste(paste(text[1:(length(text)-1)],collapse=""),"0.00000000;\n",sep="")
-	write(text,file="intree")
-	if(any(types=="c")) write.continuous(X[,types=="c"])
-	if(any(types=="d")) write.dna(apply(as.matrix(X[,types=="d"]),2,to.integers),append=any(types=="c"))
-	## start populating arguments
-	oo<-c("r")
-	if(!any(types=="d")) oo<-c(oo,"d")
-	if(any(types=="c")) oo<-c(oo,"c")
-	if(hasArg(burnin)){
-		burnin<-list(...)$burnin
-		oo<-c(oo,"b",burnin)
-	}
-	if(hasArg(nchain)){
-		nchain<-list(...)$nchain
-		oo<-c(oo,"n",nchain)
-	}
-	if(hasArg(ngen)){
-		ngen<-list(...)$ngen
-		oo<-c(oo,"s",ngen)
-	}
-	if(hasArg(proposal)){
-		proposal<-list(...)$proposal
-		oo<-c(oo,"p",proposal)
-	}
-	if(hasArg(lrtest)) lrtest<-list(...)$lrtest
-	else lrtest<-FALSE
-	if(lrtest){
-		# oo<-c(oo,"t")
-		cat("/nLR-test does not seem to work yet: ignoring argument lrtest.\n\n")
-	}
-	if(quiet) oo<-c(oo,2)
-	oo<-c(oo,"y",sample(seq(1,99999,by=2),1))
-	system("touch outfile")
-	system(paste(path,"/threshml",sep=""),input=oo,show.output.on.console=(!quiet))
-	temp<-readLines("outfile")
-	cc<-which(types=="c")
-	dd<-which(types=="d")
-	## parse covariance matrix
-	ii<-grep("Covariance matrix",temp)
-	if(temp[ii]==" Covariance matrix of continuous characters"||temp[ii]==" Covariance matrix of liabilities of discrete characters"){
-		if(temp[ii+1]==" and liabilities of discrete characters"||temp[ii+1]==" and liability of the discrete character") ii<-ii+5
-		else ii<-ii+3
-	} else ii<-ii+5
-	Covariance_matrix<-matrix(NA,ncol(X),ncol(X))
-	for(i in 1:ncol(X)){
-		x<-strsplit(temp[i+ii]," ")[[1]]
-		Covariance_matrix[i,]<-as.numeric(x[x!=""])[1:ncol(X)+1]
-	}
-	Covariance_matrix<-Covariance_matrix[c(cc,dd),c(cc,dd)]
-	rownames(Covariance_matrix)<-colnames(Covariance_matrix)<-colnames(X)
-	## parse transform matrix 1
-	ii<-grep("Transform from independent variables",temp)+4
-	Transform_indepvar_liab<-matrix(NA,ncol(X),ncol(X))
-	for(i in 1:ncol(X)){
-		x<-strsplit(temp[i+ii]," ")[[1]]
-		Transform_indepvar_liab[i,]<-as.numeric(x[x!=""])[1:ncol(X)+1]
-	}
-	Transform_indepvar_liab<-Transform_indepvar_liab[c(cc,dd),c(cc,dd)]
-	rownames(Transform_indepvar_liab)<-colnames(Transform_indepvar_liab)<-colnames(X)
-	## parse variances of change
-	ii<-grep("its change",temp)+1
-	Var_change<-vector()
-	for(i in 1:ncol(X)){
-		x<-strsplit(temp[i+ii]," ")[[1]]
-		Var_change[i]<-as.numeric(x[x!=""])[2]
-	}
-	Var_change<-Var_change[c(cc,dd)]
-	names(Var_change)<-colnames(X)
-	## parse transform matrix 2
-	ii<-grep("Transform from liabilities or characters",temp)+4
-	Transform_liab_cont<-matrix(NA,ncol(X),ncol(X))
-	for(i in 1:ncol(X)){
-		x<-strsplit(temp[i+ii]," ")[[1]]
-		Transform_liab_cont[i,]<-as.numeric(x[x!=""])[1:ncol(X)+1]
-	}
-	Transform_liab_cont<-Transform_liab_cont[c(cc,dd),c(cc,dd)]
-	rownames(Transform_liab_cont)<-colnames(Transform_liab_cont)<-colnames(X)
-	## done parsing
-	if(hasArg(cleanup)) cleanup<-list(...)$cleanup
-	else cleanup<-TRUE
-	if(cleanup) cleanFiles(c("infile","intree","outfile"))
-	if(!quiet) temp<-lapply(temp,function(x) { cat(x); cat("\n") })
-	return(list(Covariance_matrix=Covariance_matrix,
-		Transform_indepvar_liab=Transform_indepvar_liab,
-		Var_change=Var_change,
-		Transform_liab_cont=Transform_liab_cont))
 }
 
 ## function to write continuous characters to file
