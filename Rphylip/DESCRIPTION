@@ -1,6 +1,11 @@
 Package: Rphylip
+<<<<<<< HEAD
 Version: 0.1-28
 Date: 2019-1-26
+=======
+Version: 0.1-26-1
+Date: 2014-8-8
+>>>>>>> 3bde655a3578558323a956246f25a45c61bc3237
 Title: An R interface for PHYLIP
 Author: Liam J. Revell, Scott A. Chamberlain
 Maintainer: Liam J. Revell <liam.revell@umb.edu>
