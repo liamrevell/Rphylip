@@ -2847,7 +2847,7 @@ Rcontrast<-function(tree,X,path=NULL,...){
 	if(is.null(path)) path<-findPath("contrast")
 	if(is.null(path)) stop("No path provided and was not able to find path to contrast")
 	if(class(tree)!="phylo") stop("tree should be an object of class 'phylo'")
-	if(!is.binary.tree(tree)){
+	if(!is.binary.phylo(tree)){
 		cat("Warning:\n  Tree is not binary, resolving with branches of zero length\n")
 		tree<-multi2di(tree)
 	}

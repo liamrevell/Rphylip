@@ -9,7 +9,7 @@ S3method(print, proseq)
 S3method(print, phylip.data)
 S3method(print, rest.data)
 
-importFrom(ape, is.binary.tree, multi2di, read.dna, read.tree, root, unroot, write.tree)
+importFrom(ape, is.binary.phylo, multi2di, read.dna, read.tree, root, unroot, write.tree)
 importFrom(methods, hasArg)
 importFrom(stats, as.dist, optim, pchisq, setNames)
 importFrom(utils, read.table, shortPathName)
